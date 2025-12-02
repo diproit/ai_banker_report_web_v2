@@ -1,78 +1,31 @@
 {
-  "name": "aib-reports",
-  "version": "0.1.0",
+  "name": "demo-react-ts",
   "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.1",
-    "@mui/material": "^7.3.1",
-    "@mui/x-data-grid": "^8.10.0",
-    "@mui/x-date-pickers": "^8.12.0",
-    "@rjsf/core": "^5.24.12",
-    "@rjsf/validator-ajv8": "^5.24.12",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.6.4",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.11.0",
-    "dayjs": "^1.11.18",
-    "file-saver": "^2.0.5",
-    "google-translate-api-browser": "^5.0.0",
-    "html-docx-js": "^0.3.1",
-    "html-to-pdfmake": "^2.5.31",
-    "html2canvas": "^1.4.1",
-    "html2pdf.js": "^0.12.0",
-    "i18next": "^25.5.3",
-    "i18next-browser-languagedetector": "^8.2.0",
-    "i18next-http-backend": "^3.0.2",
-    "jspdf": "^3.0.2",
-    "jspdf-autotable": "^5.0.2",
-    "jwt-decode": "^4.0.0",
-    "lucide-react": "^0.540.0",
-    "marked": "^15.0.12",
-    "material-react-table": "^3.2.1",
-    "moment": "^2.30.1",
-    "pdfmake": "^0.2.20",
-    "react": "^19.1.1",
-    "react-csv": "^2.2.2",
-    "react-dom": "^19.1.1",
-    "react-i18next": "^16.0.0",
-    "react-icons": "^5.5.0",
-    "react-markdown": "^10.1.0",
-    "react-modal": "^3.16.3",
-    "react-router-dom": "^7.7.1",
-    "react-scripts": "5.0.1",
-    "react-toastify": "^11.0.5",
-    "remark-gfm": "^4.0.1",
-    "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
-  },
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "braid-design-system": "^33.12.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "overrides": {
-    "typescript": "^5.9.3"
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.1.0",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.3",
+    "vite": "^7.2.2"
   }
 }

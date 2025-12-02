@@ -1,0 +1,97 @@
+.customer-list-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  min-height: 100%;
+}
+
+.customer-list-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.customer-list-heading {
+  text-align: center;
+  margin: 0 0 2rem 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+  min-width: 150px;
+  margin: 0;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
+.form-select {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-select:hover {
+  border-color: #999;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.btn-generate-report {
+  padding: 0.75rem 2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-generate-report:hover {
+  background-color: #0056b3;
+}
+
+.btn-generate-report:active {
+  transform: translateY(1px);
+}
+
+.btn-generate-report:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}

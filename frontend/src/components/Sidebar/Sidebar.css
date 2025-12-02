@@ -1,0 +1,145 @@
+.sidebar {
+  width: 260px;
+  height: calc(100vh - 60px);
+  background-color: #ffffff;
+  color: #1f2937;
+  overflow-y: auto;
+  position: sticky;
+  top: 60px;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-nav {
+  padding: 1rem 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-menu-item {
+  margin: 0;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: #4b5563;
+  background-color: transparent;
+}
+
+.sidebar-item:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.sidebar-item.active {
+  background-color: #eff6ff;
+  color: #3b82f6;
+  border-left: 4px solid #3b82f6;
+  font-weight: 600;
+}
+
+.sidebar-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.sidebar-icon {
+  font-size: 1.25rem;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.sidebar-arrow {
+  font-size: 0.65rem;
+  transition: transform 0.2s ease;
+  color: #9ca3af;
+}
+
+.sidebar-arrow.expanded {
+  transform: rotate(180deg);
+  color: #3b82f6;
+}
+
+.sidebar-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: #f9fafb;
+  border-left: 2px solid #e5e7eb;
+}
+
+.sidebar-subitem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem 0.75rem 3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.sidebar-subitem:hover {
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.sidebar-subitem.active {
+  background-color: #dbeafe;
+  color: #2563eb;
+  font-weight: 500;
+  border-left: 2px solid #3b82f6;
+}
+
+.sidebar-subicon {
+  font-size: 1rem;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+
+.sidebar-sublabel {
+  flex: 1;
+  text-align: left;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f9fafb;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
