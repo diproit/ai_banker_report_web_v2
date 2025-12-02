@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:5003
+@token = <token>
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}
+
+### Get User Navigation Rights for a specific user
+GET {{baseUrl}}/user-rights/users/41/nav-rights
+Authorization: Bearer {{token}}

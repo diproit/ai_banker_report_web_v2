@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:5003
+@token = <token>
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}
+
+### Get All Users
+GET {{baseUrl}}/user-management/users
+Authorization: Bearer {{token}}

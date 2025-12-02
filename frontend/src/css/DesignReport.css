@@ -1,0 +1,22 @@
+.data-table-placeholder table {
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+	background-color: #fff;
+}
+
+.data-table-placeholder th,
+.data-table-placeholder td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+.data-table-placeholder th {
+	background-color: #f2f2f2;
+	font-weight: bold;
+}
+
+.data-table-placeholder tr:nth-child(even) {
+	background-color: #f9f9f9;
+}

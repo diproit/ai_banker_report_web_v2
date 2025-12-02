@@ -1,0 +1,612 @@
+{
+  "report_name": "Daily_Report",
+  "base_query": "SELECT gl_account.id, gl_coa.id, gl_coa.gl_coa_type_id, gl_coa.ref_number, gl_coa.status, gl_branch.id, gl_branch.it_institute_id, gl_branch.e_mail, gl_branch.telephone, gl_branch.status, it_institute.id, it_institute.email, it_institute.phone, it_institute.reg_num, it_institute.reg_date, it_institute.status, it_user_master.id, it_user_master.customer_id, it_user_master.name, it_user_master.active_branch_id, it_user_master.id, it_user_master.customer_id, it_user_master.name, gl_branch.id, gl_coa.id, gl_coa.gl_coa_type_id, gl_account.id, gl_account.gl_coa_id, gl_account.branch_id, it_institute.email, gl_day_balance.id, gl_day_balance.fiscal_year_id, gl_day_balance.date, gl_day_balance.record_date, gl_day_balance.cash_debit, gl_day_balance.cash_credit, gl_day_balance.bank_debit, gl_day_balance.bank_credit, gl_day_balance.journal_debit, gl_day_balance.journal_credit, gl_day_balance.total_debit, gl_day_balance.total_credit, gl_day_balance.gl_account_id, gl_coa_type.id, gl_coa_type.gl_note_policy_id, it_generated_reports.id, it_generated_reports.user_id, it_generated_reports.it_institute_id, it_generated_reports.date_to, it_generated_reports.date_from, it_generated_reports.value_from, it_generated_reports.value_to, it_generated_reports.cash_open, it_generated_reports.cash_closing, it_generated_reports.bank_open, it_generated_reports.bank_closing, it_generated_reports.filter_1_text, it_generated_reports.filter_2_text, it_generated_reports.filter_1_value, it_generated_reports.filter_2_value, it_institute.name_ln1, it_institute.name_ln2, it_institute.name_ln3, it_institute.address_ln1, it_institute.address_ln2, it_institute.address_ln3, gl_coa.name_ln1, gl_coa.name_ln2, gl_coa.name_ln3, it_generated_reports.branch_id, gl_branch.name_ln1, gl_branch.name_ln2, gl_branch.name_ln3, gl_branch.address_ln1, gl_branch.address_ln2, gl_branch.address_ln3, gl_coa_type.name_ln1, gl_coa_type.name_ln2, gl_coa_type.name_ln3, gl_coa_type.status FROM gl_day_balance INNER JOIN gl_account ON gl_day_balance.gl_account_id = gl_account.id AND gl_day_balance.total_debit + gl_day_balance.total_credit <> 0 INNER JOIN gl_branch ON gl_branch.id = gl_account.branch_id INNER JOIN gl_coa ON gl_coa.id = gl_account.gl_coa_id INNER JOIN gl_coa_type ON gl_coa.gl_coa_type_id = gl_coa_type.id INNER JOIN it_institute ON gl_coa_type.it_institute_id = it_institute.id INNER JOIN it_generated_reports ON it_generated_reports.branch_id = gl_branch.id INNER JOIN it_user_master ON it_user_master.id = it_generated_reports.user_id WHERE DATE_FORMAT(it_generated_reports.date_from, '%Y-%m-%d') = DATE_FORMAT(gl_day_balance.date, '%Y-%m-%d') AND it_generated_reports.id = 2339  AND gl_day_balance.record_type_id = 2",
+  "headings": {
+    "main_heading": {
+      "expression": "$F{name_ln1}+' - ' +'Branch : '+$F{COLUMN_71}",
+      "fields": [
+        "it_institute.name_ln1",
+        "gl_branch.name_ln1"
+      ],
+      "placeholder": "{it_institute.name_ln1} - Branch : {gl_branch.name_ln1}"
+    },
+    "sub_heading": {
+      "expression": "$P{parm_b}",
+      "fields": [
+        "gl_day_balance.date"
+      ],
+      "placeholder": "Daily Report for {gl_day_balance.date}",
+      "parameter_name": "parm_b",
+      "note": "parm_b is a parameter that typically contains a formatted date for the daily report"
+    }
+  },
+  "select_fields": [
+    "gl_account.id",
+    "gl_coa.id",
+    "gl_coa.gl_coa_type_id",
+    "gl_coa.ref_number",
+    "gl_coa.status",
+    "gl_branch.id",
+    "gl_branch.it_institute_id",
+    "gl_branch.e_mail",
+    "gl_branch.telephone",
+    "gl_branch.status",
+    "gl_branch.name_ln1",
+    "gl_branch.name_ln2",
+    "gl_branch.name_ln3",
+    "gl_branch.address_ln1",
+    "gl_branch.address_ln2",
+    "gl_branch.address_ln3",
+    "it_institute.id",
+    "it_institute.email",
+    "it_institute.phone",
+    "it_institute.reg_num",
+    "it_institute.reg_date",
+    "it_institute.status",
+    "it_institute.name_ln1",
+    "it_institute.name_ln2",
+    "it_institute.name_ln3",
+    "it_institute.address_ln1",
+    "it_institute.address_ln2",
+    "it_institute.address_ln3",
+    "it_user_master.id",
+    "it_user_master.customer_id",
+    "it_user_master.name",
+    "it_user_master.active_branch_id",
+    "gl_day_balance.id",
+    "gl_day_balance.fiscal_year_id",
+    "gl_day_balance.date",
+    "gl_day_balance.record_date",
+    "gl_day_balance.cash_debit",
+    "gl_day_balance.cash_credit",
+    "gl_day_balance.bank_debit",
+    "gl_day_balance.bank_credit",
+    "gl_day_balance.journal_debit",
+    "gl_day_balance.journal_credit",
+    "gl_day_balance.total_debit",
+    "gl_day_balance.total_credit",
+    "gl_day_balance.gl_account_id",
+    "gl_account.gl_coa_id",
+    "gl_account.branch_id",
+    "gl_coa.name_ln1",
+    "gl_coa.name_ln2",
+    "gl_coa.name_ln3",
+    "gl_coa_type.id",
+    "gl_coa_type.gl_note_policy_id",
+    "gl_coa_type.name_ln1",
+    "gl_coa_type.name_ln2",
+    "gl_coa_type.name_ln3",
+    "gl_coa_type.status",
+    "it_generated_reports.id",
+    "it_generated_reports.user_id",
+    "it_generated_reports.it_institute_id",
+    "it_generated_reports.date_to",
+    "it_generated_reports.date_from",
+    "it_generated_reports.value_from",
+    "it_generated_reports.value_to",
+    "it_generated_reports.cash_open",
+    "it_generated_reports.cash_closing",
+    "it_generated_reports.bank_open",
+    "it_generated_reports.bank_closing",
+    "it_generated_reports.filter_1_text",
+    "it_generated_reports.filter_2_text",
+    "it_generated_reports.filter_1_value",
+    "it_generated_reports.filter_2_value",
+    "it_generated_reports.branch_id"
+  ],
+  "search_fields": [
+    "it_generated_reports.id",
+    "gl_day_balance.date",
+    "gl_account.id"
+  ],
+  "sort_fields": [
+    {
+      "field": "gl_day_balance.date",
+      "direction": "ASC"
+    },
+    {
+      "field": "gl_coa.name_ln1",
+      "direction": "ASC"
+    }
+  ],
+  "report_layout_fields": {
+    "column_headers": [
+      {
+        "field": "Description",
+        "width": 160,
+        "alignment": "Left"
+      },
+      {
+        "field": "Cash",
+        "width": 178,
+        "alignment": "Center",
+        "sub_headers": [
+          {
+            "field": "Receives",
+            "width": 100,
+            "alignment": "Right"
+          },
+          {
+            "field": "Payments", 
+            "width": 75,
+            "alignment": "Right"
+          }
+        ]
+      },
+      {
+        "field": "Bank",
+        "width": 152,
+        "alignment": "Center",
+        "sub_headers": [
+          {
+            "field": "Receives",
+            "width": 75,
+            "alignment": "Right"
+          },
+          {
+            "field": "Payments",
+            "width": 75,
+            "alignment": "Right"
+          }
+        ]
+      },
+      {
+        "field": "Journal",
+        "width": 153,
+        "alignment": "Center",
+        "sub_headers": [
+          {
+            "field": "Debit",
+            "width": 75,
+            "alignment": "Right"
+          },
+          {
+            "field": "Credit",
+            "width": 75,
+            "alignment": "Right"
+          }
+        ]
+      },
+      {
+        "field": "Total",
+        "width": 153,
+        "alignment": "Center",
+        "sub_headers": [
+          {
+            "field": "Debit",
+            "width": 75,
+            "alignment": "Right"
+          },
+          {
+            "field": "Credit",
+            "width": 75,
+            "alignment": "Right"
+          }
+        ]
+      }
+    ],
+    "detail_fields": [
+      {
+        "field": "gl_coa.name_ln1",
+        "type": "text",
+        "width": 160,
+        "alignment": "Left"
+      },
+      {
+        "field": "gl_day_balance.cash_credit",
+        "type": "field",
+        "width": 100,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.cash_debit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.bank_credit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.bank_debit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.journal_debit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.journal_credit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.total_debit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      },
+      {
+        "field": "gl_day_balance.total_credit",
+        "type": "field",
+        "width": 75,
+        "alignment": "Right",
+        "format": "#,##0.00#;(#,##0.00#)"
+      }
+    ],
+    "group_footer_fields": [
+      {
+        "field": "cash_in_hand_label",
+        "type": "static",
+        "value": "Cash In Hand",
+        "alignment": "Left"
+      },
+      {
+        "field": "bank_balance_label",
+        "type": "static",
+        "value": "Bank Balance",
+        "alignment": "Left"
+      },
+      {
+        "field": "opening_label",
+        "type": "static",
+        "value": "Opening",
+        "alignment": "Right"
+      },
+      {
+        "field": "closing_label",
+        "type": "static", 
+        "value": "Closing",
+        "alignment": "Right"
+      },
+      {
+        "field": "cash_open_amount",
+        "type": "field",
+        "source": "it_generated_reports.cash_open",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      },
+      {
+        "field": "cash_closing_amount",
+        "type": "field",
+        "source": "it_generated_reports.cash_closing",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      },
+      {
+        "field": "bank_open_amount",
+        "type": "field",
+        "source": "it_generated_reports.bank_open",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      },
+      {
+        "field": "bank_closing_amount",
+        "type": "field",
+        "source": "it_generated_reports.bank_closing",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      },
+      {
+        "field": "cash_credit_total",
+        "type": "variable",
+        "source": "cash_credit2",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      },
+      {
+        "field": "cash_debit_total",
+        "type": "variable",
+        "source": "cash_debit2",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      },
+      {
+        "field": "bank_credit_total",
+        "type": "variable",
+        "source": "bank_credit5",
+        "format": "#,##0.00#;(#,##0.00#)",
+        "alignment": "Right"
+      }
+    ],
+    "footer_fields": [
+      {
+        "field": "page_number",
+        "type": "calculated"
+      },
+      {
+        "field": "print_date",
+        "type": "calculated",
+        "format": "MMM d, yyyy h:mm:ss a"
+      },
+      {
+        "field": "user_name",
+        "type": "field",
+        "source": "it_user_master.name"
+      }
+    ]
+  },
+  "calculated_fields": [
+    {
+      "name": "daily_cash_balance",
+      "fields_included": [
+        "gl_day_balance.cash_debit",
+        "gl_day_balance.cash_credit"
+      ],
+      "calculation_logic": "$F{cash_credit} - $F{cash_debit}",
+      "description": "Calculate net cash balance for the day"
+    },
+    {
+      "name": "daily_bank_balance",
+      "fields_included": [
+        "gl_day_balance.bank_debit",
+        "gl_day_balance.bank_credit"
+      ],
+      "calculation_logic": "$F{bank_credit} - $F{bank_debit}",
+      "description": "Calculate net bank balance for the day"
+    },
+    {
+      "name": "daily_journal_balance",
+      "fields_included": [
+        "gl_day_balance.journal_debit",
+        "gl_day_balance.journal_credit"
+      ],
+      "calculation_logic": "$F{journal_credit} - $F{journal_debit}",
+      "description": "Calculate net journal balance for the day"
+    },
+    {
+      "name": "daily_total_balance",
+      "fields_included": [
+        "gl_day_balance.total_debit",
+        "gl_day_balance.total_credit"
+      ],
+      "calculation_logic": "$F{total_credit} - $F{total_debit}",
+      "description": "Calculate net total balance for the day"
+    }
+  ],
+  "variables": [
+    {
+      "name": "cash_credit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{cash_credit}"
+    },
+    {
+      "name": "cash_debit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{cash_debit}"
+    },
+    {
+      "name": "bank_credit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{bank_credit}"
+    },
+    {
+      "name": "bank_debit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{bank_debit}"
+    },
+    {
+      "name": "journal_debit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{journal_debit}"
+    },
+    {
+      "name": "journal_credit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{journal_credit}"
+    },
+    {
+      "name": "total_debit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{total_debit}"
+    },
+    {
+      "name": "total_credit1",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group2",
+      "calculation": "Sum",
+      "expression": "$F{total_credit}"
+    },
+    {
+      "name": "cash_credit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{cash_credit}"
+    },
+    {
+      "name": "cash_debit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{cash_debit}"
+    },
+    {
+      "name": "bank_credit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{bank_credit}"
+    },
+    {
+      "name": "bank_credit3",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{bank_credit}"
+    },
+    {
+      "name": "journal_debit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{journal_debit}"
+    },
+    {
+      "name": "journal_credit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{journal_credit}"
+    },
+    {
+      "name": "total_debit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{total_debit}"
+    },
+    {
+      "name": "total_credit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{total_credit}"
+    },
+    {
+      "name": "bank_credit4",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{bank_credit}"
+    },
+    {
+      "name": "bank_debit2",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{bank_debit}"
+    },
+    {
+      "name": "bank_credit5",
+      "class": "java.lang.Double",
+      "resetType": "Group",
+      "resetGroup": "Group1",
+      "calculation": "Sum",
+      "expression": "$F{bank_credit}"
+    }
+  ],
+  "parameters": [
+    {
+      "field": "id",
+      "name": "parm_a",
+      "class": "java.lang.Integer",
+      "reference": "it_generated_reports.id",
+      "table": "it_generated_reports",
+      "description": "Report ID parameter for filtering specific generated report"
+    },
+    {
+      "field": "report_date",
+      "name": "parm_b",
+      "class": "java.lang.String",
+      "reference": "gl_day_balance.date",
+      "table": "gl_day_balance",
+      "description": "Daily report date parameter for display"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Group1",
+      "groupExpression": "$F{date}",
+      "description": "Group by date for daily balance calculations"
+    },
+    {
+      "name": "Group2",
+      "groupExpression": "$F{gl_coa_type_id}",
+      "description": "Group by chart of accounts type for categorization"
+    }
+  ],
+  "database_tables": [
+    {
+      "name": "gl_day_balance",
+      "alias": "gl_day_balance",
+      "description": "Daily balance records for general ledger accounts"
+    },
+    {
+      "name": "gl_account",
+      "alias": "gl_account", 
+      "description": "General ledger account master data"
+    },
+    {
+      "name": "gl_branch",
+      "alias": "gl_branch",
+      "description": "Branch information for accounts"
+    },
+    {
+      "name": "gl_coa",
+      "alias": "gl_coa",
+      "description": "Chart of accounts master data"
+    },
+    {
+      "name": "gl_coa_type",
+      "alias": "gl_coa_type",
+      "description": "Chart of accounts type classification"
+    },
+    {
+      "name": "it_institute",
+      "alias": "it_institute",
+      "description": "Institute/company master information"
+    },
+    {
+      "name": "it_generated_reports",
+      "alias": "it_generated_reports",
+      "description": "Generated report parameters and metadata"
+    },
+    {
+      "name": "it_user_master",
+      "alias": "it_user_master",
+      "description": "User master data for report generation"
+    }
+  ],
+  "report_type": "daily_financial_summary",
+  "orientation": "landscape",
+  "page_format": "A4",
+  "business_purpose": "Daily financial activity summary showing cash, bank, journal and total transactions by account with opening and closing balances"
+}

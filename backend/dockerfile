@@ -1,0 +1,14 @@
+# existing base image
+FROM python:3.13-slim
+# Set working directory named /app
+WORKDIR /app
+# Copy all files from current directory to /app
+COPY . .
+# Create a virtual environment
+RUN python -m venv venv
+# Install dependencies
+RUN ./venv/bin/pip install --no-cache-dir -r requirements.txt
+# Expose port 5003
+EXPOSE 5003
+# Setup wsgi server to run the application
+CMD ["./venv/bin/gunicorn", "--bind", "0.0.0.0:5003", "main:app"]
