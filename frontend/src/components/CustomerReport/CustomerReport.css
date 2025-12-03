@@ -1,0 +1,161 @@
+.customer-report-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.report-main-heading {
+  text-align: center;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.report-sub-heading {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.report-table-section {
+  margin-bottom: 0.75rem;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.report-table thead {
+  background-color: #f8f9fa;
+}
+
+.report-table th {
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 0.875rem;
+}
+
+.report-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+  color: #555;
+  font-size: 0.875rem;
+}
+
+.report-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 2rem !important;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pagination-number {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.pagination-number:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.pagination-number.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.report-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 2px solid #dee2e6;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.footer-date,
+.footer-page {
+  padding: 0.5rem 0;
+}

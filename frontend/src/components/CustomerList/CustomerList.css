@@ -1,0 +1,115 @@
+.customer-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  min-height: 100%;
+  width: 100%;
+}
+
+.customer-list-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.customer-list-heading {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.9rem;
+  min-width: 130px;
+  margin: 0;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
+.form-select {
+  flex: 1;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.form-select:hover {
+  border-color: #999;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn-generate-report {
+  padding: 0.5rem 1.5rem;rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-generate-report:hover {
+  background-color: #0056b3;
+}
+
+.btn-generate-report:active {
+  transform: translateY(1px);
+}
+
+.btn-generate-report:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+.btn-generate-report:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  color: #721c24;
+  font-size: 0.9rem;
+}

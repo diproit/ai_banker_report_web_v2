@@ -1,0 +1,133 @@
+.loan-pastdue-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  min-height: 100%;
+}
+
+.loan-pastdue-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 720px;
+  text-align: left; /* ensure card content is left aligned */
+}
+
+.loan-pastdue-heading {
+  text-align: left;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start; /* align labels to top so multi-line controls start aligned */
+  gap: 1rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+  min-width: 150px;
+  margin: 0;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
+.form-select {
+  /* make selects narrower and consistent */
+  flex: 0 0 320px;
+  max-width: 320px;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  color: #333;
+}
+
+.range-group {
+  border: 1px solid #f0f0f0;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+}
+
+.range-group legend {
+  font-weight: 600;
+  color: #333;
+  padding: 0 0.5rem;
+  text-align: left; /* left align legend text as requested */
+  margin: 0 0 0.5rem 0;
+}
+
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  justify-content: flex-start; /* left-align the From/To row */
+}
+
+.range-row label {
+  min-width: 40px;
+  text-align: left;
+}
+
+.controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* ensure controls are left aligned */
+}
+
+.small-label {
+  font-size: 0.9rem;
+  color: #444;
+  min-width: 40px;
+}
+
+.form-input {
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  /* make inline inputs shorter */
+  width: 160px;
+  max-width: 160px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-start; /* keep action button left aligned with form */
+  margin-top: 1.5rem;
+}
+
+.btn-generate-report {
+  padding: 0.6rem 1.6rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-generate-report:hover {
+  background-color: #0056b3;
+}
+
+.btn-generate-report:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
