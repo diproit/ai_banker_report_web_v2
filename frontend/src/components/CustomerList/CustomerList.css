@@ -96,3 +96,18 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
 }
+
+.btn-generate-report:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  color: #721c24;
+  font-size: 0.9rem;
+}

@@ -14,12 +14,14 @@ interface CustomerReportProps {
   branchName: string;
   customerType: string;
   data: Customer[];
+  instituteName?: string;
 }
 
 const CustomerReport: React.FC<CustomerReportProps> = ({
   branchName,
   customerType,
   data,
+  instituteName = "Institute Name",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
@@ -55,9 +57,28 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
     setCurrentPage(page);
   };
 
+  // Calculate which page numbers to display (max 5)
+  const getVisiblePages = () => {
+    const maxVisible = 5;
+    if (totalPages <= maxVisible) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const half = Math.floor(maxVisible / 2);
+    let start = Math.max(1, currentPage - half);
+    let end = Math.min(totalPages, start + maxVisible - 1);
+
+    // Adjust start if we're near the end
+    if (end - start < maxVisible - 1) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+
   return (
     <div className="customer-report-card">
-      <h1 className="report-main-heading">Institute Name</h1>
+      <h1 className="report-main-heading">{instituteName}</h1>
       <h2 className="report-sub-heading">
         Customer List for {branchName}
         {customerType && ` - ${customerType}`}
@@ -112,19 +133,17 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
             </button>
 
             <div className="pagination-numbers">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    className={`pagination-number ${
-                      currentPage === page ? "active" : ""
-                    }`}
-                    onClick={() => handlePageClick(page)}
-                  >
-                    {page}
-                  </button>
-                )
-              )}
+              {getVisiblePages().map((page) => (
+                <button
+                  key={page}
+                  className={`pagination-number ${
+                    currentPage === page ? "active" : ""
+                  }`}
+                  onClick={() => handlePageClick(page)}
+                >
+                  {page}
+                </button>
+              ))}
             </div>
 
             <button

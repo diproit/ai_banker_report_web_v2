@@ -5,6 +5,7 @@ from config.database import create_db_and_tables
 from routes.user_nav_routes import router as user_nav_router
 from routes.language_routes import router as language_router
 from routes.translation_routes import router as translation_router
+from routes.sql_executor_routes import router as sql_executor_router
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -38,6 +39,7 @@ app.add_middleware(
 app.include_router(user_nav_router, prefix="/api/v1", tags=["user-navigation"])
 app.include_router(language_router, prefix="/api/v1", tags=["languages"])
 app.include_router(translation_router, prefix="/api/v1", tags=["translations"])
+app.include_router(sql_executor_router, prefix="/api/v1", tags=["sql-executor"])
 
 @app.get("/")
 def read_root():

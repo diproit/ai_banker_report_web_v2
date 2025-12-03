@@ -1,106 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomerReport from "../CustomerReport";
+import { sqlExecutorApi } from "../../services/sqlExecutorService";
 import "./CustomerList.css";
-
-// Dummy data - replace with API call in the future
-const DUMMY_DATA = [
-  {
-    id: 1,
-    customerName: "John Smith",
-    accountNumber: "ACC001234",
-    balance: 15000,
-    status: "Active",
-    lastTransaction: "01/12/2025",
-  },
-  {
-    id: 2,
-    customerName: "Sarah Johnson",
-    accountNumber: "ACC001235",
-    balance: 28500,
-    status: "Active",
-    lastTransaction: "02/12/2025",
-  },
-  {
-    id: 3,
-    customerName: "Michael Brown",
-    accountNumber: "ACC001236",
-    balance: 42000,
-    status: "Active",
-    lastTransaction: "29/11/2025",
-  },
-  {
-    id: 4,
-    customerName: "Emily Davis",
-    accountNumber: "ACC001237",
-    balance: 19750,
-    status: "Pending",
-    lastTransaction: "30/11/2025",
-  },
-  {
-    id: 5,
-    customerName: "David Wilson",
-    accountNumber: "ACC001238",
-    balance: 5000,
-    status: "Inactive",
-    lastTransaction: "15/11/2025",
-  },
-  {
-    id: 6,
-    customerName: "Lisa Anderson",
-    accountNumber: "ACC001239",
-    balance: 63200,
-    status: "Active",
-    lastTransaction: "03/12/2025",
-  },
-  {
-    id: 7,
-    customerName: "James Taylor",
-    accountNumber: "ACC001240",
-    balance: 31500,
-    status: "Active",
-    lastTransaction: "01/12/2025",
-  },
-  {
-    id: 8,
-    customerName: "Mary Martinez",
-    accountNumber: "ACC001241",
-    balance: 12800,
-    status: "Active",
-    lastTransaction: "02/12/2025",
-  },
-  {
-    id: 9,
-    customerName: "Robert Garcia",
-    accountNumber: "ACC001242",
-    balance: 48900,
-    status: "Pending",
-    lastTransaction: "28/11/2025",
-  },
-  {
-    id: 10,
-    customerName: "Jennifer Lopez",
-    accountNumber: "ACC001243",
-    balance: 22300,
-    status: "Active",
-    lastTransaction: "03/12/2025",
-  },
-  {
-    id: 11,
-    customerName: "William Clark",
-    accountNumber: "ACC001244",
-    balance: 37600,
-    status: "Active",
-    lastTransaction: "30/11/2025",
-  },
-  {
-    id: 12,
-    customerName: "Patricia Lee",
-    accountNumber: "ACC001245",
-    balance: 54100,
-    status: "Active",
-    lastTransaction: "02/12/2025",
-  },
-];
 
 interface Customer {
   id: number;
@@ -111,12 +12,51 @@ interface Customer {
   lastTransaction: string;
 }
 
+interface DropdownOption {
+  id: number;
+  name: string;
+}
+
 const CustomerList: React.FC = () => {
   const [branchName, setBranchName] = useState("");
   const [customerType, setCustomerType] = useState("");
   const [reportData, setReportData] = useState<Customer[] | null>(null);
   const [selectedBranch, setSelectedBranch] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Dropdown data
+  const [branches, setBranches] = useState<DropdownOption[]>([]);
+  const [customerTypes, setCustomerTypes] = useState<DropdownOption[]>([]);
+  const [instituteName, setInstituteName] = useState<string>("Institute Name");
+  const [isLoadingDropdowns, setIsLoadingDropdowns] = useState(true);
+
+  // Load dropdown data on component mount
+  useEffect(() => {
+    const loadDropdownData = async () => {
+      try {
+        setIsLoadingDropdowns(true);
+        const [branchesData, typesData, instituteData] = await Promise.all([
+          sqlExecutorApi.getBranches(),
+          sqlExecutorApi.getCustomerTypes(),
+          sqlExecutorApi.getInstitute(),
+        ]);
+        setBranches(branchesData);
+        setCustomerTypes(typesData);
+        if (instituteData) {
+          setInstituteName(instituteData.name);
+        }
+      } catch (err) {
+        console.error("Error loading dropdown data:", err);
+        setError("Failed to load dropdown options");
+      } finally {
+        setIsLoadingDropdowns(false);
+      }
+    };
+
+    loadDropdownData();
+  }, []);
 
   const handleGenerateReport = async () => {
     if (!branchName) {
@@ -124,21 +64,66 @@ const CustomerList: React.FC = () => {
       return;
     }
 
-    // TODO: Replace with actual API call
-    // Example:
-    // const response = await fetch('/api/customer-report', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ branchName, customerType })
-    // });
-    // const data = await response.json();
-    // setReportData(data);
+    setIsLoading(true);
+    setError(null);
 
-    // For now, use dummy data
-    console.log("Generating report for:", { branchName, customerType });
-    setSelectedBranch(branchName);
-    setSelectedType(customerType);
-    setReportData(DUMMY_DATA);
+    try {
+      // Build SQL query based on selected filters
+      let query = `
+        SELECT 
+          c.id,
+          c.customer_number,
+          c.full_name_ln1 as customerName,
+          ct.type_ln1 as customerType,
+          b.name_ln1 as branchName,
+          c.mobile_1 as mobile,
+          c.e_mail as email,
+          CASE 
+            WHEN c.status = 1 THEN 'Active'
+            WHEN c.status = 0 THEN 'Inactive'
+            ELSE 'Pending'
+          END as status,
+          DATE_FORMAT(c.member_date, '%d/%m/%Y') as memberDate
+        FROM ci_customer c
+        LEFT JOIN ci_customer_type ct ON c.customer_type_id = ct.id
+        LEFT JOIN gl_branch b ON c.branch_id = b.id
+        WHERE b.name_ln1 = '${branchName}'
+      `;
+
+      // Add customer type filter if selected
+      if (customerType) {
+        query += ` AND ct.type_ln1 = '${customerType}'`;
+      }
+
+      query += ` ORDER BY c.full_name_ln1`;
+
+      // Execute the query
+      const response = await sqlExecutorApi.executeQuery(query);
+
+      if (response.success && response.data) {
+        setSelectedBranch(branchName);
+        setSelectedType(customerType);
+        // Map the response data to match Customer interface
+        const mappedData = response.data.map((item: any, index: number) => ({
+          id: item.id || index + 1,
+          customerName: item.customerName || "",
+          accountNumber: item.customer_number || "",
+          balance: 0, // Not available in current query
+          status: item.status || "Pending",
+          lastTransaction: item.memberDate || "",
+        }));
+        setReportData(mappedData as Customer[]);
+      } else {
+        setError(response.error || "Failed to fetch data");
+        setReportData(null);
+      }
+    } catch (err) {
+      console.error("Error generating report:", err);
+      setError(err instanceof Error ? err.message : "An error occurred");
+      setReportData(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -155,11 +140,14 @@ const CustomerList: React.FC = () => {
             value={branchName}
             onChange={(e) => setBranchName(e.target.value)}
             className="form-select"
+            disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Branch</option>
-            <option value="Branch 1">Branch 1</option>
-            <option value="Branch 2">Branch 2</option>
-            <option value="Branch 3">Branch 3</option>
+            {branches.map((branch) => (
+              <option key={branch.id} value={branch.name}>
+                {branch.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -170,11 +158,14 @@ const CustomerList: React.FC = () => {
             value={customerType}
             onChange={(e) => setCustomerType(e.target.value)}
             className="form-select"
+            disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Customer Type</option>
-            <option value="Retail">Retail</option>
-            <option value="Corporate">Corporate</option>
-            <option value="Premium">Premium</option>
+            {customerTypes.map((type) => (
+              <option key={type.id} value={type.name}>
+                {type.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -182,10 +173,17 @@ const CustomerList: React.FC = () => {
           <button
             className="btn-generate-report"
             onClick={handleGenerateReport}
+            disabled={isLoading}
           >
-            Generate Report
+            {isLoading ? "Generating..." : "Generate Report"}
           </button>
         </div>
+
+        {error && (
+          <div className="error-message">
+            <strong>Error:</strong> {error}
+          </div>
+        )}
       </div>
 
       {reportData && (
@@ -193,6 +191,7 @@ const CustomerList: React.FC = () => {
           branchName={selectedBranch}
           customerType={selectedType}
           data={reportData}
+          instituteName={instituteName}
         />
       )}
     </div>
