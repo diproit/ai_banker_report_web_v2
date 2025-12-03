@@ -8,7 +8,7 @@ interface Customer {
   Address: string;
   Phone: string;
   Mobile: string;
-  Age: string;
+  "Date of Birth": string;
   Sex: string;
   "Branch Name": string;
 }
@@ -97,26 +97,40 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
               <th>Address</th>
               <th>Phone</th>
               <th>Mobile</th>
-              <th>Age</th>
+              <th>Date of Birth</th>
               <th>Sex</th>
               <th>Branch Name</th>
             </tr>
           </thead>
           <tbody>
             {currentData.length > 0 ? (
-              currentData.map((customer, index) => (
-                <tr key={index}>
-                  <td>{customer["Ref member number"]}</td>
-                  <td>{customer["Customer type"]}</td>
-                  <td>{customer["Name"]}</td>
-                  <td>{customer["Address"]}</td>
-                  <td>{customer["Phone"]}</td>
-                  <td>{customer["Mobile"]}</td>
-                  <td>{customer["Age"]}</td>
-                  <td>{customer["Sex"]}</td>
-                  <td>{customer["Branch Name"]}</td>
-                </tr>
-              ))
+              currentData.map((customer, index) => {
+                // Format date as YYYY/MM/DD
+                let formattedDate = "";
+                if (customer["Date of Birth"]) {
+                  const date = new Date(customer["Date of Birth"]);
+                  if (!isNaN(date.getTime())) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, "0");
+                    const day = String(date.getDate()).padStart(2, "0");
+                    formattedDate = `${year}/${month}/${day}`;
+                  }
+                }
+
+                return (
+                  <tr key={index}>
+                    <td>{customer["Ref member number"]}</td>
+                    <td>{customer["Customer type"]}</td>
+                    <td>{customer["Name"]}</td>
+                    <td>{customer["Address"]}</td>
+                    <td>{customer["Phone"]}</td>
+                    <td>{customer["Mobile"]}</td>
+                    <td>{formattedDate}</td>
+                    <td>{customer["Sex"]}</td>
+                    <td>{customer["Branch Name"]}</td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan={9} className="no-data">

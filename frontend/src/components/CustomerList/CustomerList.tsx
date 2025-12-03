@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomerReport from "../CustomerReport";
 import { sqlExecutorApi } from "../../services/sqlExecutorService";
+import { toast } from "react-toastify";
 import "./CustomerList.css";
 
 interface Customer {
@@ -10,7 +11,7 @@ interface Customer {
   Address: string;
   Phone: string;
   Mobile: string;
-  Age: string;
+  "Date of Birth": string;
   Sex: string;
   "Branch Name": string;
 }
@@ -65,7 +66,7 @@ const CustomerList: React.FC = () => {
 
   const handleGenerateReport = async () => {
     if (!branchId) {
-      alert("Please select a Branch Name");
+      toast.error("Please select a Branch Name");
       return;
     }
 
