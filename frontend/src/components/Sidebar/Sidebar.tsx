@@ -29,6 +29,21 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
               </div>
             </div>
           </li>
+          <li className="sidebar-menu-item">
+            <div
+              className={`sidebar-item ${
+                activeItem === "/loan-pastdue-reports" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveItem("/loan-pastdue-reports");
+                onItemClick?.("/loan-pastdue-reports", "Loan Past Due Reports");
+              }}
+            >
+              <div className="sidebar-item-content">
+                <span className="sidebar-label">Loan Past Due Reports</span>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </aside>
