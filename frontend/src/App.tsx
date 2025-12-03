@@ -7,7 +7,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState<{
     title: string;
     path: string;
-  } | null>(null);
+  } | null>({
+    title: "Customer List",
+    path: "/customer-list",
+  });
 
   const handleNavigation = (path: string, title?: string) => {
     console.log("Navigating to:", path);

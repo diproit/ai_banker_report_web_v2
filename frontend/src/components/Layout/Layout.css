@@ -20,7 +20,7 @@
 
 .layout-content {
   flex: 1;
-  padding: 1.5rem;
+  padding: 1rem;
   overflow-y: auto;
   background-color: #ffffff;
 }

@@ -1,11 +1,12 @@
 .sidebar {
   width: 260px;
+  min-width: 260px;
+  max-width: 260px;
   height: calc(100vh - 60px);
   background-color: #ffffff;
   color: #1f2937;
   overflow-y: auto;
-  position: sticky;
-  top: 60px;
+  flex-shrink: 0;
   border-right: 1px solid #e5e7eb;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
 }

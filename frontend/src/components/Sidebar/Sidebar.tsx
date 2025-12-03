@@ -6,7 +6,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
-  const [activeItem, setActiveItem] = useState<string>("");
+  const [activeItem, setActiveItem] = useState<string>("/customer-list");
 
   const handleItemClick = () => {
     setActiveItem("/customer-list");
