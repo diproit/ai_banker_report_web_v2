@@ -53,7 +53,7 @@ const buildFiltersList = (params: QueryParams) => {
 
 const buildQuery = (filters: string[], branchId: number) => {
   const whereClause = filters.length ? `WHERE\n          ${filters.join("\n          AND ")}` : "";
-  const groupClause = branchId === 0 ? "GROUP BY\n          gl_branch.id, pl_account_type.id" : "";
+  // const groupClause = branchId === 0 ? "GROUP BY\n          gl_branch.id, pl_account_type.id" : "";
 
   return `
       SELECT
@@ -83,7 +83,6 @@ const buildQuery = (filters: string[], branchId: number) => {
           ON ci_customer.branch_id = gl_branch.id 
         AND pl_account.branch_id = gl_branch.id
       ${whereClause}
-      ${groupClause}
       `;
 };
 
