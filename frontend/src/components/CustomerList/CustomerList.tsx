@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import CustomerReport from "../CustomerReport";
 import { sqlExecutorApi } from "../../services/sqlExecutorService";
+import { toast } from "react-toastify";
 import "./CustomerList.css";
 
 interface Customer {
-  id: number;
-  customerName: string;
-  accountNumber: string;
-  balance: number;
-  status: string;
-  lastTransaction: string;
+  "Ref member number": string;
+  "Customer type": string;
+  Name: string;
+  Address: string;
+  Phone: string;
+  Mobile: string;
+  "Date of Birth": string;
+  Sex: string;
+  "Branch Name": string;
 }
 
 interface DropdownOption {
@@ -18,6 +22,8 @@ interface DropdownOption {
 }
 
 const CustomerList: React.FC = () => {
+  const [branchId, setBranchId] = useState<number | null>(null);
+  const [customerTypeId, setCustomerTypeId] = useState<number | null>(null);
   const [branchName, setBranchName] = useState("");
   const [customerType, setCustomerType] = useState("");
   const [reportData, setReportData] = useState<Customer[] | null>(null);
@@ -59,8 +65,8 @@ const CustomerList: React.FC = () => {
   }, []);
 
   const handleGenerateReport = async () => {
-    if (!branchName) {
-      alert("Please select a Branch Name");
+    if (!branchId) {
+      toast.error("Please select a Branch Name");
       return;
     }
 
@@ -70,32 +76,43 @@ const CustomerList: React.FC = () => {
     try {
       // Build SQL query based on selected filters
       let query = `
-        SELECT 
-          c.id,
-          c.customer_number,
-          c.full_name_ln1 as customerName,
-          ct.type_ln1 as customerType,
-          b.name_ln1 as branchName,
-          c.mobile_1 as mobile,
-          c.e_mail as email,
-          CASE 
-            WHEN c.status = 1 THEN 'Active'
-            WHEN c.status = 0 THEN 'Inactive'
-            ELSE 'Pending'
-          END as status,
-          DATE_FORMAT(c.member_date, '%d/%m/%Y') as memberDate
-        FROM ci_customer c
-        LEFT JOIN ci_customer_type ct ON c.customer_type_id = ct.id
-        LEFT JOIN gl_branch b ON c.branch_id = b.id
-        WHERE b.name_ln1 = '${branchName}'
-      `;
+SELECT
+    c.customer_number              AS \`Ref member number\`,
+    ct.type_ln1                   AS \`Customer type\`,
+    c.full_name_ln1               AS \`Name\`,
+    c.address_ln1                 AS \`Address\`,
+    c.home_phone                  AS \`Phone\`,
+    c.mobile_1                    AS \`Mobile\`,
+    c.date_of_birth               AS \`Date of Birth\`,
+    c.gender                      AS \`Sex\`,
+    b.name_ln1                    AS \`Branch Name\`
+FROM
+    ci_customer AS c
+    LEFT JOIN gl_branch AS b
+        ON c.branch_id = b.id
+    LEFT JOIN ci_customer_type AS ct
+        ON c.customer_type_id = ct.id
+WHERE
+    c.branch_id = ${branchId}`;
 
       // Add customer type filter if selected
-      if (customerType) {
-        query += ` AND ct.type_ln1 = '${customerType}'`;
+      if (customerTypeId) {
+        query += `
+    AND c.customer_type_id = ${customerTypeId}`;
       }
 
-      query += ` ORDER BY c.full_name_ln1`;
+      query += `
+GROUP BY
+    b.name_ln1,
+    ct.type_ln1`;
+
+      // Console log the query being sent
+      console.log("=== SQL Query Being Sent ===");
+      console.log(query);
+      console.log("=== Parameters ===");
+      console.log("Branch ID:", branchId);
+      console.log("Customer Type ID:", customerTypeId || "NULL (not selected)");
+      console.log("==========================");
 
       // Execute the query
       const response = await sqlExecutorApi.executeQuery(query);
@@ -103,16 +120,8 @@ const CustomerList: React.FC = () => {
       if (response.success && response.data) {
         setSelectedBranch(branchName);
         setSelectedType(customerType);
-        // Map the response data to match Customer interface
-        const mappedData = response.data.map((item: any, index: number) => ({
-          id: item.id || index + 1,
-          customerName: item.customerName || "",
-          accountNumber: item.customer_number || "",
-          balance: 0, // Not available in current query
-          status: item.status || "Pending",
-          lastTransaction: item.memberDate || "",
-        }));
-        setReportData(mappedData as Customer[]);
+        // Pass through the data as-is from the SQL query
+        setReportData(response.data as Customer[]);
       } else {
         setError(response.error || "Failed to fetch data");
         setReportData(null);
@@ -137,14 +146,23 @@ const CustomerList: React.FC = () => {
           </label>
           <select
             id="branch-name"
-            value={branchName}
-            onChange={(e) => setBranchName(e.target.value)}
+            value={branchId || ""}
+            onChange={(e) => {
+              const selectedBranchId = e.target.value
+                ? Number(e.target.value)
+                : null;
+              const selectedBranchObj = branches.find(
+                (b) => b.id === selectedBranchId
+              );
+              setBranchId(selectedBranchId);
+              setBranchName(selectedBranchObj?.name || "");
+            }}
             className="form-select"
             disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Branch</option>
             {branches.map((branch) => (
-              <option key={branch.id} value={branch.name}>
+              <option key={branch.id} value={branch.id}>
                 {branch.name}
               </option>
             ))}
@@ -155,14 +173,23 @@ const CustomerList: React.FC = () => {
           <label htmlFor="customer-type">Customer Type</label>
           <select
             id="customer-type"
-            value={customerType}
-            onChange={(e) => setCustomerType(e.target.value)}
+            value={customerTypeId || ""}
+            onChange={(e) => {
+              const selectedTypeId = e.target.value
+                ? Number(e.target.value)
+                : null;
+              const selectedTypeObj = customerTypes.find(
+                (t) => t.id === selectedTypeId
+              );
+              setCustomerTypeId(selectedTypeId);
+              setCustomerType(selectedTypeObj?.name || "");
+            }}
             className="form-select"
             disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Customer Type</option>
             {customerTypes.map((type) => (
-              <option key={type.id} value={type.name}>
+              <option key={type.id} value={type.id}>
                 {type.name}
               </option>
             ))}

@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import "./CustomerReport.css";
 
 interface Customer {
-  id: number;
-  customerName: string;
-  accountNumber: string;
-  balance: number;
-  status: string;
-  lastTransaction: string;
+  "Ref member number": string;
+  "Customer type": string;
+  Name: string;
+  Address: string;
+  Phone: string;
+  Mobile: string;
+  "Date of Birth": string;
+  Sex: string;
+  "Branch Name": string;
 }
 
 interface CustomerReportProps {
@@ -88,33 +91,49 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
         <table className="report-table">
           <thead>
             <tr>
-              <th>Customer Name</th>
-              <th>Account Number</th>
-              <th>Balance</th>
-              <th>Status</th>
-              <th>Last Transaction</th>
+              <th>Ref member number</th>
+              <th>Customer type</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Mobile</th>
+              <th>Date of Birth</th>
+              <th>Sex</th>
+              <th>Branch Name</th>
             </tr>
           </thead>
           <tbody>
             {currentData.length > 0 ? (
-              currentData.map((customer) => (
-                <tr key={customer.id}>
-                  <td>{customer.customerName}</td>
-                  <td>{customer.accountNumber}</td>
-                  <td>${customer.balance.toLocaleString()}</td>
-                  <td>
-                    <span
-                      className={`status-badge status-${customer.status.toLowerCase()}`}
-                    >
-                      {customer.status}
-                    </span>
-                  </td>
-                  <td>{customer.lastTransaction}</td>
-                </tr>
-              ))
+              currentData.map((customer, index) => {
+                // Format date as YYYY/MM/DD
+                let formattedDate = "";
+                if (customer["Date of Birth"]) {
+                  const date = new Date(customer["Date of Birth"]);
+                  if (!isNaN(date.getTime())) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, "0");
+                    const day = String(date.getDate()).padStart(2, "0");
+                    formattedDate = `${year}/${month}/${day}`;
+                  }
+                }
+
+                return (
+                  <tr key={index}>
+                    <td>{customer["Ref member number"]}</td>
+                    <td>{customer["Customer type"]}</td>
+                    <td>{customer["Name"]}</td>
+                    <td>{customer["Address"]}</td>
+                    <td>{customer["Phone"]}</td>
+                    <td>{customer["Mobile"]}</td>
+                    <td>{formattedDate}</td>
+                    <td>{customer["Sex"]}</td>
+                    <td>{customer["Branch Name"]}</td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
-                <td colSpan={5} className="no-data">
+                <td colSpan={9} className="no-data">
                   No data available
                 </td>
               </tr>
