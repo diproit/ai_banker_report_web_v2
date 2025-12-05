@@ -115,9 +115,10 @@ WHERE
 
       // GROUP BY changes based on whether ALL branches is selected
       if (branchId === 0) {
-        // All branches selected - no need to group by branch
+        // All branches selected - group by branch and customer type
         query += `
 GROUP BY
+    b.name_ln1,
     ct.type_ln1`;
       } else {
         // Specific branch selected
