@@ -53,7 +53,7 @@ export const sqlExecutorApi = {
    */
   getBranches: async (): Promise<{ id: number; name: string }[]> => {
     const query =
-      "SELECT id, name_ln1 as name FROM gl_branch WHERE status = 1 AND UPPER(name_ln1) != 'ALL' ORDER BY name_ln1";
+      "SELECT id, name_ln1 as name FROM gl_branch WHERE status = 1 ORDER BY name_ln1";
     const response = await sqlExecutorApi.executeQuery(query);
     return response.success ? response.data : [];
   },

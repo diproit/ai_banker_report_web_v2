@@ -96,12 +96,10 @@ FROM
       // Build WHERE clause dynamically
       const whereConditions = [];
 
-      // Add branch filter only if not "ALL" (branchId = 0)
-      if (branchId !== 0) {
+      // Add branch filter only if not "All"
+      if (branchName.toLowerCase() !== "all") {
         whereConditions.push(`c.branch_id = ${branchId}`);
-      }
-
-      // Add customer type filter if selected
+      } // Add customer type filter if selected
       if (customerTypeId) {
         whereConditions.push(`c.customer_type_id = ${customerTypeId}`);
       }
@@ -113,26 +111,18 @@ WHERE
     ${whereConditions.join("\n    AND ")}`;
       }
 
-      // GROUP BY changes based on whether ALL branches is selected
-      if (branchId === 0) {
-        // All branches selected - group by branch and customer type
-        query += `
+      // GROUP BY - always group by both branch and customer type
+      query += `
 GROUP BY
     b.name_ln1,
     ct.type_ln1`;
-      } else {
-        // Specific branch selected
-        query += `
-GROUP BY
-    b.name_ln1,
-    ct.type_ln1`;
-      }
 
       // Console log the query being sent
       console.log("=== SQL Query Being Sent ===");
       console.log(query);
       console.log("=== Parameters ===");
-      console.log("Branch ID:", branchId === 0 ? "All" : branchId);
+      console.log("Branch ID:", branchId);
+      console.log("Branch Name:", branchName);
       console.log("Customer Type ID:", customerTypeId || "NULL (not selected)");
       console.log("==========================");
 
@@ -185,7 +175,6 @@ GROUP BY
             disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Branch</option>
-            <option value="0">All</option>
             {branches.map((branch) => (
               <option key={branch.id} value={branch.id}>
                 {branch.name}
