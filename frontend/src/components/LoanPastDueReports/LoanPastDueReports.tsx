@@ -310,6 +310,8 @@ interface ReportSectionProps {
   onPageChange: (page: number) => void;
   displayBranchName: string;
   displayLoanProductName: string;
+  onPrint: () => void;
+  onExport: () => void;
 }
 
 const ReportSection: React.FC<ReportSectionProps> = ({
@@ -323,6 +325,8 @@ const ReportSection: React.FC<ReportSectionProps> = ({
   onPageChange,
   displayBranchName,
   displayLoanProductName,
+  onPrint,
+  onExport,
 }) => {
   const visiblePages = getVisiblePages(currentPage, totalPages);
 
@@ -341,11 +345,28 @@ const ReportSection: React.FC<ReportSectionProps> = ({
 
         {hasResults ? (
           <div className="loan-report-card">
-            <h1 className="report-main-heading">Loan Past Due Report</h1>
-            <h2 className="report-sub-heading">
-              Branch: {displayBranchName}
-              {displayLoanProductName ? ` | Product: ${displayLoanProductName}` : ""}
-            </h2>
+            <div className="report-toolbar">
+              <div className="report-heading-block">
+                <div className="report-title">Loan Past Due Report</div>
+                <div className="report-meta">
+                  Generated {getTodayDate()} • {totalRows} row{totalRows === 1 ? "" : "s"}
+                </div>
+                <div className="report-filters">
+                  <span className="filter-chip">Branch: {displayBranchName}</span>
+                  {displayLoanProductName && (
+                    <span className="filter-chip">Product: {displayLoanProductName}</span>
+                  )}
+                </div>
+              </div>
+              <div className="report-actions">
+                <button className="btn-action" type="button" onClick={onPrint}>
+                  Print
+                </button>
+                <button className="btn-action primary" type="button" onClick={onExport}>
+                  Export
+                </button>
+              </div>
+            </div>
 
             <div className="report-table-section">
               <div className="table-wrap">
@@ -461,6 +482,80 @@ const LoanPastDueReports: React.FC = () => {
   const displayBranchName =
     selectedBranchId === "0" ? "All Branches" : selectedBranchObj?.name || "Selected Branch";
   const displayLoanProductName = selectedLoanProductObj?.name || "";
+
+  const handlePrint = () => {
+    if (!hasResults || !loanReportData) return;
+
+    const printableRows = loanReportData
+      .map(
+        (row) =>
+          `<tr>${columns
+            .map((col) => `<td style="padding:6px 8px;border:1px solid #ccc;">${String(row[col] ?? "")}</td>`)
+            .join("")}</tr>`
+      )
+      .join("");
+
+    const printableHeader = columns
+      .map((col) => `<th style="padding:8px 8px;border:1px solid #ccc;background:#f1f3f5;text-align:left;">${col}</th>`)
+      .join("");
+
+    const content = `
+      <html>
+        <head>
+          <title>Loan Past Due Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 16px; }
+            h1 { margin: 0 0 4px 0; font-size: 18px; }
+            h2 { margin: 0 0 12px 0; font-size: 14px; color: #555; }
+            table { border-collapse: collapse; width: 100%; font-size: 12px; }
+          </style>
+        </head>
+        <body>
+          <h1>Loan Past Due Report</h1>
+          <h2>Branch: ${displayBranchName}${displayLoanProductName ? ` | Product: ${displayLoanProductName}` : ""}</h2>
+          <table>
+            <thead><tr>${printableHeader}</tr></thead>
+            <tbody>${printableRows}</tbody>
+          </table>
+        </body>
+      </html>
+    `;
+
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    printWindow.document.open();
+    printWindow.document.write(content);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 300);
+  };
+
+  const handleExport = () => {
+    if (!hasResults || !loanReportData) return;
+
+    const header = columns.join(",");
+    const rows = loanReportData.map((row) =>
+      columns
+        .map((col) => {
+          const cell = String(row[col] ?? "");
+          const escaped = cell.replace(/"/g, '""');
+          return `"${escaped}"`;
+        })
+        .join(",")
+    );
+
+    const csvContent = [header, ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "loan-past-due-report.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     if (totalPages > 0 && currentPage > totalPages) {
@@ -586,6 +681,8 @@ const LoanPastDueReports: React.FC = () => {
           onPageChange={setCurrentPage}
           displayBranchName={displayBranchName}
           displayLoanProductName={displayLoanProductName}
+          onPrint={handlePrint}
+          onExport={handleExport}
         />
       )}
     </div>
