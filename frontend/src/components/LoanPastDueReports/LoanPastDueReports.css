@@ -1,7 +1,8 @@
 .loan-pastdue-container {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.5rem;
   padding: 2rem;
   min-height: 100%;
 }
@@ -14,6 +15,15 @@
   width: 100%;
   max-width: 720px;
   text-align: left; /* ensure card content is left aligned */
+}
+
+.loan-pastdue-results-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  text-align: left;
 }
 
 .loan-pastdue-heading {
@@ -130,4 +140,50 @@
 .btn-generate-report:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.report-table {
+  margin-top: 0;
+}
+
+.report-table h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.table-wrap {
+  margin-top: 0;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  overflow: auto;
+  max-height: 60vh; /* keep table contained with vertical scroll */
+}
+
+.table-wrap table {
+  width: 100%;
+  min-width: 960px; /* allow horizontal scroll for wide datasets */
+  border-collapse: collapse;
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.table-wrap thead th {
+  position: sticky;
+  top: 0;
+  background: #f7f9fb;
+  z-index: 1;
+}
+
+.empty-state {
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px dashed #d9e2ec;
+  border-radius: 6px;
+  color: #546e7a;
+  font-size: 0.95rem;
 }
