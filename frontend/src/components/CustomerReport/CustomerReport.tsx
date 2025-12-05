@@ -95,9 +95,9 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
               <th>Customer type</th>
               <th>Name</th>
               <th>Address</th>
-              <th>Phone</th>
-              <th>Mobile</th>
-              <th>Date of Birth</th>
+              <th className="align-right">Phone</th>
+              <th className="align-right">Mobile</th>
+              <th className="align-right">Date of Birth</th>
               <th>Sex</th>
               <th>Branch Name</th>
             </tr>
@@ -123,9 +123,9 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
                     <td>{customer["Customer type"]}</td>
                     <td>{customer["Name"]}</td>
                     <td>{customer["Address"]}</td>
-                    <td>{customer["Phone"]}</td>
-                    <td>{customer["Mobile"]}</td>
-                    <td>{formattedDate}</td>
+                    <td className="align-right">{customer["Phone"]}</td>
+                    <td className="align-right">{customer["Mobile"]}</td>
+                    <td className="align-right">{formattedDate}</td>
                     <td>{customer["Sex"]}</td>
                     <td>{customer["Branch Name"]}</td>
                   </tr>

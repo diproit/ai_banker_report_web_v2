@@ -65,7 +65,7 @@ const CustomerList: React.FC = () => {
   }, []);
 
   const handleGenerateReport = async () => {
-    if (!branchId) {
+    if (branchId === null) {
       toast.error("Please select a Branch Name");
       return;
     }
@@ -91,26 +91,47 @@ FROM
     LEFT JOIN gl_branch AS b
         ON c.branch_id = b.id
     LEFT JOIN ci_customer_type AS ct
-        ON c.customer_type_id = ct.id
-WHERE
-    c.branch_id = ${branchId}`;
+        ON c.customer_type_id = ct.id`;
+
+      // Build WHERE clause dynamically
+      const whereConditions = [];
+
+      // Add branch filter only if not "ALL" (branchId = 0)
+      if (branchId !== 0) {
+        whereConditions.push(`c.branch_id = ${branchId}`);
+      }
 
       // Add customer type filter if selected
       if (customerTypeId) {
-        query += `
-    AND c.customer_type_id = ${customerTypeId}`;
+        whereConditions.push(`c.customer_type_id = ${customerTypeId}`);
       }
 
-      query += `
+      // Add WHERE clause if there are conditions
+      if (whereConditions.length > 0) {
+        query += `
+WHERE
+    ${whereConditions.join("\n    AND ")}`;
+      }
+
+      // GROUP BY changes based on whether ALL branches is selected
+      if (branchId === 0) {
+        // All branches selected - no need to group by branch
+        query += `
+GROUP BY
+    ct.type_ln1`;
+      } else {
+        // Specific branch selected
+        query += `
 GROUP BY
     b.name_ln1,
     ct.type_ln1`;
+      }
 
       // Console log the query being sent
       console.log("=== SQL Query Being Sent ===");
       console.log(query);
       console.log("=== Parameters ===");
-      console.log("Branch ID:", branchId);
+      console.log("Branch ID:", branchId === 0 ? "All" : branchId);
       console.log("Customer Type ID:", customerTypeId || "NULL (not selected)");
       console.log("==========================");
 
@@ -146,7 +167,7 @@ GROUP BY
           </label>
           <select
             id="branch-name"
-            value={branchId || ""}
+            value={branchId ?? ""}
             onChange={(e) => {
               const selectedBranchId = e.target.value
                 ? Number(e.target.value)
@@ -155,12 +176,15 @@ GROUP BY
                 (b) => b.id === selectedBranchId
               );
               setBranchId(selectedBranchId);
-              setBranchName(selectedBranchObj?.name || "");
+              setBranchName(
+                selectedBranchId === 0 ? "ALL" : selectedBranchObj?.name || ""
+              );
             }}
             className="form-select"
             disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Branch</option>
+            <option value="0">All</option>
             {branches.map((branch) => (
               <option key={branch.id} value={branch.id}>
                 {branch.name}
