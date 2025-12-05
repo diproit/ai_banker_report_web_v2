@@ -78,4 +78,11 @@ export const sqlExecutorApi = {
       ? response.data[0]
       : null;
   },
+
+  getLoanProducts: async (): Promise<{ id: number; name: string }[]> => {
+    const query =
+      "SELECT id, name_ln1 as name FROM pl_account_type WHERE pl_account_category_id = 2 ORDER BY name_ln1";
+    const response = await sqlExecutorApi.executeQuery(query);
+    return response.success ? response.data : [];
+  },
 };
