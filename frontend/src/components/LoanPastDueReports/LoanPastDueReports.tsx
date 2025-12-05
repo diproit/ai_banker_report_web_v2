@@ -94,7 +94,39 @@ const LoanPastDueReports: React.FC = () => {
     });
 
     try {
-      let query = `
+      const filters: string[] = [
+        "pl_account_type.pl_account_category_id = 2",
+      ];
+
+      // Branch filter is optional: branchId === 0 removes the filter
+      if (branchId !== 0) {
+        filters.push(`gl_branch.id = ${branchId}`);
+      }
+
+      if (loanProductId) {
+        filters.push(`pl_account_type.id = ${loanProductId}`);
+      }
+
+      if (passdueDaysFrom && passdueDaysTo) {
+        console.log("Passdue from & to");
+        filters.push(`pl_account.past_due_days BETWEEN ${passdueFrom} AND ${passdueTo}`);
+      }
+
+      if (capitalFrom && capitalTo) {
+        console.log("Capital from & to");
+        filters.push(`pl_account.capital BETWEEN ${capitalFromNum} AND ${capitalToNum}`);
+      }
+
+      if (installmentFrom && installmentTo) {
+        console.log("Installment from & to");
+        filters.push(`(pl_account.past_due_amount / pl_account.capital_installment) BETWEEN ${installmentFromNum} AND ${installmentToNum}`);
+      }
+
+      const whereClause = filters.length ? `WHERE\n          ${filters.join("\n          AND ")}` : "";
+      const groupClause =
+        branchId === 0 ? "GROUP BY\n          gl_branch.id, pl_account_type.id" : "";
+
+      const query = `
       SELECT
         pl_account.ref_account_number,
         ci_customer.customer_number,
@@ -121,30 +153,9 @@ const LoanPastDueReports: React.FC = () => {
       INNER JOIN gl_branch
           ON ci_customer.branch_id = gl_branch.id 
         AND pl_account.branch_id = gl_branch.id
-      WHERE
-          pl_account_type.pl_account_category_id = 2 AND
-          gl_branch.id = ${branchId}
+      ${whereClause}
+      ${groupClause}
       `;
-
-      if (loanProductId) {
-        console.log("Loan Product filter applied");
-        query += ` AND pl_account_type.id = ${loanProductId}\n`;
-      }
-
-      if(passdueDaysFrom && passdueDaysTo){
-        console.log("Passdue from & to");
-        query += `\n AND pl_account.past_due_days BETWEEN ${passdueFrom} AND ${passdueTo}\n`
-      }
-
-      if(capitalFrom && capitalTo){
-        console.log("Capital from & to");
-        query += `\n AND pl_account.capital BETWEEN ${capitalFromNum} AND ${capitalToNum}\n`
-      }
-
-      if(installmentFrom && installmentTo){
-        console.log("Installment from & to");
-        query += `\n AND (pl_account.past_due_amount / pl_account.capital_installment) \n            BETWEEN ${installmentFromNum} AND ${installmentToNum}\n`
-      }
 
       const response = await sqlExecutorApi.executeQuery(query);
       console.log("response LOAN",response);
