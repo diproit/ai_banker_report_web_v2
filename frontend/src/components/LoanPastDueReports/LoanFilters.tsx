@@ -2,6 +2,97 @@ import React from "react";
 import "./LoanPastDueReports.css";
 import type { DropdownOption, GroupingOption } from "./types";
 
+interface RangeFieldProps {
+  label: string;
+  fromValue: string;
+  toValue: string;
+  onFromChange: (value: string) => void;
+  onToChange: (value: string) => void;
+  min?: string;
+  step?: string;
+  fromPlaceholder?: string;
+  toPlaceholder?: string;
+}
+
+const RangeField: React.FC<RangeFieldProps> = ({
+  label,
+  fromValue,
+  toValue,
+  onFromChange,
+  onToChange,
+  min = "0",
+  step = "1",
+  fromPlaceholder = "0",
+  toPlaceholder = "0",
+}) => (
+  <div className="form-group">
+    <label>{label}</label>
+    <div className="controls">
+      <div className="range-row">
+        <label className="small-label">From</label>
+        <input
+          type="number"
+          min={min}
+          step={step}
+          value={fromValue}
+          onChange={(e) => onFromChange(e.target.value)}
+          className="form-input"
+          placeholder={fromPlaceholder}
+        />
+        <label className="small-label">To</label>
+        <input
+          type="number"
+          min={min}
+          step={step}
+          value={toValue}
+          onChange={(e) => onToChange(e.target.value)}
+          className="form-input"
+          placeholder={toPlaceholder}
+        />
+      </div>
+    </div>
+  </div>
+);
+
+interface GroupingSelectorProps {
+  selectedGroupings: GroupingOption[];
+  isDisabled: boolean;
+  onChange: (value: GroupingOption[]) => void;
+}
+
+const GROUPING_OPTIONS: { value: GroupingOption; label: string }[] = [
+  { value: "branch", label: "With Branch" },
+  { value: "product", label: "With Product" },
+];
+
+const GroupingSelector: React.FC<GroupingSelectorProps> = ({ selectedGroupings, isDisabled, onChange }) => {
+  const toggleGrouping = (value: GroupingOption, checked: boolean) => {
+    const next = checked ? [...selectedGroupings, value] : selectedGroupings.filter((g) => g !== value);
+    onChange(next);
+  };
+
+  return (
+    <div className="form-group">
+      <label>Grouping</label>
+      <div className="controls">
+        <div className="range-row">
+          {GROUPING_OPTIONS.map((option) => (
+            <label key={option.value} className="small-label">
+              <input
+                type="checkbox"
+                checked={selectedGroupings.includes(option.value)}
+                onChange={(e) => toggleGrouping(option.value, e.target.checked)}
+                disabled={isDisabled}
+              />{" "}
+              {option.label}
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface LoanFiltersProps {
   branches: DropdownOption[];
   loanProducts: DropdownOption[];
@@ -102,127 +193,38 @@ const LoanFilters: React.FC<LoanFiltersProps> = ({
       </select>
     </div>
 
-    <div className="form-group">
-      <label>Pastdue Installment</label>
-      <div className="controls">
-        <div className="range-row">
-          <label className="small-label">From</label>
-          <input
-            type="number"
-            min="0"
-            step="1"
-            value={installmentFrom}
-            onChange={(e) => onInstallmentFromChange(e.target.value)}
-            className="form-input"
-            placeholder="0"
-          />
-          <label className="small-label">To</label>
-          <input
-            type="number"
-            min="0"
-            step="1"
-            value={installmentTo}
-            onChange={(e) => onInstallmentToChange(e.target.value)}
-            className="form-input"
-            placeholder="0"
-          />
-        </div>
-      </div>
-    </div>
+    <RangeField
+      label="Pastdue Installment"
+      fromValue={installmentFrom}
+      toValue={installmentTo}
+      onFromChange={onInstallmentFromChange}
+      onToChange={onInstallmentToChange}
+    />
 
-    <div className="form-group">
-      <label>Passdue Days</label>
-      <div className="controls">
-        <div className="range-row">
-          <label className="small-label">From</label>
-          <input
-            type="number"
-            min="0"
-            step="1"
-            value={passdueDaysFrom}
-            onChange={(e) => onPassdueDaysFromChange(e.target.value)}
-            className="form-input"
-            placeholder="0"
-          />
-          <label className="small-label">To</label>
-          <input
-            type="number"
-            min="0"
-            step="1"
-            value={passdueDaysTo}
-            onChange={(e) => onPassdueDaysToChange(e.target.value)}
-            className="form-input"
-            placeholder="0"
-          />
-        </div>
-      </div>
-    </div>
+    <RangeField
+      label="Passdue Days"
+      fromValue={passdueDaysFrom}
+      toValue={passdueDaysTo}
+      onFromChange={onPassdueDaysFromChange}
+      onToChange={onPassdueDaysToChange}
+    />
 
-    <div className="form-group">
-      <label>Capital (Amount)</label>
-      <div className="controls">
-        <div className="range-row">
-          <label className="small-label">From</label>
-          <input
-            type="number"
-            min="0"
-            step="1.00"
-            value={capitalFrom}
-            onChange={(e) => onCapitalFromChange(e.target.value)}
-            className="form-input"
-            placeholder="0.00"
-          />
-          <label className="small-label">To</label>
-          <input
-            type="number"
-            min="0"
-            step="1.00"
-            value={capitalTo}
-            onChange={(e) => onCapitalToChange(e.target.value)}
-            className="form-input"
-            placeholder="0.00"
-          />
-        </div>
-      </div>
-    </div>
+    <RangeField
+      label="Capital (Amount)"
+      fromValue={capitalFrom}
+      toValue={capitalTo}
+      onFromChange={onCapitalFromChange}
+      onToChange={onCapitalToChange}
+      step="1.00"
+      fromPlaceholder="0.00"
+      toPlaceholder="0.00"
+    />
 
-    <div className="form-group">
-      <label>Grouping </label>
-      <div className="controls">
-        <div className="range-row">
-          <label className="small-label">
-            <input
-              type="checkbox"
-              checked={selectedGroupings.includes("branch")}
-              onChange={(e) => {
-                const checked = e.target.checked;
-                const next = checked
-                  ? [...selectedGroupings, "branch"]
-                  : selectedGroupings.filter((g) => g !== "branch");
-                onGroupingChange(next);
-              }}
-              disabled={isLoadingDropdowns}
-            />{" "}
-            With Branch
-          </label>
-          <label className="small-label">
-            <input
-              type="checkbox"
-              checked={selectedGroupings.includes("product")}
-              onChange={(e) => {
-                const checked = e.target.checked;
-                const next = checked
-                  ? [...selectedGroupings, "product"]
-                  : selectedGroupings.filter((g) => g !== "product");
-                onGroupingChange(next);
-              }}
-              disabled={isLoadingDropdowns}
-            />{" "}
-            With Product
-          </label>
-        </div>
-      </div>
-    </div>
+    <GroupingSelector
+      selectedGroupings={selectedGroupings}
+      isDisabled={isLoadingDropdowns}
+      onChange={onGroupingChange}
+    />
 
     <div className="form-actions">
       <button className="btn-generate-report" onClick={onGenerate} disabled={isGenerating}>
