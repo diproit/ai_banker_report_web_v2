@@ -1,12 +1,13 @@
 import React from "react";
 import "./LoanPastDueReports.css";
-import type { DropdownOption } from "./types";
+import type { DropdownOption, GroupingOption } from "./types";
 
 interface LoanFiltersProps {
   branches: DropdownOption[];
   loanProducts: DropdownOption[];
   selectedBranchId: string;
   selectedLoanProductId: string;
+  selectedGroupings: GroupingOption[];
   installmentFrom: string;
   installmentTo: string;
   passdueDaysFrom: string;
@@ -17,6 +18,7 @@ interface LoanFiltersProps {
   error: string | null;
   onBranchChange: (value: string) => void;
   onLoanProductChange: (value: string) => void;
+  onGroupingChange: (value: GroupingOption[]) => void;
   onInstallmentFromChange: (value: string) => void;
   onInstallmentToChange: (value: string) => void;
   onPassdueDaysFromChange: (value: string) => void;
@@ -32,6 +34,7 @@ const LoanFilters: React.FC<LoanFiltersProps> = ({
   loanProducts,
   selectedBranchId,
   selectedLoanProductId,
+  selectedGroupings,
   installmentFrom,
   installmentTo,
   passdueDaysFrom,
@@ -42,6 +45,7 @@ const LoanFilters: React.FC<LoanFiltersProps> = ({
   error,
   onBranchChange,
   onLoanProductChange,
+  onGroupingChange,
   onInstallmentFromChange,
   onInstallmentToChange,
   onPassdueDaysFromChange,
@@ -178,6 +182,44 @@ const LoanFilters: React.FC<LoanFiltersProps> = ({
             className="form-input"
             placeholder="0.00"
           />
+        </div>
+      </div>
+    </div>
+
+    <div className="form-group">
+      <label>Grouping </label>
+      <div className="controls">
+        <div className="range-row">
+          <label className="small-label">
+            <input
+              type="checkbox"
+              checked={selectedGroupings.includes("branch")}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                const next = checked
+                  ? [...selectedGroupings, "branch"]
+                  : selectedGroupings.filter((g) => g !== "branch");
+                onGroupingChange(next);
+              }}
+              disabled={isLoadingDropdowns}
+            />{" "}
+            With Branch
+          </label>
+          <label className="small-label">
+            <input
+              type="checkbox"
+              checked={selectedGroupings.includes("product")}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                const next = checked
+                  ? [...selectedGroupings, "product"]
+                  : selectedGroupings.filter((g) => g !== "product");
+                onGroupingChange(next);
+              }}
+              disabled={isLoadingDropdowns}
+            />{" "}
+            With Product
+          </label>
         </div>
       </div>
     </div>

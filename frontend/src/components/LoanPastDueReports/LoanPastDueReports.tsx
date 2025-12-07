@@ -4,12 +4,13 @@ import { sqlExecutorApi } from "../../services/sqlExecutorService";
 import { buildFiltersList, buildQuery, ROWS_PER_PAGE } from "./loanQueryUtils";
 import LoanFilters from "./LoanFilters";
 import ReportSection from "./LoanReportSection";
-import type { DropdownOption, QueryParams } from "./types";
+import type { DropdownOption, GroupingOption, QueryParams } from "./types";
 
 const LoanPastDueReports: React.FC = () => {
   // store selected ids (strings from select inputs)
   const [selectedBranchId, setSelectedBranchId] = useState<string>("");
   const [selectedLoanProductId, setSelectedLoanProductId] = useState<string>("");
+  const [selectedGroupings, setSelectedGroupings] = useState<GroupingOption[]>([]);
 
   const [loanProducts, setLoanProducts] = useState<DropdownOption[]>([]);
 
@@ -48,10 +49,14 @@ const LoanPastDueReports: React.FC = () => {
   const displayBranchName =
     selectedBranchId === "0" ? "All Branches" : selectedBranchObj?.name || "Selected Branch";
   const displayLoanProductName = selectedLoanProductObj?.name || "";
+  const displayGrouping = selectedGroupings
+    .map((g) => (g === "branch" ? "With Branch" : "With Product"))
+    .join(", ");
 
   const handlePrint = () => {
     if (!hasResults || !loanReportData) return;
 
+    const groupingText = displayGrouping ? ` | Grouping: ${displayGrouping}` : "";
     const printableRows = loanReportData
       .map(
         (row) =>
@@ -78,7 +83,7 @@ const LoanPastDueReports: React.FC = () => {
         </head>
         <body>
           <h1>Loan Past Due Report</h1>
-          <h2>Branch: ${displayBranchName}${displayLoanProductName ? ` | Product: ${displayLoanProductName}` : ""}</h2>
+          <h2>Branch: ${displayBranchName}${displayLoanProductName ? ` | Product: ${displayLoanProductName}` : ""}${groupingText}</h2>
           <table>
             <thead><tr>${printableHeader}</tr></thead>
             <tbody>${printableRows}</tbody>
@@ -156,6 +161,11 @@ const LoanPastDueReports: React.FC = () => {
       return;
     }
 
+    if (selectedGroupings.length === 0) {
+      alert("Please select at least one grouping option");
+      return;
+    }
+
     // if (selectedBranchId === "0" && !selectedLoanProductId) {
     //   alert("Please select a Loan Product when Branch is All Branches");
     //   return;
@@ -191,7 +201,7 @@ const LoanPastDueReports: React.FC = () => {
 
     try {
       const filters = buildFiltersList(filterParams);
-      const query = buildQuery(filters, branchId);
+      const query = buildQuery(filters, selectedGroupings);
 
       const response = await sqlExecutorApi.executeQuery(query);
       console.log("response LOAN", response);
@@ -220,6 +230,7 @@ const LoanPastDueReports: React.FC = () => {
         loanProducts={loanProducts}
         selectedBranchId={selectedBranchId}
         selectedLoanProductId={selectedLoanProductId}
+        selectedGroupings={selectedGroupings}
         installmentFrom={installmentFrom}
         installmentTo={installmentTo}
         passdueDaysFrom={passdueDaysFrom}
@@ -230,6 +241,7 @@ const LoanPastDueReports: React.FC = () => {
         error={error}
         onBranchChange={setSelectedBranchId}
         onLoanProductChange={setSelectedLoanProductId}
+        onGroupingChange={setSelectedGroupings}
         onInstallmentFromChange={setInstallmentFrom}
         onInstallmentToChange={setInstallmentTo}
         onPassdueDaysFromChange={setPassdueDaysFrom}
@@ -252,6 +264,7 @@ const LoanPastDueReports: React.FC = () => {
           onPageChange={setCurrentPage}
           displayBranchName={displayBranchName}
           displayLoanProductName={displayLoanProductName}
+          displayGrouping={displayGrouping}
           onPrint={handlePrint}
           onExport={handleExport}
         />

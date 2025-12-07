@@ -3,6 +3,8 @@ export interface DropdownOption {
   name: string;
 }
 
+export type GroupingOption = "branch" | "product";
+
 export interface QueryParams {
   branchId: number;
   loanProductId: number | null;

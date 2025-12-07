@@ -1,4 +1,4 @@
-import type { QueryParams } from "./types";
+import type { GroupingOption, QueryParams } from "./types";
 
 export const ROWS_PER_PAGE = 10;
 
@@ -30,12 +30,88 @@ export const buildFiltersList = (params: QueryParams) => {
   return filters;
 };
 
-export const buildQuery = (filters: string[], branchId: number) => {
-  const whereClause = filters.length ? `WHERE\n          ${filters.join("\n          AND ")}` : "";
-  // const groupClause = branchId === 0 ? "GROUP BY\n          gl_branch.id, pl_account_type.id" : "";
+const buildSelectAndGroupClause = (groupings: GroupingOption[]) => {
+  const hasBranch = groupings.includes("branch");
+  const hasProduct = groupings.includes("product");
 
-  return `
+  if (hasBranch && hasProduct) {
+    return {
+      selectClause: `
       SELECT
+        gl_branch.id AS branch_id,
+        gl_branch.name_ln1 AS branch_name,
+        pl_account_type.id AS product_id,
+        pl_account_type.name_ln1 AS product_name,
+        COUNT(pl_account.id) AS accounts,
+        FORMAT(SUM(pl_account.capital), 2) AS total_capital,
+        FORMAT(SUM(pl_account.balance), 2) AS total_balance,
+        FORMAT(SUM(pl_account.interest), 2) AS total_interest,
+        FORMAT(SUM(pl_account.past_due_amount), 2) AS total_past_due_amount,
+        FORMAT(SUM(pl_account.capital_installment), 2) AS total_capital_installment,
+        FORMAT(ROUND(SUM(pl_account.past_due_amount) / NULLIF(SUM(pl_account.capital_installment), 0), 2), 2) AS passdue_installment,
+        FORMAT(AVG(pl_account.past_due_days), 2) AS avg_past_due_days
+    `,
+      groupClause: `
+      GROUP BY
+          gl_branch.id,
+          gl_branch.name_ln1,
+          pl_account_type.id,
+          pl_account_type.name_ln1
+      `,
+    };
+  }
+
+  if (hasBranch) {
+    return {
+      selectClause: `
+      SELECT
+        gl_branch.id AS branch_id,
+        gl_branch.name_ln1 AS branch_name,
+        COUNT(pl_account.id) AS accounts,
+        FORMAT(SUM(pl_account.capital), 2) AS total_capital,
+        FORMAT(SUM(pl_account.balance), 2) AS total_balance,
+        FORMAT(SUM(pl_account.interest), 2) AS total_interest,
+        FORMAT(SUM(pl_account.past_due_amount), 2) AS total_past_due_amount,
+        FORMAT(SUM(pl_account.capital_installment), 2) AS total_capital_installment,
+        FORMAT(ROUND(SUM(pl_account.past_due_amount) / NULLIF(SUM(pl_account.capital_installment), 0), 2), 2) AS passdue_installment,
+        FORMAT(AVG(pl_account.past_due_days), 2) AS avg_past_due_days
+    `,
+      groupClause: `
+      GROUP BY
+          gl_branch.id,
+          gl_branch.name_ln1
+      `,
+    };
+  }
+
+  if (hasProduct) {
+    return {
+      selectClause: `
+      SELECT
+        pl_account_type.id AS product_id,
+        pl_account_type.name_ln1 AS product_name,
+        COUNT(pl_account.id) AS accounts,
+        FORMAT(SUM(pl_account.capital), 2) AS total_capital,
+        FORMAT(SUM(pl_account.balance), 2) AS total_balance,
+        FORMAT(SUM(pl_account.interest), 2) AS total_interest,
+        FORMAT(SUM(pl_account.past_due_amount), 2) AS total_past_due_amount,
+        FORMAT(SUM(pl_account.capital_installment), 2) AS total_capital_installment,
+        FORMAT(ROUND(SUM(pl_account.past_due_amount) / NULLIF(SUM(pl_account.capital_installment), 0), 2), 2) AS passdue_installment,
+        FORMAT(AVG(pl_account.past_due_days), 2) AS avg_past_due_days
+    `,
+      groupClause: `
+      GROUP BY
+          pl_account_type.id,
+          pl_account_type.name_ln1
+      `,
+    };
+  }
+
+  return {
+    selectClause: `
+      SELECT
+        gl_branch.name_ln1 AS branch_name,
+        pl_account_type.name_ln1 AS product_name,
         pl_account.ref_account_number,
         ci_customer.customer_number,
         ci_customer.full_name_ln1,
@@ -52,6 +128,17 @@ export const buildQuery = (filters: string[], branchId: number) => {
         FORMAT(pl_account.capital_installment, 2) AS capital_installment,
         FORMAT(ROUND(pl_account.past_due_amount / pl_account.capital_installment, 2), 2) AS passdue_installment,
         pl_account.past_due_days
+    `,
+    groupClause: "",
+  };
+};
+
+export const buildQuery = (filters: string[], groupings: GroupingOption[]) => {
+  const whereClause = filters.length ? `\n      WHERE\n          ${filters.join("\n          AND ")}` : "";
+  const { selectClause, groupClause } = buildSelectAndGroupClause(groupings);
+
+  return `
+      ${selectClause}
       FROM
           ci_customer
       INNER JOIN pl_account
@@ -62,6 +149,7 @@ export const buildQuery = (filters: string[], branchId: number) => {
           ON ci_customer.branch_id = gl_branch.id 
         AND pl_account.branch_id = gl_branch.id
       ${whereClause}
+      ${groupClause}
       `;
 };
 

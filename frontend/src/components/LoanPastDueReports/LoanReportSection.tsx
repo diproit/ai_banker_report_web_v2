@@ -13,6 +13,7 @@ interface ReportSectionProps {
   onPageChange: (page: number) => void;
   displayBranchName: string;
   displayLoanProductName: string;
+  displayGrouping: string;
   onPrint: () => void;
   onExport: () => void;
 }
@@ -28,6 +29,7 @@ const ReportSection: React.FC<ReportSectionProps> = ({
   onPageChange,
   displayBranchName,
   displayLoanProductName,
+  displayGrouping,
   onPrint,
   onExport,
 }) => {
@@ -59,6 +61,7 @@ const ReportSection: React.FC<ReportSectionProps> = ({
                   {displayLoanProductName && (
                     <span className="filter-chip">Product: {displayLoanProductName}</span>
                   )}
+                  {displayGrouping && <span className="filter-chip">Grouping: {displayGrouping}</span>}
                 </div>
               </div>
               <div className="report-actions">
