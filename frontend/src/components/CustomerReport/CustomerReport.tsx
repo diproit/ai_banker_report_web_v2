@@ -27,18 +27,46 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
   instituteName = "Institute Name",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterBranch, setFilterBranch] = useState<string>("all");
+  const [filterCustomerType, setFilterCustomerType] = useState<string>("all");
   const rowsPerPage = 10;
 
   // Reset to first page when data changes
   useEffect(() => {
     setCurrentPage(1);
+    setFilterBranch("all");
+    setFilterCustomerType("all");
   }, [data]);
 
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterBranch, filterCustomerType]);
+
+  // Get unique branches and customer types from data
+  const uniqueBranches = Array.from(
+    new Set(data.map((item) => item["Branch Name"]).filter(Boolean))
+  ).sort();
+
+  const uniqueCustomerTypes = Array.from(
+    new Set(data.map((item) => item["Customer type"]).filter(Boolean))
+  ).sort();
+
+  // Filter data based on selected filters
+  const filteredData = data.filter((item) => {
+    const branchMatch =
+      filterBranch === "all" || item["Branch Name"] === filterBranch;
+    const typeMatch =
+      filterCustomerType === "all" ||
+      item["Customer type"] === filterCustomerType;
+    return branchMatch && typeMatch;
+  });
+
   // Calculate pagination
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-  const currentData = data.slice(startIndex, endIndex);
+  const currentData = filteredData.slice(startIndex, endIndex);
 
   // Get today's date in dd/mm/yyyy format
   const getTodayDate = () => {
@@ -91,6 +119,43 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
         Customer List for {branchName}
         {customerType && ` - ${customerType}`}
       </h2>
+
+      {/* Filter Section */}
+      <div className="filter-section">
+        <div className="filter-group">
+          <label htmlFor="filter-branch">Filter by Branch:</label>
+          <select
+            id="filter-branch"
+            value={filterBranch}
+            onChange={(e) => setFilterBranch(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Branches</option>
+            {uniqueBranches.map((branch) => (
+              <option key={branch} value={branch}>
+                {branch}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label htmlFor="filter-customer-type">Filter by Customer Type:</label>
+          <select
+            id="filter-customer-type"
+            value={filterCustomerType}
+            onChange={(e) => setFilterCustomerType(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Types</option>
+            {uniqueCustomerTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <div className="report-table-section">
         <table className="report-table">
@@ -146,7 +211,7 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
           </tbody>
         </table>
 
-        {data.length > rowsPerPage && (
+        {filteredData.length > rowsPerPage && (
           <div className="pagination">
             <button
               className="pagination-btn"
