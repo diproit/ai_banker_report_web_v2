@@ -112,6 +112,29 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
+  // Handle print action
+  const handlePrint = () => {
+    console.log("=== Print Report ===");
+    console.log("Branch:", branchName);
+    console.log("Customer Type:", customerType || "All");
+    console.log("Filter - Branch:", filterBranch);
+    console.log("Filter - Customer Type:", filterCustomerType);
+    console.log("Total Records:", filteredData.length);
+    console.log("====================");
+  };
+
+  // Handle export action
+  const handleExport = () => {
+    console.log("=== Export Report ===");
+    console.log("Branch:", branchName);
+    console.log("Customer Type:", customerType || "All");
+    console.log("Filter - Branch:", filterBranch);
+    console.log("Filter - Customer Type:", filterCustomerType);
+    console.log("Total Records:", filteredData.length);
+    console.log("Data:", filteredData);
+    console.log("=====================");
+  };
+
   return (
     <div className="customer-report-card">
       <h1 className="report-main-heading">{instituteName}</h1>
@@ -155,6 +178,16 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
             ))}
           </select>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="report-actions">
+        <button className="btn-print" onClick={handlePrint}>
+          Print
+        </button>
+        <button className="btn-export" onClick={handleExport}>
+          Export
+        </button>
       </div>
 
       <div className="report-table-section">

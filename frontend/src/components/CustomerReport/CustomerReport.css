@@ -69,6 +69,45 @@
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
+.report-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: flex-end;
+}
+
+.btn-print,
+.btn-export {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-print {
+  background-color: white;
+  color: #333;
+}
+
+.btn-print:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.btn-export {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.btn-export:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
 .report-table-section {
   margin-bottom: 0.75rem;
 }
