@@ -111,11 +111,18 @@ WHERE
     ${whereConditions.join("\n    AND ")}`;
       }
 
-      // GROUP BY - always group by both branch and customer type
-      query += `
-GROUP BY
-    b.name_ln1,
-    ct.type_ln1`;
+      // Add ORDER BY based on selected filters
+      if (branchName.toLowerCase() === "all" && !customerTypeId) {
+        // All branches, no customer type - order by branch id
+        query += `
+ORDER BY
+    b.id`;
+      } else if (branchName.toLowerCase() !== "all" || customerTypeId) {
+        // Branch selected OR customer type selected OR both - order by customer type id
+        query += `
+ORDER BY
+    ct.id`;
+      }
 
       // Console log the query being sent
       console.log("=== SQL Query Being Sent ===");

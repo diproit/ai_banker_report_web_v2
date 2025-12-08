@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CustomerReport.css";
 
 interface Customer {
@@ -28,6 +28,11 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
+
+  // Reset to first page when data changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data]);
 
   // Calculate pagination
   const totalPages = Math.ceil(data.length / rowsPerPage);
