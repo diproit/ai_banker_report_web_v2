@@ -26,47 +26,97 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
   data,
   instituteName = "Institute Name",
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filterBranch, setFilterBranch] = useState<string>("all");
-  const [filterCustomerType, setFilterCustomerType] = useState<string>("all");
-  const rowsPerPage = 10;
+  const [expandedBranches, setExpandedBranches] = useState<Set<string>>(
+    new Set()
+  );
+  const [expandedTypes, setExpandedTypes] = useState<Set<string>>(new Set());
+  const [expandAll, setExpandAll] = useState(false);
 
-  // Reset to first page when data changes
+  // Reset expanded state when data changes
   useEffect(() => {
-    setCurrentPage(1);
-    setFilterBranch("all");
-    setFilterCustomerType("all");
+    setExpandedBranches(new Set());
+    setExpandedTypes(new Set());
+    setExpandAll(false);
   }, [data]);
 
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filterBranch, filterCustomerType]);
+  // Group data by branch and customer type
+  const groupedData = data.reduce((acc, customer) => {
+    const branch = customer["Branch Name"] || "Unknown";
+    const type = customer["Customer type"] || "Unknown";
 
-  // Get unique branches and customer types from data
-  const uniqueBranches = Array.from(
-    new Set(data.map((item) => item["Branch Name"]).filter(Boolean))
-  ).sort();
+    if (!acc[branch]) {
+      acc[branch] = {};
+    }
+    if (!acc[branch][type]) {
+      acc[branch][type] = [];
+    }
+    acc[branch][type].push(customer);
 
-  const uniqueCustomerTypes = Array.from(
-    new Set(data.map((item) => item["Customer type"]).filter(Boolean))
-  ).sort();
+    return acc;
+  }, {} as Record<string, Record<string, Customer[]>>);
 
-  // Filter data based on selected filters
-  const filteredData = data.filter((item) => {
-    const branchMatch =
-      filterBranch === "all" || item["Branch Name"] === filterBranch;
-    const typeMatch =
-      filterCustomerType === "all" ||
-      item["Customer type"] === filterCustomerType;
-    return branchMatch && typeMatch;
-  });
+  // Sort branches alphabetically
+  const sortedBranches = Object.keys(groupedData).sort();
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-  const currentData = filteredData.slice(startIndex, endIndex);
+  // Toggle branch expansion
+  const toggleBranch = (branch: string) => {
+    const newExpanded = new Set(expandedBranches);
+    if (newExpanded.has(branch)) {
+      newExpanded.delete(branch);
+      // Also collapse all types under this branch
+      const typesToRemove = Object.keys(groupedData[branch]).map(
+        (type) => `${branch}::${type}`
+      );
+      const newExpandedTypes = new Set(expandedTypes);
+      typesToRemove.forEach((key) => newExpandedTypes.delete(key));
+      setExpandedTypes(newExpandedTypes);
+    } else {
+      newExpanded.add(branch);
+    }
+    setExpandedBranches(newExpanded);
+  };
+
+  // Toggle customer type expansion
+  const toggleType = (branch: string, type: string) => {
+    const key = `${branch}::${type}`;
+    const newExpanded = new Set(expandedTypes);
+    if (newExpanded.has(key)) {
+      newExpanded.delete(key);
+    } else {
+      newExpanded.add(key);
+    }
+    setExpandedTypes(newExpanded);
+  };
+
+  // Expand/Collapse all
+  const handleExpandCollapseAll = () => {
+    if (expandAll) {
+      setExpandedBranches(new Set());
+      setExpandedTypes(new Set());
+    } else {
+      const allBranches = new Set(sortedBranches);
+      const allTypes = new Set<string>();
+      sortedBranches.forEach((branch) => {
+        Object.keys(groupedData[branch]).forEach((type) => {
+          allTypes.add(`${branch}::${type}`);
+        });
+      });
+      setExpandedBranches(allBranches);
+      setExpandedTypes(allTypes);
+    }
+    setExpandAll(!expandAll);
+  };
+
+  // Format date helper
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  };
 
   // Get today's date in dd/mm/yyyy format
   const getTodayDate = () => {
@@ -77,39 +127,9 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
     return `${day}/${month}/${year}`;
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handlePageClick = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  // Calculate which page numbers to display (max 5)
-  const getVisiblePages = () => {
-    const maxVisible = 5;
-    if (totalPages <= maxVisible) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    const half = Math.floor(maxVisible / 2);
-    let start = Math.max(1, currentPage - half);
-    let end = Math.min(totalPages, start + maxVisible - 1);
-
-    // Adjust start if we're near the end
-    if (end - start < maxVisible - 1) {
-      start = Math.max(1, end - maxVisible + 1);
-    }
-
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  // Get total count for a branch
+  const getBranchCount = (branch: string) => {
+    return Object.values(groupedData[branch]).flat().length;
   };
 
   return (
@@ -120,137 +140,115 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
         {customerType && ` - ${customerType}`}
       </h2>
 
-      {/* Filter Section */}
-      <div className="filter-section">
-        <div className="filter-group">
-          <label htmlFor="filter-branch">Filter by Branch:</label>
-          <select
-            id="filter-branch"
-            value={filterBranch}
-            onChange={(e) => setFilterBranch(e.target.value)}
-            className="filter-select"
-          >
-            <option value="all">All Branches</option>
-            {uniqueBranches.map((branch) => (
-              <option key={branch} value={branch}>
-                {branch}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="filter-customer-type">Filter by Customer Type:</label>
-          <select
-            id="filter-customer-type"
-            value={filterCustomerType}
-            onChange={(e) => setFilterCustomerType(e.target.value)}
-            className="filter-select"
-          >
-            <option value="all">All Types</option>
-            {uniqueCustomerTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Expand/Collapse All Button */}
+      <div className="drill-down-controls">
+        <button
+          className="btn-expand-collapse"
+          onClick={handleExpandCollapseAll}
+        >
+          {expandAll ? "Collapse All" : "Expand All"}
+        </button>
       </div>
 
-      <div className="report-table-section">
-        <table className="report-table">
-          <thead>
-            <tr>
-              <th>Ref member number</th>
-              <th>Customer type</th>
-              <th>Name</th>
-              <th>Address</th>
-              <th className="align-right">Phone</th>
-              <th className="align-right">Mobile</th>
-              <th className="align-right">Date of Birth</th>
-              <th>Sex</th>
-              <th>Branch Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.length > 0 ? (
-              currentData.map((customer, index) => {
-                // Format date as YYYY/MM/DD
-                let formattedDate = "";
-                if (customer["Date of Birth"]) {
-                  const date = new Date(customer["Date of Birth"]);
-                  if (!isNaN(date.getTime())) {
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, "0");
-                    const day = String(date.getDate()).padStart(2, "0");
-                    formattedDate = `${year}/${month}/${day}`;
-                  }
-                }
+      {/* Drill-down Structure */}
+      <div className="drill-down-container">
+        {sortedBranches.map((branch) => {
+          const isBranchExpanded = expandedBranches.has(branch);
+          const branchCount = getBranchCount(branch);
+          const customerTypes = Object.keys(groupedData[branch]).sort();
 
-                return (
-                  <tr key={index}>
-                    <td>{customer["Ref member number"]}</td>
-                    <td>{customer["Customer type"]}</td>
-                    <td>{customer["Name"]}</td>
-                    <td>{customer["Address"]}</td>
-                    <td className="align-right">{customer["Phone"]}</td>
-                    <td className="align-right">{customer["Mobile"]}</td>
-                    <td className="align-right">{formattedDate}</td>
-                    <td>{customer["Sex"]}</td>
-                    <td>{customer["Branch Name"]}</td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={9} className="no-data">
-                  No data available
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+          return (
+            <div key={branch} className="branch-group">
+              {/* Branch Header */}
+              <div
+                className="branch-header"
+                onClick={() => toggleBranch(branch)}
+              >
+                <span className="expand-icon">
+                  {isBranchExpanded ? "▼" : "▶"}
+                </span>
+                <span className="branch-name">{branch}</span>
+                <span className="record-count">({branchCount} records)</span>
+              </div>
 
-        {filteredData.length > rowsPerPage && (
-          <div className="pagination">
-            <button
-              className="pagination-btn"
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
+              {/* Customer Types (shown when branch is expanded) */}
+              {isBranchExpanded && (
+                <div className="customer-types-container">
+                  {customerTypes.map((type) => {
+                    const typeKey = `${branch}::${type}`;
+                    const isTypeExpanded = expandedTypes.has(typeKey);
+                    const typeCustomers = groupedData[branch][type];
+                    const typeCount = typeCustomers.length;
 
-            <div className="pagination-numbers">
-              {getVisiblePages().map((page) => (
-                <button
-                  key={page}
-                  className={`pagination-number ${
-                    currentPage === page ? "active" : ""
-                  }`}
-                  onClick={() => handlePageClick(page)}
-                >
-                  {page}
-                </button>
-              ))}
+                    return (
+                      <div key={typeKey} className="type-group">
+                        {/* Customer Type Header */}
+                        <div
+                          className="type-header"
+                          onClick={() => toggleType(branch, type)}
+                        >
+                          <span className="expand-icon">
+                            {isTypeExpanded ? "▼" : "▶"}
+                          </span>
+                          <span className="type-name">{type}</span>
+                          <span className="record-count">
+                            ({typeCount} records)
+                          </span>
+                        </div>
+
+                        {/* Customer Table (shown when type is expanded) */}
+                        {isTypeExpanded && (
+                          <div className="customer-table-container">
+                            <table className="report-table">
+                              <thead>
+                                <tr>
+                                  <th>Ref member number</th>
+                                  <th>Customer type</th>
+                                  <th>Name</th>
+                                  <th>Address</th>
+                                  <th className="align-right">Phone</th>
+                                  <th className="align-right">Mobile</th>
+                                  <th className="align-right">Date of Birth</th>
+                                  <th>Sex</th>
+                                  <th>Branch Name</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {typeCustomers.map((customer, index) => (
+                                  <tr key={index}>
+                                    <td>{customer["Ref member number"]}</td>
+                                    <td>{customer["Customer type"]}</td>
+                                    <td>{customer["Name"]}</td>
+                                    <td>{customer["Address"]}</td>
+                                    <td className="align-right">
+                                      {customer["Phone"]}
+                                    </td>
+                                    <td className="align-right">
+                                      {customer["Mobile"]}
+                                    </td>
+                                    <td className="align-right">
+                                      {formatDate(customer["Date of Birth"])}
+                                    </td>
+                                    <td>{customer["Sex"]}</td>
+                                    <td>{customer["Branch Name"]}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-
-            <button
-              className="pagination-btn"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        )}
+          );
+        })}
       </div>
 
       <div className="report-footer">
         <div className="footer-date">{getTodayDate()}</div>
-        <div className="footer-page">
-          Page {String(currentPage).padStart(2, "0")}
-        </div>
       </div>
     </div>
   );
