@@ -110,7 +110,9 @@ const buildSelectAndGroupClause = (groupings: GroupingOption[]) => {
   return {
     selectClause: `
       SELECT
+        gl_branch.id AS branch_id,
         gl_branch.name_ln1 AS branch_name,
+        pl_account_type.id AS product_id,
         pl_account_type.name_ln1 AS product_name,
         pl_account.ref_account_number,
         ci_customer.customer_number,

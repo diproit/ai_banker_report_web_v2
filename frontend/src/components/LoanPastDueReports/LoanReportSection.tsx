@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./LoanPastDueReports.css";
 import { ROWS_PER_PAGE, getTodayDate, getVisiblePages } from "./loanQueryUtils";
+import type { BranchDrilldownGroup, ProductDrilldownGroup } from "./types";
+import DrilldownTabs, { type DrilldownView } from "./components/DrilldownTabs";
+import BranchDrilldown from "./components/BranchDrilldown";
+import ProductDrilldown from "./components/ProductDrilldown";
+import TableView from "./components/TableView";
 
 interface ReportSectionProps {
   error: string | null;
@@ -16,6 +21,9 @@ interface ReportSectionProps {
   displayGrouping: string;
   onPrint: () => void;
   onExport: () => void;
+  isAllBranches: boolean;
+  branchGroups: BranchDrilldownGroup[] | null;
+  productGroups: ProductDrilldownGroup[] | null;
 }
 
 const ReportSection: React.FC<ReportSectionProps> = ({
@@ -32,8 +40,74 @@ const ReportSection: React.FC<ReportSectionProps> = ({
   displayGrouping,
   onPrint,
   onExport,
+  isAllBranches,
+  branchGroups,
+  productGroups,
 }) => {
   const visiblePages = getVisiblePages(currentPage, totalPages);
+  const [expandedBranches, setExpandedBranches] = useState<Record<string, boolean>>({});
+  const [branchPages, setBranchPages] = useState<Record<string, number>>({});
+  const [expandedBranchProducts, setExpandedBranchProducts] = useState<Record<string, boolean>>({});
+  const [branchProductPages, setBranchProductPages] = useState<Record<string, number>>({});
+  const [expandedProducts, setExpandedProducts] = useState<Record<string, boolean>>({});
+  const [productPages, setProductPages] = useState<Record<string, number>>({});
+  const [activeDrilldown, setActiveDrilldown] = useState<DrilldownView>("table");
+
+  useEffect(() => {
+    if (isAllBranches && branchGroups && branchGroups.length > 0) {
+      setActiveDrilldown("branch");
+    } else if (productGroups && productGroups.length > 0) {
+      setActiveDrilldown("product");
+    } else {
+      setActiveDrilldown("table");
+    }
+  }, [branchGroups, productGroups, isAllBranches]);
+
+  const toggleBranch = (key: string) => {
+    setExpandedBranches((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const setBranchPage = (key: string, page: number) => {
+    setBranchPages((prev) => ({ ...prev, [key]: page }));
+  };
+
+  const toggleBranchProduct = (key: string) => {
+    setExpandedBranchProducts((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const setBranchProductPage = (key: string, page: number) => {
+    setBranchProductPages((prev) => ({ ...prev, [key]: page }));
+  };
+
+  const toggleProduct = (key: string) => {
+    setExpandedProducts((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const setProductPage = (key: string, page: number) => {
+    setProductPages((prev) => ({ ...prev, [key]: page }));
+  };
+
+  const hasBranchDrilldown = isAllBranches && branchGroups && branchGroups.length > 0;
+  const hasProductDrilldown = productGroups && productGroups.length > 0;
+
+  const detailColumns = useMemo(() => {
+    const excluded = new Set<string>();
+
+    if (activeDrilldown === "branch" && isAllBranches) {
+      excluded.add("branch_name");
+      excluded.add("branch_id");
+    }
+
+    if (activeDrilldown === "product") {
+      excluded.add("product_name");
+      excluded.add("product_id");
+    }
+
+    return excluded.size ? columns.filter((col) => !excluded.has(col)) : columns;
+  }, [columns, activeDrilldown, isAllBranches]);
+
+  const formatNumber = (value: number) =>
+    Number.isFinite(value) ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0.00";
 
   if (!error && !hasResults) {
     return null;
@@ -53,9 +127,7 @@ const ReportSection: React.FC<ReportSectionProps> = ({
             <div className="report-toolbar">
               <div className="report-heading-block">
                 <div className="report-title">Loan Past Due Report</div>
-                <div className="report-meta">
-                  Generated {getTodayDate()} • {totalRows} row{totalRows === 1 ? "" : "s"}
-                </div>
+                <div className="report-meta">Generated {getTodayDate()} - {totalRows} row{totalRows === 1 ? "" : "s"}</div>
                 <div className="report-filters">
                   <span className="filter-chip">Branch: {displayBranchName}</span>
                   {displayLoanProductName && (
@@ -75,57 +147,47 @@ const ReportSection: React.FC<ReportSectionProps> = ({
             </div>
 
             <div className="report-table-section">
-              <div className="table-wrap">
-                <table className="report-table">
-                  <thead>
-                    <tr>
-                      {columns.map((col) => (
-                        <th key={col}>{col}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedData.map((row, idx) => (
-                      <tr key={idx}>
-                        {columns.map((col) => (
-                          <td key={col}>{String(row[col] ?? "")}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <DrilldownTabs
+                active={activeDrilldown}
+                hasBranch={hasBranchDrilldown}
+                hasProduct={hasProductDrilldown}
+                onChange={setActiveDrilldown}
+              />
 
-              {totalRows > ROWS_PER_PAGE && (
-                <div className="pagination">
-                  <button
-                    className="pagination-btn"
-                    onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </button>
-
-                  <div className="pagination-numbers">
-                    {visiblePages.map((page) => (
-                      <button
-                        key={page}
-                        className={`pagination-number ${currentPage === page ? "active" : ""}`}
-                        onClick={() => onPageChange(page)}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    className="pagination-btn"
-                    onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </button>
-                </div>
+              {activeDrilldown === "branch" && hasBranchDrilldown ? (
+                <BranchDrilldown
+                  branchGroups={branchGroups ?? []}
+                  detailColumns={detailColumns}
+                  expandedBranches={expandedBranches}
+                  branchPages={branchPages}
+                  onToggleBranch={toggleBranch}
+                  onBranchPageChange={setBranchPage}
+                  expandedBranchProducts={expandedBranchProducts}
+                  branchProductPages={branchProductPages}
+                  onToggleBranchProduct={toggleBranchProduct}
+                  onBranchProductPageChange={setBranchProductPage}
+                  formatNumber={formatNumber}
+                />
+              ) : activeDrilldown === "product" && hasProductDrilldown ? (
+                <ProductDrilldown
+                  productGroups={productGroups ?? []}
+                  detailColumns={detailColumns}
+                  expandedProducts={expandedProducts}
+                  productPages={productPages}
+                  onToggleProduct={toggleProduct}
+                  onProductPageChange={setProductPage}
+                  formatNumber={formatNumber}
+                />
+              ) : (
+                <TableView
+                  columns={columns}
+                  paginatedData={paginatedData}
+                  totalRows={totalRows}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  visiblePages={visiblePages}
+                  onPageChange={onPageChange}
+                />
               )}
             </div>
 

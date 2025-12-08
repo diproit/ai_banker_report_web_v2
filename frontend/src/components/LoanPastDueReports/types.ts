@@ -18,3 +18,29 @@ export interface QueryParams {
   hasCapitalRange: boolean;
   hasInstallmentRange: boolean;
 }
+
+export interface BranchDrilldownTotals {
+  accounts: number;
+  capital: number;
+  balance: number;
+  interest: number;
+  pastDueAmount: number;
+  capitalInstallment: number;
+  passdueInstallment: number;
+  avgPastDueDays: number;
+}
+
+export interface BranchDrilldownGroup {
+  branchId: number | string;
+  branchName: string;
+  rows: any[];
+  totals: BranchDrilldownTotals;
+  productGroups?: ProductDrilldownGroup[];
+}
+
+export interface ProductDrilldownGroup {
+  productId: number | string;
+  productName: string;
+  rows: any[];
+  totals: BranchDrilldownTotals;
+}

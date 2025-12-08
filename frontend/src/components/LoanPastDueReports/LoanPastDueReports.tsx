@@ -4,7 +4,35 @@ import { sqlExecutorApi } from "../../services/sqlExecutorService";
 import { buildFiltersList, buildQuery, ROWS_PER_PAGE } from "./loanQueryUtils";
 import LoanFilters from "./LoanFilters";
 import ReportSection from "./LoanReportSection";
-import type { DropdownOption, GroupingOption, QueryParams } from "./types";
+import type {
+  BranchDrilldownGroup,
+  DropdownOption,
+  GroupingOption,
+  ProductDrilldownGroup,
+  QueryParams,
+} from "./types";
+
+const parseNumericValue = (value: unknown) => {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === "number") return value;
+  const cleaned = String(value).replace(/,/g, "").replace(/%/g, "");
+  const parsed = parseFloat(cleaned);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+type TotalsAccumulator = BranchDrilldownGroup["totals"] & { pastDueDaysSum: number };
+
+const createTotals = (): TotalsAccumulator => ({
+  accounts: 0,
+  capital: 0,
+  balance: 0,
+  interest: 0,
+  pastDueAmount: 0,
+  capitalInstallment: 0,
+  passdueInstallment: 0,
+  avgPastDueDays: 0,
+  pastDueDaysSum: 0,
+});
 
 const LoanPastDueReports: React.FC = () => {
   // store selected ids (strings from select inputs)
@@ -32,6 +60,8 @@ const LoanPastDueReports: React.FC = () => {
   const [reportError, setReportError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const hasResults = loanReportData !== null && loanReportData.length > 0;
+  const isAllBranchesSelected = selectedBranchId === "0";
+  const activeGroupings = isAllBranchesSelected ? [] : selectedGroupings;
   const columns = useMemo(
     () => (loanReportData && loanReportData.length > 0 ? Object.keys(loanReportData[0]) : []),
     [loanReportData]
@@ -49,9 +79,183 @@ const LoanPastDueReports: React.FC = () => {
   const displayBranchName =
     selectedBranchId === "0" ? "All Branches" : selectedBranchObj?.name || "Selected Branch";
   const displayLoanProductName = selectedLoanProductObj?.name || "";
-  const displayGrouping = selectedGroupings
-    .map((g) => (g === "branch" ? "With Branch" : "With Product"))
-    .join(", ");
+  const displayGrouping = activeGroupings.map((g) => (g === "branch" ? "With Branch" : "With Product")).join(", ");
+  const branchDrilldownData = useMemo<BranchDrilldownGroup[] | null>(() => {
+    if (!isAllBranchesSelected || !loanReportData) {
+      return null;
+    }
+
+    const buildProductGroups = (rows: any[]): ProductDrilldownGroup[] => {
+      const productMap = new Map<
+        string,
+        { productId: string | number; productName: string; rows: any[]; totals: TotalsAccumulator }
+      >();
+
+      rows.forEach((row) => {
+        const productIdRaw =
+          row.product_id ?? row.productId ?? row.product ?? row.productid ?? row.pl_account_type_id;
+        const productName = row.product_name ?? row.productName ?? "Unknown Product";
+        const productId = productIdRaw !== undefined && productIdRaw !== null ? productIdRaw : productName;
+        const productKey = String(productId);
+
+        if (!productMap.has(productKey)) {
+          productMap.set(productKey, { productId, productName, rows: [], totals: createTotals() });
+        }
+
+        const productGroup = productMap.get(productKey);
+        if (!productGroup) return;
+
+        productGroup.rows.push(row);
+        productGroup.totals.accounts += 1;
+        productGroup.totals.capital += parseNumericValue(row.capital ?? row.total_capital);
+        productGroup.totals.balance += parseNumericValue(row.balance ?? row.total_balance);
+        productGroup.totals.interest += parseNumericValue(row.interest ?? row.total_interest);
+        productGroup.totals.pastDueAmount += parseNumericValue(row.past_due_amount ?? row.total_past_due_amount);
+        productGroup.totals.capitalInstallment += parseNumericValue(
+          row.capital_installment ?? row.total_capital_installment
+        );
+        productGroup.totals.pastDueDaysSum += parseNumericValue(row.past_due_days);
+      });
+
+      return Array.from(productMap.values()).map((group) => {
+        const { accounts, capital, balance, interest, pastDueAmount, capitalInstallment, pastDueDaysSum } =
+          group.totals;
+        const passdueInstallment =
+          capitalInstallment > 0 ? parseFloat((pastDueAmount / capitalInstallment).toFixed(2)) : 0;
+        const avgPastDueDays = accounts > 0 ? parseFloat((pastDueDaysSum / accounts).toFixed(2)) : 0;
+
+        return {
+          productId: group.productId,
+          productName: group.productName,
+          rows: group.rows,
+          totals: {
+            accounts,
+            capital,
+            balance,
+            interest,
+            pastDueAmount,
+            capitalInstallment,
+            passdueInstallment,
+            avgPastDueDays,
+          },
+        };
+      });
+    };
+
+    const grouped = new Map<
+      string,
+      { branchId: string | number; branchName: string; rows: any[]; totals: TotalsAccumulator }
+    >();
+
+    loanReportData.forEach((row) => {
+      const branchIdRaw = row.branch_id ?? row.branchId ?? row.branch ?? row.branchid;
+      const branchName = row.branch_name ?? row.branchName ?? "Unknown Branch";
+      const branchId = branchIdRaw !== undefined && branchIdRaw !== null ? branchIdRaw : branchName;
+      const branchKey = String(branchId);
+
+      if (!grouped.has(branchKey)) {
+        grouped.set(branchKey, { branchId, branchName, rows: [], totals: createTotals() });
+      }
+
+      const group = grouped.get(branchKey);
+      if (!group) return;
+
+      group.rows.push(row);
+      group.totals.accounts += 1;
+      group.totals.capital += parseNumericValue(row.capital);
+      group.totals.balance += parseNumericValue(row.balance);
+      group.totals.interest += parseNumericValue(row.interest);
+      group.totals.pastDueAmount += parseNumericValue(row.past_due_amount);
+      group.totals.capitalInstallment += parseNumericValue(row.capital_installment);
+      group.totals.pastDueDaysSum += parseNumericValue(row.past_due_days);
+    });
+
+    return Array.from(grouped.values()).map((group) => {
+      const { accounts, capital, balance, interest, pastDueAmount, capitalInstallment, pastDueDaysSum } =
+        group.totals;
+      const passdueInstallment =
+        capitalInstallment > 0 ? parseFloat((pastDueAmount / capitalInstallment).toFixed(2)) : 0;
+      const avgPastDueDays = accounts > 0 ? parseFloat((pastDueDaysSum / accounts).toFixed(2)) : 0;
+
+      return {
+        branchId: group.branchId,
+        branchName: group.branchName,
+        rows: group.rows,
+        totals: {
+          accounts,
+          capital,
+          balance,
+          interest,
+          pastDueAmount,
+          capitalInstallment,
+          passdueInstallment,
+          avgPastDueDays,
+        },
+        productGroups: buildProductGroups(group.rows),
+      };
+    });
+  }, [isAllBranchesSelected, loanReportData]);
+
+  const productDrilldownData = useMemo<ProductDrilldownGroup[] | null>(() => {
+    if (!loanReportData) {
+      return null;
+    }
+
+    const grouped = new Map<
+      string,
+      { productId: string | number; productName: string; rows: any[]; totals: TotalsAccumulator }
+    >();
+
+    loanReportData.forEach((row) => {
+      const productIdRaw =
+        row.product_id ?? row.productId ?? row.product ?? row.productid ?? row.pl_account_type_id;
+      const productName = row.product_name ?? row.productName ?? "Unknown Product";
+      const productId = productIdRaw !== undefined && productIdRaw !== null ? productIdRaw : productName;
+      const productKey = String(productId);
+
+      if (!grouped.has(productKey)) {
+        grouped.set(productKey, { productId, productName, rows: [], totals: createTotals() });
+      }
+
+      const group = grouped.get(productKey);
+      if (!group) return;
+
+      group.rows.push(row);
+      group.totals.accounts += 1;
+      group.totals.capital += parseNumericValue(row.capital ?? row.total_capital);
+      group.totals.balance += parseNumericValue(row.balance ?? row.total_balance);
+      group.totals.interest += parseNumericValue(row.interest ?? row.total_interest);
+      group.totals.pastDueAmount += parseNumericValue(row.past_due_amount ?? row.total_past_due_amount);
+      group.totals.capitalInstallment += parseNumericValue(
+        row.capital_installment ?? row.total_capital_installment
+      );
+      group.totals.pastDueDaysSum += parseNumericValue(row.past_due_days);
+    });
+
+    return Array.from(grouped.values()).map((group) => {
+      const { accounts, capital, balance, interest, pastDueAmount, capitalInstallment, pastDueDaysSum } =
+        group.totals;
+      const passdueInstallment =
+        capitalInstallment > 0 ? parseFloat((pastDueAmount / capitalInstallment).toFixed(2)) : 0;
+      const avgPastDueDays = accounts > 0 ? parseFloat((pastDueDaysSum / accounts).toFixed(2)) : 0;
+
+      return {
+        productId: group.productId,
+        productName: group.productName,
+        rows: group.rows,
+        totals: {
+          accounts,
+          capital,
+          balance,
+          interest,
+          pastDueAmount,
+          capitalInstallment,
+          passdueInstallment,
+          avgPastDueDays,
+        },
+      };
+    });
+  }, [loanReportData]);
 
   const handlePrint = () => {
     if (!hasResults || !loanReportData) return;
@@ -161,15 +365,17 @@ const LoanPastDueReports: React.FC = () => {
       return;
     }
 
-    if (selectedGroupings.length === 0) {
-      alert("Please select at least one grouping option");
-      return;
-    }
+    // if (selectedGroupings.length === 0) {
+    //   alert("Please select at least one grouping option");
+    //   return;
+    // }
 
     // if (selectedBranchId === "0" && !selectedLoanProductId) {
     //   alert("Please select a Loan Product when Branch is All Branches");
     //   return;
     // }
+
+    //drildown drillup
 
     setIsGenerating(true);
     setReportError(null);
@@ -201,7 +407,7 @@ const LoanPastDueReports: React.FC = () => {
 
     try {
       const filters = buildFiltersList(filterParams);
-      const query = buildQuery(filters, selectedGroupings);
+      const query = buildQuery(filters, activeGroupings);
 
       const response = await sqlExecutorApi.executeQuery(query);
       console.log("response LOAN", response);
@@ -267,6 +473,9 @@ const LoanPastDueReports: React.FC = () => {
           displayGrouping={displayGrouping}
           onPrint={handlePrint}
           onExport={handleExport}
+          isAllBranches={isAllBranchesSelected}
+          branchGroups={branchDrilldownData}
+          productGroups={productDrilldownData}
         />
       )}
     </div>

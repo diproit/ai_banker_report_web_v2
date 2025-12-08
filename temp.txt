@@ -1,0 +1,302 @@
+import React, { useEffect, useMemo, useState } from "react";
+import "./LoanPastDueReports.css";
+import { ROWS_PER_PAGE, getTodayDate, getVisiblePages } from "./loanQueryUtils";
+import type { BranchDrilldownGroup, ProductDrilldownGroup } from "./types";
+
+interface ReportSectionProps {
+  error: string | null;
+  hasResults: boolean;
+  columns: string[];
+  paginatedData: any[];
+  totalRows: number;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  displayBranchName: string;
+  displayLoanProductName: string;
+  displayGrouping: string;
+  onPrint: () => void;
+  onExport: () => void;
+  isAllBranches: boolean;
+  branchGroups: BranchDrilldownGroup[] | null;
+  productGroups: ProductDrilldownGroup[] | null;
+}
+
+const ReportSection: React.FC<ReportSectionProps> = ({
+  error,
+  hasResults,
+  columns,
+  paginatedData,
+  totalRows,
+  currentPage,
+  totalPages,
+  onPageChange,
+  displayBranchName,
+  displayLoanProductName,
+  displayGrouping,
+  onPrint,
+  onExport,
+  isAllBranches,
+  branchGroups,
+  productGroups,
+}) => {
+  const visiblePages = getVisiblePages(currentPage, totalPages);
+  const [expandedBranches, setExpandedBranches] = useState<Record<string, boolean>>({});
+  const [branchPages, setBranchPages] = useState<Record<string, number>>({});
+  const [expandedProducts, setExpandedProducts] = useState<Record<string, boolean>>({});
+  const [productPages, setProductPages] = useState<Record<string, number>>({});
+  const [activeDrilldown, setActiveDrilldown] = useState<"branch" | "product" | "table">("table");
+
+  useEffect(() => {
+    if (isAllBranches && branchGroups && branchGroups.length > 0) {
+      setActiveDrilldown("branch");
+    } else if (productGroups && productGroups.length > 0) {
+      setActiveDrilldown("product");
+    } else {
+      setActiveDrilldown("table");
+    }
+  }, [branchGroups, productGroups, isAllBranches]);
+
+  const toggleBranch = (key: string) => {
+    setExpandedBranches((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const setBranchPage = (key: string, page: number) => {
+    setBranchPages((prev) => ({ ...prev, [key]: page }));
+  };
+
+  const toggleProduct = (key: string) => {
+    setExpandedProducts((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const setProductPage = (key: string, page: number) => {
+    setProductPages((prev) => ({ ...prev, [key]: page }));
+  };
+
+  const hasBranchDrilldown = isAllBranches && branchGroups && branchGroups.length > 0;
+  const hasProductDrilldown = productGroups && productGroups.length > 0;
+
+  const detailColumns = useMemo(() => {
+    const excluded = new Set<string>();
+
+    if (activeDrilldown === "branch" && isAllBranches) {
+      excluded.add("branch_name");
+      excluded.add("branch_id");
+    }
+
+    if (activeDrilldown === "product") {
+      excluded.add("product_name");
+      excluded.add("product_id");
+    }
+
+    return excluded.size ? columns.filter((col) => !excluded.has(col)) : columns;
+  }, [columns, activeDrilldown, isAllBranches]);
+
+  const formatNumber = (value: number) =>
+    Number.isFinite(value) ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0.00";
+
+  if (!error && !hasResults) {
+    return null;
+  }
+
+  return (
+    <div className="loan-pastdue-results-card">
+      <div className="report-results">
+        {error && (
+          <div className="error-message">
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+
+        {hasResults ? (
+          <div className="loan-report-card">
+            <div className="report-toolbar">
+              <div className="report-heading-block">
+                <div className="report-title">Loan Past Due Report</div>
+                <div className="report-meta">
+                  Generated {getTodayDate()} • {totalRows} row{totalRows === 1 ? "" : "s"}
+                </div>
+                <div className="report-filters">
+                  <span className="filter-chip">Branch: {displayBranchName}</span>
+                  {displayLoanProductName && (
+                    <span className="filter-chip">Product: {displayLoanProductName}</span>
+                  )}
+                  {displayGrouping && <span className="filter-chip">Grouping: {displayGrouping}</span>}
+                </div>
+              </div>
+              <div className="report-actions">
+                <button className="btn-action" type="button" onClick={onPrint}>
+                  Print
+                </button>
+                <button className="btn-action primary" type="button" onClick={onExport}>
+                  Export
+                </button>
+              </div>
+            </div>
+
+            <div className="report-table-section">
+              {isAllBranches && branchGroups && branchGroups.length > 0 ? (
+                <div className="branch-drilldown">
+                  {branchGroups.map((group) => {
+                    const key = String(group.branchId);
+                    const isOpen = expandedBranches[key] ?? false;
+                    const branchTotalPages = Math.max(1, Math.ceil(group.rows.length / ROWS_PER_PAGE));
+                    const branchPage = Math.min(branchPages[key] ?? 1, branchTotalPages);
+                    const branchVisiblePages = getVisiblePages(branchPage, branchTotalPages);
+                    const branchRows = group.rows.slice((branchPage - 1) * ROWS_PER_PAGE, branchPage * ROWS_PER_PAGE);
+
+                    return (
+                      <div className="branch-panel" key={key}>
+                        <div className="branch-header">
+                          <button className="branch-toggle" type="button" onClick={() => toggleBranch(key)}>
+                            <span className="branch-caret">{isOpen ? "▾" : "▸"}</span>
+                            <span className="branch-name">{group.branchName}</span>
+                            <span className="branch-chip">
+                              {group.totals.accounts} account{group.totals.accounts === 1 ? "" : "s"}
+                            </span>
+                          </button>
+                          <div className="branch-metrics">
+                            <span>Capital {formatNumber(group.totals.capital)}</span>
+                            <span>Balance {formatNumber(group.totals.balance)}</span>
+                            <span>Interest {formatNumber(group.totals.interest)}</span>
+                            <span>Past Due {formatNumber(group.totals.pastDueAmount)}</span>
+                            <span>Inst. Due {formatNumber(group.totals.capitalInstallment)}</span>
+                            <span>PD/Install {formatNumber(group.totals.passdueInstallment)}</span>
+                            <span>Avg PD Days {formatNumber(group.totals.avgPastDueDays)}</span>
+                          </div>
+                        </div>
+
+                        {isOpen && (
+                          <div className="branch-body">
+                            {group.rows.length > ROWS_PER_PAGE && (
+                              <div className="branch-pagination">
+                                <button
+                                  className="pagination-btn"
+                                  onClick={() => setBranchPage(key, Math.max(1, branchPage - 1))}
+                                  disabled={branchPage === 1}
+                                >
+                                  Previous
+                                </button>
+                                <div className="pagination-numbers">
+                                  {branchVisiblePages.map((page) => (
+                                    <button
+                                      key={`${key}-page-${page}`}
+                                      className={`pagination-number ${branchPage === page ? "active" : ""}`}
+                                      onClick={() => setBranchPage(key, page)}
+                                    >
+                                      {page}
+                                    </button>
+                                  ))}
+                                </div>
+                                <button
+                                  className="pagination-btn"
+                                  onClick={() => setBranchPage(key, Math.min(branchTotalPages, branchPage + 1))}
+                                  disabled={branchPage === branchTotalPages}
+                                >
+                                  Next
+                                </button>
+                              </div>
+                            )}
+
+                            <div className="table-wrap">
+                              <table className="report-table">
+                                <thead>
+                                  <tr>
+                                    {detailColumns.map((col) => (
+                                      <th key={col}>{col}</th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {branchRows.map((row, idx) => (
+                                    <tr key={`${key}-${idx}`}>
+                                      {detailColumns.map((col) => (
+                                        <td key={col}>{String(row[col] ?? "")}</td>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <>
+                  <div className="table-wrap">
+                    <table className="report-table">
+                      <thead>
+                        <tr>
+                          {columns.map((col) => (
+                            <th key={col}>{col}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginatedData.map((row, idx) => (
+                          <tr key={idx}>
+                            {columns.map((col) => (
+                              <td key={col}>{String(row[col] ?? "")}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {totalRows > ROWS_PER_PAGE && (
+                    <div className="pagination">
+                      <button
+                        className="pagination-btn"
+                        onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+
+                      <div className="pagination-numbers">
+                        {visiblePages.map((page) => (
+                          <button
+                            key={page}
+                            className={`pagination-number ${currentPage === page ? "active" : ""}`}
+                            onClick={() => onPageChange(page)}
+                          >
+                            {page}
+                          </button>
+                        ))}
+                      </div>
+
+                      <button
+                        className="pagination-btn"
+                        onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="report-footer">
+              <div className="footer-date">{getTodayDate()}</div>
+              <div className="footer-page">
+                Page {String(currentPage).padStart(2, "0")} of {String(totalPages).padStart(2, "0")}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="empty-state">
+            <p>No results to display. Adjust filters and generate again.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ReportSection;
