@@ -132,6 +132,25 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
     return Object.values(groupedData[branch]).flat().length;
   };
 
+  // Handle print action
+  const handlePrint = (branch: string, type: string) => {
+    console.log("=== Print Report ===");
+    console.log("Branch:", branch);
+    console.log("Customer Type:", type);
+    console.log("Record Count:", groupedData[branch][type].length);
+    console.log("====================");
+  };
+
+  // Handle export action
+  const handleExport = (branch: string, type: string) => {
+    console.log("=== Export Report ===");
+    console.log("Branch:", branch);
+    console.log("Customer Type:", type);
+    console.log("Record Count:", groupedData[branch][type].length);
+    console.log("Data:", groupedData[branch][type]);
+    console.log("=====================");
+  };
+
   return (
     <div className="customer-report-card">
       <h1 className="report-main-heading">{instituteName}</h1>
@@ -199,6 +218,22 @@ const CustomerReport: React.FC<CustomerReportProps> = ({
                         {/* Customer Table (shown when type is expanded) */}
                         {isTypeExpanded && (
                           <div className="customer-table-container">
+                            {/* Action Buttons */}
+                            <div className="table-actions">
+                              <button
+                                className="btn-print"
+                                onClick={() => handlePrint(branch, type)}
+                              >
+                                Print
+                              </button>
+                              <button
+                                className="btn-export"
+                                onClick={() => handleExport(branch, type)}
+                              >
+                                Export
+                              </button>
+                            </div>
+
                             <table className="report-table">
                               <thead>
                                 <tr>
