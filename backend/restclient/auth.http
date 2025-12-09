@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:5003
+@token = <token>
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "user_name": "test1",
+    "name": "Test User 1",
+    "password": "password",
+    "user_role": "CLERK"
+}
+
+### Register an admin user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "name": "Administrator",
+    "password": "password",
+    "user_role": "ADMIN"
+}
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}

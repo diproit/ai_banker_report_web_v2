@@ -1,0 +1,74 @@
+/* QuickBooks Inspired Report & Design Page CSS */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1e50d2;
+  --error: #dc2626;
+  --success: #059669;
+  --warning: #d97706;
+  --text: #1a1a1a;
+  --text-light: #64748b;
+  --text-lighter: #94a3b8;
+  --border: #e4e7eb;
+  --border-light: #f1f5f9;
+  --bg: #ffffff;
+  --bg-light: #f8fafc;
+  --bg-lighter: #f1f5f9;
+  --card-bg: #ffffff;
+  --input-bg: #f8fafc;
+  --sidebar-bg: #f8fafc;
+  --toolbar-bg: #ffffff;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --radius-lg: 12px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg);
+  padding-top: 80px; /* Height of fixed navbar */
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 80px); /* Adjust based on navbar height */
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 2rem;
+  background-color: var(--bg-light);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  margin-left: 240px; /* Width of fixed sidebar */
+  transition: margin-left 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout-container {
+    padding-top: 70px; /* Adjusted for mobile navbar */
+  }
+  
+  .main-content {
+    min-height: calc(100vh - 70px);
+  }
+  
+  .content-wrapper {
+    padding: 1rem;
+  }
+}

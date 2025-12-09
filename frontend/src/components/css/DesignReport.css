@@ -1,0 +1,509 @@
+.design-report-page {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	width: 100%;
+	max-width: 100vw;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	background: #f5f6fa;
+	padding-top: 5px; /* Add padding to account for fixed toolbar */
+}
+
+/* Remove horizontal padding from work-area so toolbar sits flush */
+.work-area {
+	display: flex;
+	gap: 16px;
+	flex: 1;
+	min-height: 0;
+	padding: 0 0 16px 0;
+	box-sizing: border-box;
+	width: 100%;
+	height: 1px;
+}
+
+
+/* Toolbar */
+.design-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 32px 10px 24px;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+	margin: 5px 5px 5px 5px;
+	box-sizing: border-box;
+	width: calc(100% - 0px);
+	max-width: 100%;
+	overflow-x: hidden; /* Change from visible to hidden to prevent horizontal overflow */
+}
+
+@media (max-width: 900px) {
+  .design-toolbar {
+    padding-right: 12px;
+    border-radius: 12px;
+  }
+  
+  .toolbar-right {
+    max-width: 200px; /* Reduce max-width on smaller screens */
+  }
+  
+  .tb-btn {
+    white-space: nowrap; /* Prevent text wrapping in buttons */
+  }
+}
+
+.work-area {
+	display: flex;
+	gap: 16px;
+	flex: 1;
+	min-height: 0;
+	padding: 5px;
+	box-sizing: border-box;
+	width: 100%;
+	height: 1px;
+}
+
+.toolbar-group { display: flex; align-items: center; gap: 6px; }
+.label { font-size: 12px; color: #555; }
+.tb-btn {
+	width: 30px; height: 30px;
+	display: inline-flex; align-items: center; justify-content: center;
+	border: 1px solid #d0d7de; background: #fff; border-radius: 6px; cursor: pointer;
+}
+.zoom-select, .page-select {
+	height: 30px; border: 1px solid #d0d7de; background: #fff; border-radius: 6px; padding: 0 6px;
+}
+.dropdown { position: relative; }
+.dropdown-btn { height: 30px; padding: 0 10px; border: 1px solid #d0d7de; background: #fff; border-radius: 6px; cursor: pointer; }
+.dropdown:hover .dropdown-menu { display: block; }
+.dropdown-menu {
+	display: none; position: absolute; top: 36px; left: 0; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px; min-width: 140px; z-index: 1200;
+}
+.dropdown-menu button { width: 100%; text-align: left; padding: 6px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; }
+.dropdown-menu button:hover { background: #f0f4f8; }
+.dropdown-menu hr { border: none; border-top: 1px solid #eee; margin: 6px 0; }
+.hint-item { color: #777; font-size: 12px; padding: 4px 2px; display: block; }
+.toolbar-right { 
+	margin-left: auto; 
+	display: flex; 
+	align-items: center; 
+	max-width: 300px; /* Add max-width to prevent extending too far */
+	flex-shrink: 0; /* Prevent shrinking */
+	overflow: visible; /* Keep buttons visible */
+}
+.preview-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #635bff; color: #fff; border: none; border-radius: 999px; cursor: pointer; }
+
+.design-sidebar {
+	position: sticky;
+	top: 86px;
+	align-self: flex-start;
+	width: 220px;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	padding: 12px;
+	background: #fff;
+	height: calc(100vh - 110px);
+	min-height: 300px;
+	max-height: calc(100vh - 110px);
+	overflow-y: auto;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+	margin-bottom: 8px;
+}
+
+.design-sidebar-title {
+	margin: 20px 0 8px 0;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.report-dropdown-container {
+	margin-bottom: 20px;
+}
+
+.report-dropdown-container label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333;
+}
+
+.report-dropdown {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #d0d7de;
+	border-radius: 6px;
+	background: #fff;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.report-dropdown:hover {
+	border-color: #bbb;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.report-dropdown:focus {
+	outline: none;
+	border-color: #1976d2;
+	box-shadow: 0 0 0 2px rgba(25,118,210,0.2);
+}
+
+.toolbox {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 8px;
+}
+
+.tool {
+	padding: 10px 12px;
+	border: 1px dashed #bdbdbd;
+	border-radius: 6px;
+	background: #fafafa;
+	cursor: grab;
+	user-select: none;
+}
+
+.tool.dragging {
+	opacity: 0.6;
+}
+
+.hint {
+	margin-top: 10px;
+	font-size: 12px;
+	color: #777;
+}
+
+.design-canvas-wrapper {
+	flex: 1;
+	display: flex;
+	min-width: 0;
+	background: #f5f5f5;
+	border-radius: 12px;
+	box-sizing: border-box;
+	height: calc(100vh - 110px);
+	max-height: calc(100vh - 110px);
+	overflow: auto;
+}
+
+/* Canvas area with rulers */
+.canvas-area {
+	position: relative;
+	flex: 1;
+	/* Reserve space for rulers */
+	padding-top: calc(var(--ruler-thickness, 24px) + 5px); /* Increased top padding for better ruler visibility */
+	padding-left: var(--ruler-thickness, 24px);
+	box-sizing: border-box;
+}
+
+/* Rulers */
+.ruler {
+	position: absolute;
+	background: #fafafa;
+	border-color: #e0e0e0;
+	z-index: 2;
+}
+
+.ruler.horizontal {
+	top: 0;
+	left: var(--ruler-thickness, 24px);
+	right: 0;
+	height: calc(var(--ruler-thickness, 24px) + 5px); /* Increased height for better visibility */
+	border-bottom: 1px solid var(--border, #e0e0e0);
+	box-shadow: inset 0 -1px 0 #e0e0e0;
+	z-index: 5; /* Increase z-index to ensure visibility */
+}
+
+.ruler.vertical {
+	top: calc(var(--ruler-thickness, 24px) + 5px); /* Adjusted to match horizontal ruler's new height */
+	left: 0;
+	bottom: 0;
+	width: var(--ruler-thickness, 24px);
+	border-right: 1px solid var(--border, #e0e0e0);
+	box-shadow: inset -1px 0 0 #e0e0e0;
+	z-index: 5; /* Increase z-index to ensure visibility */
+}
+
+/* Ruler ticks */
+.tick {
+	position: absolute;
+	color: #666;
+	font-size: 10px;
+	line-height: 1;
+}
+
+.horizontal .tick {
+	bottom: 0;
+	width: 0;
+	border-left: 1px solid #bdbdbd;
+	height: 8px; /* Increased height for better visibility */
+	transform: translateX(-0.5px);
+}
+
+.horizontal .tick.medium { height: 12px; } /* Increased from 10px */
+.horizontal .tick.major { height: 16px; } /* Increased from 14px */
+.horizontal .tick .label {
+	position: absolute;
+	bottom: 16px; /* Adjusted to match increased tick height */
+	left: 2px;
+	transform: translateX(-50%);
+	white-space: nowrap;
+	font-weight: 500; /* Make labels more visible */
+}
+
+.vertical .tick {
+	right: 0;
+	height: 0;
+	border-top: 1px solid #bdbdbd;
+	width: 6px;
+	transform: translateY(-0.5px);
+}
+
+.vertical .tick.medium { width: 10px; }
+.vertical .tick.major { width: 14px; }
+.vertical .tick .label {
+	position: absolute;
+	right: 16px;
+	top: -6px;
+	white-space: nowrap;
+}
+
+/* Actual canvas */
+.design-canvas {
+	position: relative;
+	flex: 1;
+	height: 100%;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	background-image: linear-gradient(#f5f5f5 1px, transparent 1px), linear-gradient(90deg, #f5f5f5 1px, transparent 1px);
+	background-size: 10px 10px;
+	background-position: -1px -1px;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+.canvas-zoom { position: relative; width: 100%; height: 100%; }
+
+/* Selection and handles mimic the screenshot */
+.widget {
+	position: absolute;
+	box-sizing: border-box;
+}
+
+.widget.active {
+	outline: 1px dashed #1e88e5;
+	outline-offset: 2px;
+}
+
+/* eight resize handles */
+.rz { position: absolute; width: 10px; height: 10px; background: #40a9ff; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #40a9ff; }
+.rz-nw { left: -6px; top: -6px; cursor: nwse-resize; }
+.rz-n { left: 50%; top: -6px; transform: translateX(-50%); cursor: ns-resize; }
+.rz-ne { right: -6px; top: -6px; cursor: nesw-resize; }
+.rz-e { right: -6px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+.rz-se { right: -6px; bottom: -6px; cursor: nwse-resize; }
+.rz-s { left: 50%; bottom: -6px; transform: translateX(-50%); cursor: ns-resize; }
+.rz-sw { left: -6px; bottom: -6px; cursor: nesw-resize; }
+.rz-w { left: -6px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+
+/* move handle icon */
+.move-handle { position: absolute; left: -22px; top: -22px; width: 22px; height: 22px; border-radius: 50%; background: #e3f2fd; border: 1px solid #90caf9; display: inline-flex; align-items: center; justify-content: center; cursor: move; color: #1976d2; }
+
+/* Content inside widgets */
+.widget-textarea {
+	width: 100%;
+	height: 100%;
+	border: none;
+	outline: none;
+	resize: none;
+	background: transparent;
+	padding: 6px;
+	box-sizing: border-box;
+}
+
+.rectangle-shape { width: 100%; height: 100%; background: #bbdefb; }
+.line-shape { width: 100%; height: 2px; background: #1976d2; position: absolute; top: 50%; transform: translateY(-50%); }
+.dashline-shape { width: 100%; height: 0; position: absolute; top: 50%; transform: translateY(-50%); border-top: 2px dashed #1976d2; background: transparent; }
+.image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #777; }
+.header-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #e8f5e8; color: #2e7d32; border: 1px dashed #4caf50; }
+.footer-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #fff3e0; color: #ef6c00; border: 1px dashed #ff9800; }
+
+/* Dropdown menu styles for header/footer widgets */
+.widget-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.dropdown-toggle:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  z-index: 1000;
+  margin-top: 2px;
+  border: 1px solid #ddd;
+}
+
+.widget-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-item {
+  color: #333;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 13px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-item:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.dropdown-item:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.dropdown-item.add-new {
+  color: #1976d2;
+  font-weight: 500;
+  border-top: 1px solid #eee;
+}
+
+.dropdown-item.add-new:hover {
+  background-color: #e3f2fd;
+}
+
+/* Preview modal */
+.preview-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 2000;
+}
+
+.preview-modal {
+	background: #fff;
+	border-radius: 10px;
+	width: min(95vw, 1100px);
+	max-height: 90vh;
+	overflow: auto;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.preview-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 16px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.close-btn { border: 1px solid #ddd; background: #f5f5f5; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+
+.preview-canvas {
+	position: relative;
+	margin: 16px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	background: #fff;
+}
+
+.widget-preview { position: absolute; }
+.text-preview { padding: 6px; white-space: pre-wrap; }
+
+/* Rotation handle */
+.rotate-handle {
+	position: absolute;
+	right: -22px;
+	top: -22px;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #fff3e0;
+	border: 1px solid #ff9800;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: grab;
+	color: #ef6c00;
+	z-index: 10;
+}
+
+.rotate-handle:active {
+	cursor: grabbing;
+}
+
+.rotate-handle:hover {
+	background: #ffe0b2;
+}
+
+.coordinate-label {
+	position: absolute;
+	bottom: -20px;
+	right: 0;
+	background-color: rgba(0, 123, 255, 0.8);
+	color: white;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-family:'Poppins', sans-serif;;
+	white-space: nowrap;
+	z-index: 1000;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.widget.active .coordinate-label {
+	opacity: 1;
+}
+

@@ -1,0 +1,1200 @@
+.menu-management-btn span {
+  text-decoration: none !important;
+}
+.sidebar-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  box-sizing: border-box;
+  resize: vertical;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  background: #f8fafc;
+  color: #222;
+  transition: border 0.15s;
+}
+.sidebar-textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+/* Sidebar.css */
+/* Modern Blue & White Theme */
+:root {
+  --primary-blue: #1976d2;
+  --sidebar-width: 250px;
+  --sidebar-management-width: 340px;
+  --light-blue: #e3f2fd;
+  --dark-blue: #1565c0;
+  --white: #ffffff;
+  --gray-border: #e0e0e0;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: calc(100vh - 80px);
+  background-color: var(--white);
+  border-right: 1px solid var(--gray-border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Footer logout button anchored bottom-center inside the sidebar */
+.sidebar-footer {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  z-index: 1050;
+}
+
+.btn-logout {
+  background: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.12);
+}
+
+.btn-logout:hover {
+  background: var(--dark-blue);
+}
+
+/* On small screens when sidebar overlays, make logout full-width and more prominent */
+@media (max-width: 768px) {
+  .sidebar-footer {
+    padding: 12px;
+  }
+  .btn-logout {
+    width: calc(100% - 32px);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+}
+
+.sidebar.management-mode {
+  width: var(--sidebar-management-width);
+  z-index: 1002;
+}
+
+.sidebar-close-btn {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-blue);
+  z-index: 1001;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--gray-border);
+  background-color: var(--light-blue);
+  transition: all 0.3s ease;
+}
+
+/* .sidebar.management-mode .sidebar-header {
+  background-color:var(--light-blue);;
+  color: var(--primary-blue);
+} */
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-menu {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.nav-item {
+  margin: 2px 6px; /* reduced vertical spacing */
+  border-radius: 6px;
+  transition: all 0.18s ease;
+  position: relative;
+  min-height: 28px;
+}
+
+.nav-item:hover {
+  background-color: var(--light-blue);
+}
+
+.nav-item.active {
+  background-color: var(--light-blue);
+}
+
+.nav-item.active > .menu-item-content {
+  color: var(--primary-blue);
+  font-weight: 500;
+}
+
+.menu-item-content {
+  display: flex;
+  align-items: center;
+  padding: 8px 8px 8px 12px; /* slightly smaller padding */
+  cursor: pointer;
+  color: #333;
+  font-size: 13px;
+  gap: 8px;
+  min-height: 28px;
+  width: 100%;
+  position: relative;
+}
+
+.nav-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-title {
+  flex-grow: 1;
+  text-align: left;
+  min-width: 0; /* Allow text truncation */
+}
+
+.chevron-icon {
+  display: flex;
+  align-items: center;
+  color: #757575;
+  flex-shrink: 0;
+}
+
+.chevron-icon {
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.chevron-icon:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Indentation for nested items */
+.nav-item.level-1 {
+  margin-left: 0px;
+  margin-right: 4px;
+}
+
+.nav-item.level-2 {
+  margin-left: 2px;
+  margin-right: 4px;
+}
+
+/* Active state indicator */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--primary-blue);
+  border-radius: 3px 0 0 3px;
+}
+
+/* Menu Form Popup Styles - FIXED POSITIONING */
+.menu-form-popup {
+  position: fixed;
+  top: 80px;
+  left: var(--sidebar-width);
+  width: 420px;
+  max-width: calc(100vw - var(--sidebar-width) - 12px);
+  height: calc(100vh - 80px);
+  background-color: var(--white);
+  border-left: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+  z-index: 1100;
+  overflow-y: auto;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    left 0.3s ease;
+}
+
+.menu-form-popup.management-active {
+  left: var(--sidebar-management-width);
+}
+
+.menu-form-content {
+  padding: 20px;
+}
+
+.menu-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--gray-border);
+}
+
+.menu-form-header h4 {
+  margin: 0;
+  color: var(--primary-blue);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.close-popup-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #757575;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.close-popup-btn:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* URL Combobox Styles */
+.url-combobox {
+  position: relative;
+  width: 100%;
+  font-weight: normal;
+}
+
+.url-input {
+  width: 100%;
+  padding: 8px 35px 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: normal;
+  box-sizing: border-box;
+  height: 36px;
+  line-height: 1.2;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.url-dropdown-toggle {
+  position: absolute;
+  right: 8px;
+  top: 65%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #757575;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.url-dropdown-toggle:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.url-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.url-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: normal;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.15s ease;
+}
+
+.url-option:hover {
+  background-color: var(--light-blue);
+  color: var(--primary-blue);
+}
+
+.url-option:last-child {
+  border-bottom: none;
+}
+
+.url-option.no-results {
+  color: #999;
+  cursor: default;
+  font-style: italic;
+}
+
+.url-option.no-results:hover {
+  background-color: white;
+  color: #999;
+}
+
+/* Group Combobox Styles - Similar to URL combobox */
+.group-combobox {
+  position: relative;
+  width: 100%;
+}
+
+.group-input {
+  width: 100%;
+  padding: 8px 35px 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: normal;
+  box-sizing: border-box;
+  height: 36px;
+  line-height: 1.2;
+}
+
+.group-input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.group-dropdown-toggle {
+  position: absolute;
+  right: 8px;
+  top: 55%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #757575;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.group-dropdown-toggle:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.group-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.group-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: normal;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.15s ease;
+}
+
+.group-option:hover {
+  background-color: var(--light-blue);
+  color: var(--primary-blue);
+}
+
+.group-option:last-child {
+  border-bottom: none;
+}
+
+.group-option.no-results {
+  color: #999;
+  cursor: default;
+  font-style: italic;
+}
+
+.group-option.no-results:hover {
+  background-color: white;
+  color: #999;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    height: 100vh;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar.management-mode {
+    width: 100%;
+    max-width: 340px;
+    z-index: 1002;
+  }
+
+  .sidebar-close-btn {
+    display: block;
+  }
+
+  .menu-form-popup {
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    max-width: 340px;
+    z-index: 1003;
+  }
+
+  .menu-form-popup.management-active {
+    left: 340px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+  }
+
+  .sidebar.management-mode {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .menu-form-popup {
+    width: 100%;
+    max-width: 320px;
+    left: 0;
+  }
+
+  .menu-form-popup.management-active {
+    left: 280px; /* Match the sidebar width exactly */
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .sidebar.management-mode {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .menu-form-popup {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .menu-form-popup.management-active {
+    left: 280px; /* Match the sidebar width exactly */
+  }
+}
+
+/* Menu Management Styles - Compact & Perfect Alignment */
+.menu-management-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  background-color: var(--light-blue);
+  border: 1px solid var(--primary-blue);
+  border-radius: 4px;
+  color: var(--primary-blue);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 12px;
+  font-weight: 500;
+  min-height: 28px;
+}
+
+.menu-management-btn:hover {
+  background-color: var(--primary-blue);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.menu-manager-header {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  /* background-color: var(--primary-blue); */
+  min-height: 44px;
+  color: white;
+}
+
+.menu-manager-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.back-btn,
+.add-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-blue);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.back-btn:hover,
+.add-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Menu Item Actions - Compact - MOVED TO LEFT SIDE */
+.menu-item-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  margin-right: 8px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.action-btn {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  padding: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 1;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.action-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.action-btn.edit-btn {
+  background: #fff8e1;
+  border: 1px solid #ffecb3;
+  color: #ffa000;
+}
+
+.edit-btn:hover {
+  background-color: #ffc107;
+  color: white;
+}
+
+.action-btn.delete-btn {
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  color: #d32f2f;
+}
+
+.delete-btn:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.expand-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 4px;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.expand-toggle-btn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.title-input-container .translate-btn,
+.expand-toggle-btn.small {
+  font-size: 12px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #f5f7fb;
+  border: 1px solid transparent;
+  color: #333;
+}
+
+.title-input-container .translate-btn:hover,
+.expand-toggle-btn.small:hover {
+  background: #e9f3ff;
+}
+
+/* Ensure translate button icon/text doesn't overflow */
+.title-input-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Prevent long words from being cut off in menu */
+.menu-item-content,
+.nav-title {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Adjust active indicator so it doesn't push content */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  background-color: var(--primary-blue);
+  border-radius: 3px;
+}
+
+/* Submenu indentation: slightly more to the right */
+.nav-item.level-1 .menu-item-content {
+  padding-left: 36px;
+}
+.nav-item.level-2 .menu-item-content {
+  padding-left: 52px;
+}
+
+/* Make the URL and group inputs show ellipsis for overflow (avoids layout break)
+   and provide full value on hover via title attribute handled in JS (if needed) */
+.url-input,
+.group-input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* End custom adjustments */
+.title-input-container .translate-btn,
+.expand-toggle-btn.small {
+  font-size: 12px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #f5f7fb;
+  border: 1px solid transparent;
+  color: #333;
+}
+
+.title-input-container .translate-btn:hover,
+.expand-toggle-btn.small:hover {
+  background: #e9f3ff;
+}
+
+/* Ensure translate button icon/text doesn't overflow */
+.title-input-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Prevent long words from being cut off in menu */
+.menu-item-content,
+.nav-title {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Adjust active indicator so it doesn't push content */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  background-color: var(--primary-blue);
+  border-radius: 3px;
+}
+
+/* Submenu indentation: slightly more to the right */
+.nav-item.level-1 .menu-item-content {
+  padding-left: 36px;
+}
+.nav-item.level-2 .menu-item-content {
+  padding-left: 52px;
+}
+
+/* Make the URL and group inputs show ellipsis for overflow (avoids layout break)
+   and provide full value on hover via title attribute handled in JS (if needed) */
+.url-input,
+.group-input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* End custom adjustments */
+/* Submenu indentation: slightly more to the right */
+.nav-item.level-1 .menu-item-content {
+  padding-left: 36px;
+}
+.nav-item.level-2 .menu-item-content {
+  padding-left: 52px;
+}
+
+/* Make the URL and group inputs show ellipsis for overflow (avoids layout break)
++   and provide full value on hover via title attribute handled in JS (if needed) */
+.url-input,
+.group-input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* End custom adjustments */
+
+/* ===== Custom adjustments requested by user ===== */
+/* Make translate and small toggle buttons match primary button sizing */
+.title-input-container .translate-btn,
+.expand-toggle-btn.small {
+  font-size: 12px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #f5f7fb;
+  border: 1px solid transparent;
+  color: #333;
+}
+
+.title-input-container .translate-btn:hover,
+.expand-toggle-btn.small:hover {
+  background: #e9f3ff;
+}
+
+/* Ensure translate button icon/text doesn't overflow */
+.title-input-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Prevent long words from being cut off */
+.menu-item-content,
+.nav-title {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Adjust active indicator so it doesn't push content */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  background-color: var(--primary-blue);
+  border-radius: 3px;
+}
+
+/* Submenu indentation: slightly more to the right */
+.nav-item.level-1 .menu-item-content {
+  padding-left: 36px;
+}
+.nav-item.level-2 .menu-item-content {
+  padding-left: 52px;
+}
+
+/* Make the URL and group inputs wrap text if very long */
+.url-input,
+.group-input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* End custom adjustments */
+
+/* Management mode: expand sidebar when manage button is active and compact spacing */
+.sidebar.management-mode .nav-item {
+  margin: 2px 6px;
+  min-height: 30px;
+}
+
+.sidebar.management-mode .menu-item-content {
+  padding: 6px 10px;
+  min-height: 30px;
+  padding-right: 60px; /* Add extra space for action buttons */
+  position: relative;
+}
+
+/* Compact indentation for nested levels to reduce whitespace between levels */
+.nav-item.level-0 .menu-item-content {
+  padding-left: 8px;
+}
+.nav-item.level-1 .menu-item-content {
+  padding-left: 20px;
+}
+.nav-item.level-2 .menu-item-content {
+  padding-left: 32px;
+}
+
+/* Multi-language titles section */
+.multi-lang-titles {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px;
+  background-color: #fafafa;
+  margin-bottom: 12px;
+}
+
+.multi-lang-titles .form-group {
+  margin-bottom: 8px;
+}
+
+.multi-lang-titles .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.translating-indicator {
+  font-size: 10px;
+  margin-left: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Spinning loader animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning-loader {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+/* Base query textarea styling */
+.textarea-container {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.textarea-container.expanded {
+  z-index: 1002;
+}
+
+.code-textarea {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.character-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 10px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.field-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.field-header .expand-toggle-btn {
+  margin-left: auto;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  box-sizing: border-box;
+  height: 36px;
+  line-height: 1.2;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  margin: 0;
+  font-size: 12px;
+  color: #333;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  min-height: 36px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--dark-blue);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+/* Smooth transitions for all interactive elements */
+.menu-management-btn,
+.back-btn,
+.add-btn,
+.action-btn,
+.btn,
+.form-group input,
+.url-dropdown-toggle,
+.url-option {
+  transition: all 0.15s ease;
+}
+
+/* Focus states for accessibility */
+.menu-management-btn:focus,
+.back-btn:focus,
+.add-btn:focus,
+.action-btn:focus,
+.btn:focus,
+.form-group input:focus,
+.url-dropdown-toggle:focus {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 1px;
+}
+
+/* Improved styling for hierarchical display */
+.nav-item {
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #f5f5f5;
+}
+
+.menu-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Parent dropdown styling */
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Indentation for hierarchy */
+.submenu {
+  margin-left: 0;
+}
+
+/* Ensure icon visibility */
+.action-btn svg {
+  color: white !important;
+  stroke: white !important;
+  stroke-width: 2 !important;
+  width: 16px !important;
+  height: 16px !important;
+  display: block !important;
+  visibility: visible !important;
+}

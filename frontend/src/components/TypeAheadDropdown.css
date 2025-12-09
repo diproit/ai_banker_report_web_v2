@@ -1,0 +1,39 @@
+.typeahead-dropdown-container {
+  position: relative;
+  width: 100%;
+}
+
+.typeahead-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.typeahead-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* ensure this list appears above table headers and other overlays */
+  z-index: 10005;
+}
+
+.typeahead-dropdown-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.typeahead-dropdown-list li:hover {
+  background-color: #f0f0f0;
+}

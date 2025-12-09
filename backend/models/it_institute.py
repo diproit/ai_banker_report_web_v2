@@ -1,13 +1,11 @@
-from sqlmodel import SQLModel, Field
-from typing import Optional
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, List
 from datetime import datetime
 
 
 class ItInstitute(SQLModel, table=True):
-    """Institute information model"""
-
-    __tablename__ = "it_institute"
-
+    __tablename__ = 'it_institute'
+    
     id: Optional[int] = Field(default=None, primary_key=True)
     name_ln1: Optional[str] = Field(default=None, max_length=300)
     name_ln2: Optional[str] = Field(default=None, max_length=300)
@@ -22,9 +20,9 @@ class ItInstitute(SQLModel, table=True):
     sms_mask: Optional[str] = Field(default=None, max_length=12)
     sms_mask_id: Optional[str] = Field(default=None, max_length=12)
     swift_code: Optional[str] = Field(default=None, max_length=11)
-    Coop_Fund: Optional[float] = Field(default=None)
-    Statu_Reserves: Optional[float] = Field(default=None)
-    Profit: Optional[float] = Field(default=None)
+    coop_fund: Optional[float] = Field(default=None)
+    statu_reserves: Optional[float] = Field(default=None)
+    profit: Optional[float] = Field(default=None)
     status: Optional[int] = Field(default=None)
     c_at: Optional[datetime] = Field(default=None)
     c_by: Optional[int] = Field(default=None)
@@ -32,3 +30,5 @@ class ItInstitute(SQLModel, table=True):
     m_by: Optional[int] = Field(default=None)
     age_min: Optional[int] = Field(default=None)
     age_max: Optional[int] = Field(default=None)
+
+    branches: List["GlBranch"] = Relationship(back_populates="institute")

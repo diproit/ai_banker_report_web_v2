@@ -1,23 +1,9 @@
 __pycache__/
 *.pyc
 venv/
-.venv/
-env/
-.env/
-ENV/
-env.bak/
-venv.bak/
-
-# Environment variables and secrets
 .env
-.env.local
-.env.*.local
+env/
+populate_db.py
 .flaskenv
-
-# Database
-*.db
-*.sqlite3
-demo.db
-
-# IDE
+# VSCode
 .vscode/

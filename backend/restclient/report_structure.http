@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:5003
+@token = <token>
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}
+
+### Get single report structure by ID
+GET {{baseUrl}}/report-structure/2
+Authorization: Bearer {{token}}
+
+### Generate JRXML JSON from base query
+POST {{baseUrl}}/report-structure/generate-jrxml
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+	"base_query": "SELECT pl_month_tb.id, pl_month_tb.pl_account_id, pl_month_tb.branch_month_id, pl_month_tb.month_debit, pl_month_tb.month_credit, pl_month_tb.paid_interest, pl_month_tb.paid_penalty, pl_month_tb.closing_balance, pl_month_tb.passdue_amount, pl_month_tb.interest_reservation, pl_month_tb.status, pl_account.id, ci_customer.id, pl_account.ci_customer_id, ci_customer.customer_number, pl_account_type.id, pl_account_type.period_max, pl_account_type.period_min, pl_account_type.interest_policy, pl_account_type.interest_update_policy, pl_account_type.interest_rate_max, pl_account_type.interest_rate_min, pl_account_type.penalty_policy, pl_account_type.penalty_rate, pl_account_type.insurance_policy, pl_account_type.insurance_rate, pl_account_type.fee_policy, pl_account_type.fee_rate, pl_account_type.minimum_balance, pl_account_type.field_collection, pl_account_type.allow_interest_edit, pl_account_type.loan_schedule_type, pl_account_type.tax_minimum_balance, pl_account_type.tax_rate, pl_account_type.no_of_loan_guarantor, pl_account_type.passdue_policy, pl_account_type.status, pl_account.pl_account_type_id, pl_month_tb.id, gl_branch.telephone, pl_month_tb.status, it_institute.id, it_institute.email, it_institute.phone, it_institute.reg_num, it_institute.reg_date, it_institute.sms_mask, it_institute.sms_mask_id, it_institute.swift_code, it_institute.status, pl_account_type.it_institute_id, pl_account.open_date, pl_account.reneve_date, pl_account.ref_account_number, it_user_master.id, it_user_master.customer_id, it_user_master.name, it_user_master.status, it_user_master.active_branch_id, pl_account_type.it_institute_id, it_generated_reports.id, it_generated_reports.user_id, it_generated_reports.it_institute_id, it_generated_reports.date_from, it_generated_reports.date_to, it_generated_reports.value_from, it_generated_reports.value_to, it_generated_reports.cash_open, it_generated_reports.cash_closing, it_generated_reports.bank_open, it_generated_reports.bank_closing, it_generated_reports.filter_1_text, it_generated_reports.filter_2_text, it_generated_reports.filter_1_value, it_generated_reports.filter_2_value, pl_account_type.pl_account_category_id, pl_account.status, gl_branch.id, gl_branch.it_institute_id, gl_branch.status, it_institute.name_ln1, it_institute.name_ln2, it_institute.name_ln3, it_institute.address_ln1, it_institute.address_ln3, it_institute.address_ln2, ci_customer.full_name_ln1, ci_customer.full_name_ln2, ci_customer.full_name_ln3, pl_account_type.name_ln1, pl_account_type.name_ln2, pl_account_type.name_ln3, gl_branch.name_ln1, gl_branch.name_ln2, gl_branch.name_ln3, pl_month_tb.age, it_branch_month.id, it_branch_month.status, it_generated_reports.branch_id FROM pl_month_tb INNER JOIN pl_account ON pl_month_tb.pl_account_id = pl_account.id INNER JOIN ci_customer ON pl_account.ci_customer_id = ci_customer.id INNER JOIN pl_account_type ON pl_account.pl_account_type_id = pl_account_type.id INNER JOIN gl_branch ON pl_account.branch_id = gl_branch.id AND ci_customer.branch_id = gl_branch.id INNER JOIN it_institute ON it_institute.id = gl_branch.it_institute_id INNER JOIN it_branch_month ON it_branch_month.id = pl_month_tb.branch_month_id INNER JOIN it_generated_reports ON it_generated_reports.branch_id = gl_branch.id INNER JOIN it_user_master ON it_user_master.id = it_generated_reports.user_id WHERE pl_month_tb.closing_balance <> 0 AND pl_account_type.pl_account_category_id = 1 AND pl_month_tb.branch_month_id = it_generated_reports.filter_2_value AND it_generated_reports.id = $P{parm_a} ORDER BY pl_account_type.id ASC, pl_account.ref_account_number ASC"
+}

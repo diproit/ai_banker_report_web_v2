@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:5003
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc2MDEwMjc5NywianRpIjoiNzljZmRkNTItMTkwNy00ZTI4LThjZGEtYjQ2ZWRiZmE4MzA2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjQyIiwibmJmIjoxNzYwMTAyNzk3LCJjc3JmIjoiMGQ3ZjgwNjQtYmU2Ny00YjVlLTg3MzItMDViNzFjZWY3YjM3IiwiZXhwIjoxNzYwMTA2Mzk3fQ.SHvYsajWkHyNTWdAsBgqsTbWekuteBNo14vS9ANk5uk
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}
+
+### Get navigation menu
+GET {{baseUrl}}/nav/menu
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get navigation menu (Sinhala)
+GET {{baseUrl}}/nav/menu?lang=si
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get navigation menu (Tamil)
+GET {{baseUrl}}/nav/menu?lang=ta
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get navigation menu (English explicitly)
+GET {{baseUrl}}/nav/menu?lang=en
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get all available navigation menu items
+GET {{baseUrl}}/nav/menu/all
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get menu items by level 0 (root items)
+GET {{baseUrl}}/nav/menu/level/0
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get menu items by level 1 (first level children)
+GET {{baseUrl}}/nav/menu/level/1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get subtree for Transactions (ID: 3) - English
+GET {{baseUrl}}/nav/menu/subtree/3
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get subtree for Transactions (ID: 3) - Sinhala
+GET {{baseUrl}}/nav/menu/subtree/3?lang=si
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get subtree for Transactions (ID: 3) - Tamil
+GET {{baseUrl}}/nav/menu/subtree/3?lang=ta
+Accept: application/json
+Authorization: Bearer {{token}}

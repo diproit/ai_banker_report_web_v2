@@ -1,0 +1,124 @@
+@baseUrl = http://localhost:5003
+@token = <token>
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}
+
+
+### Create top-level menu item (Basic)
+POST {{baseUrl}}/nav/menu
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Test Reports",
+    "url": "/test-reports",
+    "sort_order": 100,
+    "is_active": true
+}
+
+
+### Create menu item with comprehensive report structure data
+POST {{baseUrl}}/nav/menu
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Report",
+    "url": "/report",
+    "group_name": "Advanced Reports",
+    "sort_order": 103,
+    "is_active": true,
+    "jrxml_json": "{\"reportTemplate\": {\"title\": \"Comprehensive Report\", \"pageFormat\": \"A4\", \"sections\": [\"header\", \"detail\", \"footer\"]}}",
+    "base_query": "SELECT t.id, t.amount, t.date, u.name as user_name FROM transactions t JOIN users u ON t.user_id = u.id WHERE t.is_active = 1 ORDER BY t.date DESC"
+}
+
+
+### Get all menu items
+GET {{baseUrl}}/nav/menu/all
+Authorization: Bearer {{token}}
+
+
+### Delete menu item
+DELETE {{baseUrl}}/nav/menu/<ID>
+Authorization: Bearer {{token}}
+
+
+### Create item with same title but different parent (should succeed)
+POST {{baseUrl}}/nav/menu
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Details",
+    "url": "/sub-ledger-accounts/savings/details",
+    "parent_id": 5,
+    "group_name": "Sub Ledger Accounts"
+}
+
+### Get existing URLs
+GET {{baseUrl}}/nav/menu/urls
+Authorization: Bearer {{token}}
+
+### Get existing groups
+GET {{baseUrl}}/nav/menu/groups
+Authorization: Bearer {{token}}
+
+
+### Get menu item with report structure details
+GET {{baseUrl}}/nav/menu/74
+Authorization: Bearer {{token}}
+
+
+### Update menu item - Change group name (should auto-update level, path, parent_id)
+PUT {{baseUrl}}/nav/menu/74
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Moved Report",
+    "url": "/moved-report",
+    "group_name": "Different Group"
+}
+
+### Update menu item - Update report structure data (base_query and jrxml_json)
+PUT {{baseUrl}}/nav/menu/74
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Updated Report with New Structure",
+    "base_query": "SELECT u.id, u.name, u.email, COUNT(t.id) as transaction_count FROM users u LEFT JOIN transactions t ON u.id = t.user_id WHERE u.is_active = 1 GROUP BY u.id ORDER BY transaction_count DESC",
+    "jrxml_json": ""
+}
+
+### Update menu item - Comprehensive update (all fields)
+PUT {{baseUrl}}/nav/menu/74
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Comprehensive Updated Report",
+    "url": "/sub-ledger-accounts/comprehensive-updated-report",
+    "group_name": "Updated Reports Group",
+    "sort_order": 50,
+    "is_active": true,
+    "base_query": "SELECT u.id, u.name, u.email, COUNT(t.id) as transaction_count FROM users u LEFT JOIN transactions t ON u.id = t.user_id WHERE u.is_active = 1 GROUP BY u.id ORDER BY transaction_count DESC",
+    "jrxml_json": "{\"reportTemplate\": {\"title\": \"Comprehensive Report\", \"pageFormat\": \"A4\", \"orientation\": \"portrait\", \"margins\": {\"top\": 20, \"bottom\": 20, \"left\": 20, \"right\": 20}, \"sections\": [\"pageHeader\", \"columnHeader\", \"detail\", \"pageFooter\"], \"fields\": [{\"name\": \"id\", \"type\": \"Integer\"}, {\"name\": \"name\", \"type\": \"String\"}, {\"name\": \"category\", \"type\": \"String\"}, {\"name\": \"created_date\", \"type\": \"Date\"}, {\"name\": \"created_by\", \"type\": \"String\"}]}}"
+}
+
+### Update menu item - Clear group name (move to root level)
+PUT {{baseUrl}}/nav/menu/74
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Root Level Report",
+    "group_name": ""
+}

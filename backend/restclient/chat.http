@@ -1,0 +1,118 @@
+@baseUrl = http://localhost:5003
+@token = <token>
+
+### Login with the user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "user_name": "admin",
+    "password": "password"
+}
+
+### Get Available Languages and English Prompt Texts
+GET {{baseUrl}}/chat/languages
+Authorization: Bearer {{token}}
+
+### Get Quick Prompts for English
+GET {{baseUrl}}/chat/quick-prompts/English
+Authorization: Bearer {{token}}
+
+### Get Quick Prompts for Sinhala
+GET {{baseUrl}}/chat/quick-prompts/සිංහල
+Authorization: Bearer {{token}}
+
+### Get Quick Prompts for Tamil
+GET {{baseUrl}}/chat/quick-prompts/தமிழ்
+Authorization: Bearer {{token}}
+
+### Get Quick Prompts for Tagalog
+GET {{baseUrl}}/chat/quick-prompts/Tagalog
+Authorization: Bearer {{token}}
+
+### Get Quick Prompts for Thai
+GET {{baseUrl}}/chat/quick-prompts/ไทย
+Authorization: Bearer {{token}}
+
+### Get Placeholder Information for a Prompt
+GET {{baseUrl}}/chat/prompt-placeholders/2
+Authorization: Bearer {{token}}
+
+### Send Chat with Prompt ID and Language (Loan Past Due - English)
+POST {{baseUrl}}/chat/send
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "prompt_id": 2,
+  "selected_language": "English",
+  "form_data": {}
+}
+
+### Send Chat with User Message (Free-form Input)
+POST {{baseUrl}}/chat/send
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "user_message": "What is micro finance?",
+  "selected_language": "English"
+}
+
+### Send Chat with Form Data (Customer Rating with placeholder)
+POST {{baseUrl}}/chat/send
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "prompt_id": 7,
+  "selected_language": "English",
+  "form_data": {
+    "customer_id": "M0004"
+  }
+}
+
+### Send Streaming Chat with Prompt ID and Language (Loan Past Due - English)
+POST {{baseUrl}}/chat/send-stream
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "prompt_id": 2,
+  "selected_language": "English",
+  "form_data": {}
+}
+
+### Send Streaming Chat with User Message (free-form input)
+POST {{baseUrl}}/chat/send-stream
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "user_message": "What is micro finance?",
+  "selected_language": "English"
+}
+
+### Send Streaming Chat with Form Data (Customer Rating with placeholder)
+POST {{baseUrl}}/chat/send-stream
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "prompt_id": 7,
+  "selected_language": "English",
+  "form_data": {
+    "customer_id": "M0004"
+  }
+}
+
+### Send Streaming Chat in Sinhala
+POST {{baseUrl}}/chat/send-stream
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "prompt_id": 2,
+  "selected_language": "සිංහල",
+  "form_data": {}
+}
