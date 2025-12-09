@@ -8,7 +8,7 @@
 }
 
 .report-main-heading {
-  font-size: 20px;
+  font-size: 14px;
   color: #2c3e50;
   text-align: center;
   margin-bottom: 8px;
@@ -16,7 +16,7 @@
 }
 
 .report-sub-heading {
-  font-size: 16px;
+  font-size: 12px;
   color: #34495e;
   text-align: center;
   margin-bottom: 20px;
@@ -42,7 +42,7 @@
   margin-bottom: 6px;
   color: #34495e;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .filter-select {
@@ -50,7 +50,7 @@
   padding: 6px 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 11px;
   background-color: white;
 }
 .filter-select:focus {
@@ -71,19 +71,19 @@
   padding: 6px 16px;
   border: none;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .btn-print {
-  background-color: #3498db;
+  background-color: #1976d2;
   color: white;
 }
 
 .btn-print:hover {
-  background-color: #2980b9;
+  background-color: #1565c0;
 }
 
 .btn-export {
@@ -104,7 +104,7 @@
 .report-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .report-table thead {
