@@ -549,8 +549,6 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
   };
 
   const handleItemClick = async (item, e) => {
-    // console.log("Selected menu item:", item);
-
     if (showMenuManager) return;
 
     if (item.user_has_access === false && item.has_children) {
@@ -573,73 +571,21 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       return;
     }
 
-    // Navigation logic for leaf node
-    try {
-      // Use the isAdmin variable that's already defined from useAuth context
-      console.log("Navigation debug:", {
-        isAdmin,
-        userRole: user?.user_role,
-        reportId: item.it_report_structures_id,
-        itemUrl: item.url,
+    // Navigation logic for leaf node - SIMPLIFIED
+    // Navigate to the URL directly - DynamicPage will handle component rendering
+    if (item.url) {
+      console.log("Navigating to:", item.url);
+      navigate(item.url, {
+        state: {
+          item,
+          reportId: item.it_report_structures_id,
+          baseQuery: item.base_query,
+          reportName: item.report_name,
+        },
       });
-
-      // If item has a report structure id, use the correct route
-      if (item.it_report_structures_id) {
-        // Navigate to /:base/:section/:reportId or /:base/:section/:subsection/:reportId
-        // Role-based access is still enforced through backend and user permissions
-        // Dynamically extract base, section, and subsection from item.url
-        // Example: /transactions/section or /transactions/section/subsection or /reports/analytics/monthly
-        let base = "";
-        let section = "";
-        let subsection = "";
-
-        if (item.url) {
-          const urlParts = item.url.split("/").filter(Boolean);
-          // Extract parts dynamically: first part is base, second is section, third is subsection (if exists)
-          if (urlParts.length >= 1) {
-            base = urlParts[0]; // e.g., "transactions", "reports", "analytics", etc.
-          }
-          if (urlParts.length >= 2) {
-            section = urlParts[1]; // e.g., "test2", "monthly", etc.
-          }
-          if (urlParts.length >= 3) {
-            subsection = urlParts[2]; // e.g., "details", "summary", etc.
-          }
-        }
-
-        // Build the navigation path based on available parts
-        let navigationPath = "";
-        if (base && section && subsection) {
-          // Both section and subsection available
-          navigationPath = `/${base}/${section}/${subsection}/${item.it_report_structures_id}`;
-        } else if (base && section) {
-          // Only section available
-          navigationPath = `/${base}/${section}/${item.it_report_structures_id}`;
-        }
-
-        console.log("Generated navigation path:", navigationPath);
-
-        if (navigationPath) {
-          navigate(navigationPath, { state: { item } });
-        } else {
-          console.error(
-            "No navigation path generated - missing base/section or reportId"
-          );
-        }
-      } else if (item.url) {
-        // Fallback: just navigate to the url
-        navigate(item.url, { state: { item } });
-      }
-    } catch (err) {
-      console.error("Error parsing user from localStorage:", err);
-      // fallback
-      if (item.url) {
-        navigate(item.url, { state: { item } });
-      }
     }
 
     closeSidebar();
-    return;
   };
 
   const closeMenuManager = () => {

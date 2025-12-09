@@ -12,6 +12,7 @@ import Home from "./components/Pages/Home";
 import Team from "./components/Pages/Team";
 import ChatUI from "./components/Pages/ChatUI";
 import UserRights from "./components/Pages/UserRights";
+import DynamicPage from "./components/Pages/DynamicPage";
 
 // import ReportPage from "./components/Pages/ReportPage";
 import ReportDesignPage from "./components/Pages/Report&DesignPage";
@@ -95,27 +96,17 @@ const AppRoutes = () => {
         </Route>
         <Route path="chat" element={<ChatUI />} />
 
-        {/* Dynamic routes for ANY base path (transactions, reports, analytics, etc.) */}
-        {/* User routes with 3-level paths: /:base/:section/:subsection/:reportId */}
+        {/* Dynamic routes - catch-all for database-driven pages */}
+        {/* This will handle any URL from the database navigation menu */}
         <Route
-          path=":base/:section/:subsection/:reportId"
+          path="*"
           element={
             <ProtectedRoute>
-              <ReportDesignPage />
-            </ProtectedRoute>
-          }
-        />
-        {/* User routes with 2-level paths: /:base/:section/:reportId */}
-        <Route
-          path=":base/:section/:reportId"
-          element={
-            <ProtectedRoute>
-              <ReportDesignPage />
+              <DynamicPage />
             </ProtectedRoute>
           }
         />
       </Route>
-      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 };
