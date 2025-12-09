@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import "./Layout.css";
@@ -8,23 +9,29 @@ interface LayoutProps {
   userName?: string;
   userAvatar?: string;
   logoText?: string;
-  onNavigate?: (path: string, title?: string) => void;
-  onLogoClick?: () => void;
-  onUserClick?: () => void;
 }
 
 const Layout: React.FC<LayoutProps> = ({
   children,
-  userName = "John Doe",
+  userName = "User",
   userAvatar,
-  logoText = "MyApp",
-  onNavigate,
-  onLogoClick,
-  onUserClick,
+  logoText = "AIB Reports",
 }) => {
+  const navigate = useNavigate();
+
   const handleNavigation = (path: string, title?: string) => {
     console.log("Navigating to:", path, title);
-    onNavigate?.(path, title);
+    navigate(path);
+  };
+
+  const handleLogoClick = () => {
+    console.log("Logo clicked");
+    navigate("/customer-list");
+  };
+
+  const handleUserClick = () => {
+    console.log("User profile clicked");
+    // You can add user profile navigation here if needed
   };
 
   return (
@@ -33,8 +40,8 @@ const Layout: React.FC<LayoutProps> = ({
         userName={userName}
         userAvatar={userAvatar}
         logoText={logoText}
-        onLogoClick={onLogoClick}
-        onUserClick={onUserClick}
+        onLogoClick={handleLogoClick}
+        onUserClick={handleUserClick}
       />
 
       <div className="layout-body">
