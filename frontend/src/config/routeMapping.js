@@ -13,6 +13,7 @@ import Team from "../components/Pages/Team";
  */
 export const routeComponentMap = {
   "/home": Home,
+  "/dashboard": Home,
   "/member-reports/lists/customer-lists": CustomerList,
   "/chat": ChatUI,
   "/user-rights": UserRights,
