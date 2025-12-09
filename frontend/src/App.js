@@ -17,8 +17,6 @@ import UserRights from "./components/Pages/UserRights";
 import ReportDesignPage from "./components/Pages/Report&DesignPage";
 import DesignReport from "./components/Pages/DesignReport";
 
-import Admin from "./components/Pages/admin/Admin";
-
 import "./App.css";
 
 // Protected Route Component
@@ -96,26 +94,8 @@ const AppRoutes = () => {
           <Route path="team" element={<Team />} />
         </Route>
         <Route path="chat" element={<ChatUI />} />
-        
+
         {/* Dynamic routes for ANY base path (transactions, reports, analytics, etc.) */}
-        {/* Admin routes with 3-level paths: /:base/:section/:subsection/Admin/:reportId */}
-        <Route
-          path=":base/:section/:subsection/Admin/:reportId"
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-        {/* Admin routes with 2-level paths: /:base/:section/Admin/:reportId */}
-        <Route
-          path=":base/:section/Admin/:reportId"
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
         {/* User routes with 3-level paths: /:base/:section/:subsection/:reportId */}
         <Route
           path=":base/:section/:subsection/:reportId"
@@ -134,7 +114,6 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
       </Route>
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>

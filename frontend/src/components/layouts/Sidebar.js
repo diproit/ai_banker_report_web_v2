@@ -585,8 +585,8 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
 
       // If item has a report structure id, use the correct route
       if (item.it_report_structures_id) {
-        // For admin, use /:base/:section/Admin/:reportId or /:base/:section/:subsection/Admin/:reportId
-        // For user, use /:base/:section/:reportId or /:base/:section/:subsection/:reportId
+        // Navigate to /:base/:section/:reportId or /:base/:section/:subsection/:reportId
+        // Role-based access is still enforced through backend and user permissions
         // Dynamically extract base, section, and subsection from item.url
         // Example: /transactions/section or /transactions/section/subsection or /reports/analytics/monthly
         let base = "";
@@ -611,14 +611,10 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         let navigationPath = "";
         if (base && section && subsection) {
           // Both section and subsection available
-          navigationPath = isAdmin
-            ? `/${base}/${section}/${subsection}/Admin/${item.it_report_structures_id}`
-            : `/${base}/${section}/${subsection}/${item.it_report_structures_id}`;
+          navigationPath = `/${base}/${section}/${subsection}/${item.it_report_structures_id}`;
         } else if (base && section) {
           // Only section available
-          navigationPath = isAdmin
-            ? `/${base}/${section}/Admin/${item.it_report_structures_id}`
-            : `/${base}/${section}/${item.it_report_structures_id}`;
+          navigationPath = `/${base}/${section}/${item.it_report_structures_id}`;
         }
 
         console.log("Generated navigation path:", navigationPath);
