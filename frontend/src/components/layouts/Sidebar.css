@@ -1205,12 +1205,29 @@
 }
 
 /* Ensure icon visibility */
-.action-btn svg {
+.menu-item-actions .action-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  visibility: visible;
+}
+
+.menu-item-actions .edit-btn svg {
+  color: #ffa000 !important;
+  stroke: #ffa000 !important;
+}
+
+.menu-item-actions .edit-btn:hover svg {
   color: white !important;
   stroke: white !important;
-  stroke-width: 2 !important;
-  width: 16px !important;
-  height: 16px !important;
-  display: block !important;
-  visibility: visible !important;
+}
+
+.menu-item-actions .delete-btn svg {
+  color: #d32f2f !important;
+  stroke: #d32f2f !important;
+}
+
+.menu-item-actions .delete-btn:hover svg {
+  color: white !important;
+  stroke: white !important;
 }

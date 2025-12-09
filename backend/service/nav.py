@@ -48,8 +48,24 @@ class NavService:
         
         try:
             with get_session() as session:
-                # Complex query with LEFT JOIN and EXISTS subquery
-                # First, get all menu items with user rights
+                # First, get all menu item IDs the user has access to (for child checking)
+                accessible_items_stmt = select(ItNavMenu.id, ItNavMenu.path).select_from(
+                    ItNavMenu.__table__.join(
+                        ItUserNavRights.__table__,
+                        ItNavMenu.id == ItUserNavRights.nav_menu_id
+                    )
+                ).where(
+                    and_(
+                        ItUserNavRights.user_id == user_id,
+                        ItUserNavRights.can_view == True,
+                        ItNavMenu.is_active == True
+                    )
+                )
+                accessible_items = session.exec(accessible_items_stmt).all()
+                accessible_ids = set(row.id for row in accessible_items)
+                accessible_paths = set(row.path for row in accessible_items)
+                
+                # Main query with LEFT JOIN
                 stmt = select(
                     ItNavMenu.id,
                     ItNavMenu.url,
@@ -86,27 +102,17 @@ class NavService:
                 items_data = []
                 for row in results:
                     # Check if user has direct access
-                    has_direct_access = row.user_has_access_direct is not None
+                    has_direct_access = row.id in accessible_ids
                     
-                    # Check if user has access to children
+                    # Check if user has access to children using pre-fetched paths
                     has_child_access = False
-                    if not has_direct_access:
-                        child_stmt = select(ItNavMenu.id).select_from(
-                            ItNavMenu.__table__.join(
-                                ItUserNavRights.__table__,
-                                ItNavMenu.id == ItUserNavRights.nav_menu_id
-                            )
-                        ).where(
-                            and_(
-                                ItNavMenu.path.like(f"{row.path}%"),
-                                ItNavMenu.id != row.id,
-                                ItUserNavRights.user_id == user_id,
-                                ItUserNavRights.can_view == True
-                            )
-                        ).limit(1)
-                        
-                        child_result = session.exec(child_stmt).first()
-                        has_child_access = child_result is not None
+                    if not has_direct_access and row.has_children:
+                        # Check if any accessible path starts with this item's path
+                        row_path = row.path
+                        has_child_access = any(
+                            path.startswith(row_path) and path != row_path 
+                            for path in accessible_paths
+                        )
                     
                     # Only include items where user has direct access or child access
                     if has_direct_access or has_child_access:

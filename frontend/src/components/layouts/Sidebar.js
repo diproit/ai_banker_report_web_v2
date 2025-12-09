@@ -748,15 +748,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                         style={{ color: "#ffa000" }}
                       />
                     ) : (
-                      <Edit
-                        size={16}
-                        style={{
-                          color: "#ffa000",
-                          stroke: "#ffa000",
-                          strokeWidth: 2,
-                          display: "block",
-                        }}
-                      />
+                      <Edit size={16} />
                     )}
                   </button>
                   <button
@@ -780,15 +772,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                         style={{ color: "#d32f2f" }}
                       />
                     ) : (
-                      <Trash2
-                        size={16}
-                        style={{
-                          color: "#d32f2f",
-                          stroke: "#d32f2f",
-                          strokeWidth: 2,
-                          display: "block",
-                        }}
-                      />
+                      <Trash2 size={16} />
                     )}
                   </button>
                 </div>
