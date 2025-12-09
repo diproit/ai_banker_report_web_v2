@@ -176,6 +176,16 @@
   font-weight: 600;
 }
 
+/* Parent of active item - same styling as active */
+.nav-item.active-parent {
+  background-color: var(--light-blue);
+}
+
+.nav-item.active-parent > .menu-item-content {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
 .menu-item-content {
   display: flex;
   align-items: center;
@@ -245,6 +255,17 @@
 
 /* Active state indicator */
 .nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--primary-blue);
+  border-radius: 3px 0 0 3px;
+}
+
+.nav-item.active-parent::before {
   content: "";
   position: absolute;
   left: 0;

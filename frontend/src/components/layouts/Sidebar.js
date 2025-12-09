@@ -526,14 +526,16 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
   const toggleExpand = async (itemId, itemUrl, e) => {
     e.stopPropagation();
 
-    if (!loadedSubtrees[itemId] && expandedItems[itemUrl] === undefined) {
-      await fetchSubtree(itemId);
-    }
-
+    // Immediately toggle the expand state for instant UI feedback
     setExpandedItems((prev) => ({
       ...prev,
       [itemUrl]: !prev[itemUrl],
     }));
+
+    // Fetch children in background if not loaded yet
+    if (!loadedSubtrees[itemId]) {
+      fetchSubtree(itemId);
+    }
   };
 
   const toggleFieldExpand = (field) => {
@@ -548,11 +550,19 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
     return location.pathname.startsWith(itemUrl);
   };
 
+  const isParentOfActive = (item) => {
+    if (!item.url) return false;
+    // Check if current path starts with this item's URL but is not exactly this URL
+    return (
+      location.pathname.startsWith(item.url) && location.pathname !== item.url
+    );
+  };
+
   const handleItemClick = async (item, e) => {
     if (showMenuManager) return;
 
     if (item.user_has_access === false && item.has_children) {
-      await toggleExpand(item.id, item.url, e);
+      toggleExpand(item.id, item.url, e);
       return;
     }
 
@@ -560,13 +570,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       return;
     }
 
-    if (item.has_children && !loadedSubtrees[item.id]) {
-      await fetchSubtree(item.id);
-      toggleExpand(item.id, item.url, e);
-      return;
-    }
-
-    if (item.children && item.children.length > 0) {
+    if (item.has_children) {
       toggleExpand(item.id, item.url, e);
       return;
     }
@@ -689,7 +693,8 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       const hasChildren =
         item.has_children || (item.children && item.children.length > 0);
       const isExpanded = expandedItems[item.url];
-      const isActive = isActiveOrChildActive(item.url);
+      const isActive = location.pathname === item.url;
+      const isParent = isParentOfActive(item);
       const userHasAccess = item.user_has_access !== false;
 
       return (
@@ -697,6 +702,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
           <li
             className={`nav-item 
               ${isActive ? "active" : ""} 
+              ${isParent ? "active-parent" : ""}
               ${hasChildren ? "has-children" : ""}
               ${!userHasAccess ? "no-access" : ""}
               level-${level}`}
