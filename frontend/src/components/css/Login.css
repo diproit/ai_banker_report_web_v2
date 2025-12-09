@@ -1,6 +1,6 @@
 /* Login.css - Compact Modern Auth UI */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
 /* Base Styles */
 :root {
@@ -23,7 +23,7 @@
   justify-content: center;
   min-height: 100vh;
   background-color: var(--bg);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   padding: 1rem;
 }
 
@@ -92,7 +92,7 @@
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   font-size: 0.8125rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: var(--input-bg);
   transition: all 0.2s ease;
 }
@@ -157,68 +157,6 @@
   cursor: not-allowed;
 }
 
-/* Biometric Auth */
-.biometric-auth {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: var(--primary);
-  font-size: 0.75rem;
-  font-weight: 500;
-  margin: 0.75rem 0;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: background 0.2s ease;
-}
-
-.biometric-auth:hover {
-  background: rgba(37, 99, 235, 0.05);
-}
-
-.fingerprint-icon {
-  font-size: 0.875rem;
-}
-
-/* Biometric Modal Styles */
-.biometric-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.biometric-content {
-  background: var(--card-bg);
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 70%;
-  max-width: 300px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  animation: slideUp 0.3s ease-out;
-}
-
-.biometric-content .scanning-icon {
-  font-size: 3rem;
-  color: var(--primary);
-  margin-bottom: 1rem;
-}
-
-.biometric-content p {
-  color: var(--text);
-  margin-bottom: 1.5rem;
-  font-size: 0.9375rem;
-}
-
 /* Spinner Styles */
 .spinner {
   display: inline-block;
@@ -230,15 +168,10 @@
   animation: spin 1s ease-in-out infinite;
 }
 
-.spinner.small {
-  width: 14px;
-  height: 14px;
-  border-width: 2px;
-  margin-left: 8px;
-}
-
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Button Loader Styles */
@@ -247,24 +180,6 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-}
-
-/* Loading States */
-.biometric-auth.loading {
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-/* Animations */
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
 }
 
 /* Divider */
@@ -360,8 +275,14 @@
 
 /* Modern Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .login-card {
@@ -377,7 +298,7 @@
 
 /* Toast Notification Customization */
 .Toastify__toast {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;

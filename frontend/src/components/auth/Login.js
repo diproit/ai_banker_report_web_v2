@@ -1,53 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaUser, FaLock } from 'react-icons/fa';
-import { ToastContainer, toast } from 'react-toastify';
-import { useAuth } from '../../contexts/AuthContext';
-import { checkStatus as checkFingerprintStatus } from '../../clients/fingerprintClient';
-import BiometricAuthButton from './loginComponents/BiometricAuthButton';
-import BiometricModal from './loginComponents/BiometricModal';
-import SocialLoginButtons from './loginComponents/SocialLoginButtons';
-import 'react-toastify/dist/ReactToastify.css';
-import '../css/Login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
+import "react-toastify/dist/ReactToastify.css";
+import "../css/Login.css";
 
 const Login = () => {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [showBiometric, setShowBiometric] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isBiometricLoading, setIsBiometricLoading] = useState(false);
-  const [isFingerprintAvailable, setIsFingerprintAvailable] = useState(false);
-  const [fingerprintStatus, setFingerprintStatus] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  useEffect(() => {
-    let didCancel = false;
-
-    async function loadFingerprintStatus() {
-      const status = await checkFingerprintStatus();
-      if (!didCancel) {
-        setIsFingerprintAvailable(status.deviceAvailable);
-        setFingerprintStatus(status.message);
-      }
-    }
-
-    loadFingerprintStatus();
-    return () => { didCancel = true; };
-  }, []);
-
   const validateForm = () => {
     if (!userName) {
-      toast.error('Please enter your username');
+      toast.error("Please enter your username");
       return false;
     }
     if (!password) {
-      toast.error('Please enter your password');
+      toast.error("Please enter your password");
       return false;
     }
     if (userName.length < 2) {
-      toast.error('Username must be at least 2 characters long');
+      toast.error("Username must be at least 2 characters long");
       return false;
     }
     return true;
@@ -64,38 +41,23 @@ const Login = () => {
       const result = await login(userName, password);
 
       if (result.success) {
-        toast.success('Login successful! Redirecting...');
-        navigate('/home');
+        toast.success("Login successful! Redirecting...");
+        navigate("/home");
       } else {
-        toast.error(result.error || 'Login failed');
+        toast.error(result.error || "Login failed");
       }
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      toast.error("An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleBiometricAuth = () => {
-    setShowBiometric(true);
-    setIsBiometricLoading(true);
-
-    // Simulate biometric authentication
-    setTimeout(() => {
-      setIsBiometricLoading(false);
-      setShowBiometric(false);
-      toast.success('Biometric authentication successful!');
-      // Redirect to home page after successful biometric auth
-      navigate('/home');
-    }, 2000000);
-  };
-
-
   const handleSocialLogin = (provider) => {
     toast.info(`Redirecting to ${provider} authentication...`);
     // Simulate social login and redirect
     setTimeout(() => {
-      navigate('/home');
+      navigate("/home");
     }, 1500);
   };
 
@@ -164,18 +126,9 @@ const Login = () => {
                 <span>Signing in...</span>
               </div>
             ) : (
-              'Sign In'
+              "Sign In"
             )}
           </button>
-
-          <BiometricAuthButton
-            isLoading={isBiometricLoading}
-            isAvailable={isFingerprintAvailable}
-            status={fingerprintStatus}
-            onClick={handleBiometricAuth}
-          />
-
-          <BiometricModal show={showBiometric} isLoading={isBiometricLoading} />
         </form>
 
         {/* <div className="divider">
@@ -205,7 +158,10 @@ const Login = () => {
       </div>
 
       <div className="login-footer">
-        <p>© {new Date().getFullYear()} 2006-2025 Rajida Holdings (Pvt) Ltd. All Rights Reserved.</p>
+        <p>
+          © {new Date().getFullYear()} 2006-2025 Rajida Holdings (Pvt) Ltd. All
+          Rights Reserved.
+        </p>
         <div className="footer-links">
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
