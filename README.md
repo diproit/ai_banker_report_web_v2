@@ -1,34 +1,45 @@
 # AI Banker Report Web v2
 
-A full-stack web application for AI-powered banker reports, built with React + TypeScript + Vite frontend and FastAPI backend.
-
-## Project Structure
-
-```
-ai_banker_report_web_v2/
-├── frontend/          # React + TypeScript + Vite application
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.ts
-├── backend/           # FastAPI Python backend
-│   └── .gitignore
-└── README.md
-```
+A full-stack web application for AI-powered banking reports with dynamic report generation and multi-language support.
 
 ## Tech Stack
 
 ### Frontend
 
-- **React 18** - UI library
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Fast build tool and dev server
-- **ESLint** - Code linting
+- **React 19** - UI library
+- **React Router v7** - Navigation
+- **Axios** - HTTP client
+- **i18next** - Internationalization (English, Sinhala, Tamil, Tagalog, Thai)
+- **React Toastify** - Notifications
 
 ### Backend
 
-- **FastAPI** - Modern Python web framework
-- **Python 3.x** - Backend runtime
+- **Flask** - Python web framework
+- **SQLModel + SQLAlchemy** - ORM and database management
+- **MySQL** - Database
+- **Flask-JWT-Extended** - Authentication
+- **Flask-CORS** - Cross-origin support
+
+## Project Structure
+
+```
+ai_banker_report_web_v2/
+├── frontend/          # React application
+│   ├── src/
+│   │   ├── clients/       # API clients
+│   │   ├── components/    # React components
+│   │   ├── contexts/      # React contexts
+│   │   ├── config/        # Configuration
+│   │   └── utils/         # Utilities
+│   └── public/
+├── backend/           # Flask backend
+│   ├── routes/        # API routes
+│   ├── service/       # Business logic
+│   ├── models/        # Database models
+│   ├── config/        # Configuration
+│   └── utils/         # Utilities
+└── README.md
+```
 
 ## Getting Started
 
@@ -36,76 +47,49 @@ ai_banker_report_web_v2/
 
 - Node.js (v18 or higher)
 - Python 3.8+
-- npm or yarn
+- MySQL 8.0+
 
 ### Frontend Setup
 
-1. Navigate to the frontend directory:
-
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-
-```bash
 npm install
+npm start
 ```
 
-3. Start the development server:
-
-```bash
-npm run dev
-```
-
-The frontend will be available at `http://localhost:5173`
+The frontend will be available at `http://localhost:3000`
 
 ### Backend Setup
 
-1. Navigate to the backend directory:
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # macOS/Linux
+pip install -r requirements.txt
+flask run
+```
+
+The backend API will be available at `http://localhost:5003`
+
+### Database Setup
+
+1. Create MySQL database
+2. Configure database credentials in `backend/config/config.py`
+3. Run database initialization:
 
 ```bash
 cd backend
+python setup_db.py
 ```
 
-2. Create a virtual environment:
+## Features
 
-```bash
-python -m venv venv
-```
-
-3. Activate the virtual environment:
-
-- Windows: `venv\Scripts\activate`
-- macOS/Linux: `source venv/bin/activate`
-
-4. Install dependencies (once you create requirements.txt):
-
-```bash
-pip install -r requirements.txt
-```
-
-5. Run the FastAPI server:
-
-```bash
-uvicorn main:app --reload
-```
-
-The backend API will be available at `http://localhost:8000`
-
-## Development
-
-### Frontend Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-### Backend Scripts
-
-- `uvicorn main:app --reload` - Start development server with auto-reload
-- `pytest` - Run tests (once configured)
+- **Dynamic Navigation** - Database-driven menu system with role-based access control
+- **Report Generation** - SQL-based dynamic report creation
+- **Multi-language Support** - Support for 5 languages
+- **User Management** - Role-based authentication and authorization
+- **AI Integration** - OpenAI and Gemini provider support for chat features
 
 ## License
 
