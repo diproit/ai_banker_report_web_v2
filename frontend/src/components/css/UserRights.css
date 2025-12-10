@@ -118,13 +118,13 @@
 }
 
 .menu-section h2 {
-  background-color: #1976d2;
-  color: white;
+  background-color: rgb(236, 236, 236);
+  color: #2d3748;
   margin: 0;
   padding: 18px 24px;
   font-size: 18px;
   font-weight: 600;
-  border-bottom: none;
+  border-bottom: 1px solid #eaeef2;
 }
 
 .changes-notice {
@@ -179,10 +179,9 @@
 }
 
 .menu-item.level-0 {
-  background-color: #e3f2fd;
+  background-color: white;
   font-weight: 600;
   color: #2d3748;
-  border-left: 4px solid #1976d2;
 }
 
 .menu-item.level-1 {
@@ -406,4 +405,15 @@
   .menu-item.level-3 {
     padding-left: 52px;
   }
+}
+
+.no-user-selected-message {
+  padding: 24px;
+  text-align: center;
+}
+
+.no-user-selected-message p {
+  color: #94a3b8;
+  font-size: 15px;
+  margin: 0;
 }
