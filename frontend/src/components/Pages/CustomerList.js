@@ -156,15 +156,37 @@ ORDER BY
             id="branch-name"
             value={branchId ?? ""}
             onChange={(e) => {
+              console.log(
+                "Raw e.target.value:",
+                e.target.value,
+                "Type:",
+                typeof e.target.value
+              );
+
               const selectedBranchId = e.target.value
                 ? Number(e.target.value)
                 : null;
+
+              console.log(
+                "selectedBranchId after conversion:",
+                selectedBranchId
+              );
+              console.log("All branches:", branches);
+
               const selectedBranchObj = branches.find(
                 (b) => b.id === selectedBranchId
               );
+
+              console.log("Found branch object:", selectedBranchObj);
+
               setBranchId(selectedBranchId);
-              setBranchName(
-                selectedBranchId === 0 ? "ALL" : selectedBranchObj?.name || ""
+              setBranchName(selectedBranchObj?.name || "");
+
+              console.log(
+                "Set branchId to:",
+                selectedBranchId,
+                "branchName to:",
+                selectedBranchObj?.name || ""
               );
             }}
             className="form-select"
