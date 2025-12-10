@@ -280,7 +280,7 @@
   .ai-chat-button span {
     display: none;
   }
-  
+
   .ai-chat-button {
     padding: 0.5rem;
     border-radius: 50%;
@@ -288,13 +288,13 @@
     height: 36px;
     justify-content: center;
   }
-  
+
   .welcome-header {
     align-items: flex-start;
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .ai-chat-button {
     align-self: flex-end;
   }
