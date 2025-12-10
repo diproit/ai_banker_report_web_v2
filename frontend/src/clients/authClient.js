@@ -1,4 +1,4 @@
-import api, { get, post } from './apiClient';
+import api, { get, post } from "./apiClient";
 
 /**
  * Login with username and password.
@@ -8,7 +8,7 @@ import api, { get, post } from './apiClient';
  * @returns {Promise<any>} Response data (may include user object)
  */
 export function login(user_name, password) {
-    return post('/auth/login', { user_name, password });
+  return post("/auth/login", { user_name, password });
 }
 
 /**
@@ -16,19 +16,28 @@ export function login(user_name, password) {
  * @returns {Promise<any>} Response data
  */
 export function logout() {
-    return post('/auth/logout', {});
+  return post("/auth/logout", {});
 }
 
 /**
  * Verify current session (cookie-based auth) and return validity/user info.
  * @returns {Promise<any>} Response data, e.g. { valid: boolean, user?: object }
  */
-export function verify() {
-    return get('/auth/verify');
+export async function verify() {
+  try {
+    return await get("/auth/verify");
+  } catch (error) {
+    // Silently handle 401 - it's expected when not logged in
+    // This prevents console errors on page load
+    if (error?.response?.status === 401) {
+      return { valid: false };
+    }
+    throw error;
+  }
 }
 
 export default {
-    login,
-    logout,
-    verify,
+  login,
+  logout,
+  verify,
 };

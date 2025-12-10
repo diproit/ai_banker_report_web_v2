@@ -1,12 +1,22 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { login as authLogin, logout as authLogout, verify as authVerify } from '../clients/authClient';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import {
+  login as authLogin,
+  logout as authLogout,
+  verify as authVerify,
+} from "../clients/authClient";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -22,8 +32,8 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
 
     // Only redirect if not already on login page
-    if (window.location.pathname !== '/login') {
-      window.location.replace('/login');
+    if (window.location.pathname !== "/login") {
+      window.location.replace("/login");
     }
   }, []);
 
@@ -40,7 +50,7 @@ export const AuthProvider = ({ children }) => {
           clearAuthAndRedirect();
         }
       } catch (error) {
-        console.error('Auth verification failed:', error);
+        // Don't log - 401 on page load is expected when not logged in
         clearAuthAndRedirect();
       } finally {
         setLoading(false);
@@ -51,14 +61,13 @@ export const AuthProvider = ({ children }) => {
 
     // Listen for unauthorized events from apiClient
     const handleUnauthorized = () => {
-      console.log('Received unauthorized event, clearing auth...');
       clearAuthAndRedirect();
     };
 
-    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
 
     return () => {
-      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+      window.removeEventListener("auth:unauthorized", handleUnauthorized);
     };
   }, [clearAuthAndRedirect]);
 
@@ -74,14 +83,14 @@ export const AuthProvider = ({ children }) => {
       } else {
         return {
           success: false,
-          error: 'Invalid response from server'
+          error: "Invalid response from server",
         };
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       return {
         success: false,
-        error: error.response?.data?.message || 'Login failed'
+        error: error.response?.data?.message || "Login failed",
       };
     }
   };
@@ -95,12 +104,12 @@ export const AuthProvider = ({ children }) => {
       // Then call backend to clear HTTP-only cookie
       await authLogout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
 
     // Navigate to login page (state is already cleared, so ProtectedRoute will redirect)
-    if (window.location.pathname !== '/login') {
-      window.location.href = '/login';
+    if (window.location.pathname !== "/login") {
+      window.location.href = "/login";
     }
   }, []);
 
@@ -110,12 +119,8 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isAuthenticated,
-    clearAuthAndRedirect
+    clearAuthAndRedirect,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
