@@ -671,12 +671,15 @@
 
 /* Menu Item Actions - Compact - MOVED TO LEFT SIDE */
 .menu-item-actions {
-  display: flex;
+  display: flex !important;
   gap: 4px;
   margin-left: auto;
   margin-right: 8px;
   flex-shrink: 0;
   z-index: 20;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 .action-btn {
@@ -685,13 +688,16 @@
   padding: 4px;
   border-radius: 3px;
   cursor: pointer;
-  opacity: 1;
+  opacity: 1 !important;
+  visibility: visible !important;
   transition: all 0.2s ease;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  pointer-events: auto !important;
+  font-size: 16px;
 }
 
 .action-btn:hover {
@@ -699,26 +705,30 @@
   transform: scale(1.1);
 }
 
+.action-btn:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  transform: none !important;
+}
+
 .action-btn.edit-btn {
   background: #fff8e1;
   border: 1px solid #ffecb3;
-  color: #ffa000;
 }
 
 .edit-btn:hover {
   background-color: #ffc107;
-  color: white;
+  transform: scale(1.15);
 }
 
 .action-btn.delete-btn {
   background: #ffebee;
   border: 1px solid #ffcdd2;
-  color: #d32f2f;
 }
 
 .delete-btn:hover {
-  background-color: #dc3545;
-  color: white;
+  background-color: #ef5350;
+  transform: scale(1.15);
 }
 
 .expand-toggle-btn {

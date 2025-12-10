@@ -718,15 +718,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
           >
             <div className="menu-item-content">
               {showMenuManager && (
-                <div
-                  className="menu-item-actions"
-                  style={{
-                    zIndex: 100,
-                    display: "flex",
-                    visibility: "visible",
-                    opacity: 1,
-                  }}
-                >
+                <div className="menu-item-actions">
                   <button
                     className="action-btn edit-btn"
                     title="Edit"
@@ -735,21 +727,8 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       if (!actionLoading.edit) handleEdit(item);
                     }}
                     disabled={actionLoading.edit}
-                    style={
-                      actionLoading.edit
-                        ? { cursor: "not-allowed", opacity: 0.6 }
-                        : { opacity: 1, display: "flex", visibility: "visible" }
-                    }
                   >
-                    {actionLoading.edit ? (
-                      <Loader
-                        size={16}
-                        className="spinning-loader"
-                        style={{ color: "#ffa000" }}
-                      />
-                    ) : (
-                      <Edit size={16} />
-                    )}
+                    {actionLoading.edit ? "..." : "✏️"}
                   </button>
                   <button
                     className="action-btn delete-btn"
@@ -759,21 +738,8 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       if (!actionLoading.delete) handleDelete(item);
                     }}
                     disabled={actionLoading.delete}
-                    style={
-                      actionLoading.delete
-                        ? { cursor: "not-allowed", opacity: 0.6 }
-                        : { opacity: 1, display: "flex", visibility: "visible" }
-                    }
                   >
-                    {actionLoading.delete ? (
-                      <Loader
-                        size={16}
-                        className="spinning-loader"
-                        style={{ color: "#d32f2f" }}
-                      />
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
+                    {actionLoading.delete ? "..." : "🗑️"}
                   </button>
                 </div>
               )}
