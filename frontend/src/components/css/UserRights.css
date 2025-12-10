@@ -1,9 +1,10 @@
 /* UserRights.css - Modern and Elegant Design */
 .user-rights-container {
   padding: 24px;
-  max-width: 1000px;
+  width: 1000px;
+  max-width: 100%;
   margin: 0 auto;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #333;
 }
 
@@ -27,7 +28,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  background: #1976d2;
   color: white;
   border: none;
   border-radius: 8px;
@@ -35,14 +36,13 @@
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+  transition: background 0.2s ease;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
 }
 
 .save-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #4338ca, #6d28d9);
-  box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);
-  transform: translateY(-1px);
+  background: #1565c0;
+  box-shadow: 0 4px 6px rgba(25, 118, 210, 0.3);
 }
 
 .save-button:disabled {
@@ -58,11 +58,12 @@
   margin-bottom: 25px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  background-color: #f8fafc;
+  background-color: white;
   padding: 16px 20px;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .user-selection label {
@@ -117,13 +118,13 @@
 }
 
 .menu-section h2 {
-  background-color: #f8fafc;
-  color: #2d3748;
+  background-color: #1976d2;
+  color: white;
   margin: 0;
   padding: 18px 24px;
   font-size: 18px;
   font-weight: 600;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: none;
 }
 
 .changes-notice {
@@ -174,14 +175,14 @@
 }
 
 .menu-item:hover {
-  background-color: #f8fafc;
+  background-color: transparent;
 }
 
 .menu-item.level-0 {
-  background-color: #f8fafc;
+  background-color: #e3f2fd;
   font-weight: 600;
   color: #2d3748;
-  border-left: 4px solid #4f46e5;
+  border-left: 4px solid #1976d2;
 }
 
 .menu-item.level-1 {
@@ -301,7 +302,8 @@
 }
 
 .access-checkbox input:focus ~ .checkmark {
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  outline: none;
+  box-shadow: none;
 }
 
 .access-checkbox:hover input:not(:checked) ~ .checkmark {
@@ -312,7 +314,8 @@
   background-color: #fff;
 }
 
-.loading-spinner, .loading-indicator {
+.loading-spinner,
+.loading-indicator {
   color: #64748b;
   font-style: italic;
   padding: 24px;
@@ -331,52 +334,52 @@
   .user-rights-container {
     padding: 16px;
   }
-  
+
   .header-section {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .user-rights-container h1 {
     font-size: 24px;
   }
-  
+
   .save-button {
     align-self: stretch;
     justify-content: center;
   }
-  
+
   .user-selection {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  
+
   .user-selection select {
     width: 100%;
   }
-  
+
   .menu-item-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .access-section {
     width: 100%;
     justify-content: space-between;
     padding-left: 28px;
   }
-  
+
   .menu-item.level-1 {
     padding-left: 32px;
   }
-  
+
   .menu-item.level-2 {
     padding-left: 48px;
   }
-  
+
   .menu-item.level-3 {
     padding-left: 64px;
   }
@@ -386,20 +389,20 @@
   .menu-item {
     padding: 12px 16px;
   }
-  
+
   .menu-section h2 {
     padding: 14px 16px;
     font-size: 16px;
   }
-  
+
   .menu-item.level-1 {
     padding-left: 28px;
   }
-  
+
   .menu-item.level-2 {
     padding-left: 40px;
   }
-  
+
   .menu-item.level-3 {
     padding-left: 52px;
   }
