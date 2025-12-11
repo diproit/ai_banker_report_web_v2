@@ -1,10 +1,12 @@
 import CustomerList from "../components/Pages/CustomerList";
+import PersonalSavingsReport from "../components/Pages/PersonalSavingsReport";
 import Home from "../components/Pages/Home";
 import ChatUI from "../components/Pages/ChatUI";
 import UserRights from "../components/Pages/UserRights";
 import ReportDesignPage from "../components/Pages/Report&DesignPage";
 import DesignReport from "../components/Pages/DesignReport";
 import Team from "../components/Pages/Team";
+import LoanPastDueReports from "../components/Pages/LoanPastDueReports";
 
 /**
  * Maps database URLs to React components
@@ -20,6 +22,8 @@ export const routeComponentMap = {
   "/report": ReportDesignPage,
   "/design-report": DesignReport,
   "/about/team": Team,
+  "/transactions/personal-savings/savings": PersonalSavingsReport,
+  "/transactions/past-due/loan-past-due": LoanPastDueReports,
   // Add more mappings as you create components
 };
 
