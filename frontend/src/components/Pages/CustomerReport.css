@@ -195,135 +195,25 @@
   font-size: 12px;
 }
 
-/* Screen-only elements (visible on screen, hidden in print) */
-.screen-only {
-  display: block;
-}
-
-.print-only {
-  display: none;
-}
-
-.print-only-footer {
-  display: none;
-}
-
 /* Print Styles */
 @media print {
-  /* Page setup */
-  @page {
-    size: A4 landscape;
-    margin: 1.5cm 1cm 1.5cm 1cm;
-  }
-
-  /* Hide browser default headers and footers */
-  html,
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* Hide screen elements */
-  .screen-only {
-    display: none !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  /* Hide UI controls */
   .filter-section,
   .report-actions,
-  .pagination,
-  .report-footer {
+  .pagination {
     display: none !important;
   }
 
   .customer-report-card {
     padding: 0;
-    margin: 0;
-    box-shadow: none;
-    border: none;
-    background: white;
   }
 
-  /* Show headers only on first page */
-  .report-main-heading,
-  .report-sub-heading {
-    display: block !important;
-    text-align: center;
-    color: #000 !important;
-    page-break-after: avoid;
-  }
-
-  .report-main-heading {
-    font-size: 18pt;
-    margin: 0 0 10px 0;
-    font-weight: bold;
-  }
-
-  .report-sub-heading {
-    font-size: 14pt;
-    margin: 0 0 20px 0;
-    font-weight: normal;
-  }
-
-  /* Table styling for print */
   .report-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 8pt;
-    margin-bottom: 50px;
+    page-break-inside: auto;
   }
 
-  .report-table thead {
-    display: table-header-group;
-  }
-
-  .report-table th {
-    background-color: #f5f5f5 !important;
-    border: 1px solid #000;
-    padding: 6px 4px;
-    font-weight: bold;
-    text-align: left;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .report-table td {
-    border: 1px solid #000;
-    padding: 5px 4px;
-    font-size: 8pt;
-  }
-
-  /* Page break after every 15 rows */
-  .report-table tbody tr:nth-child(15n) {
-    page-break-after: always;
-  }
-
-  /* Avoid breaking rows */
   .report-table tr {
     page-break-inside: avoid;
-  }
-
-  /* Print footer on every page */
-  .print-only-footer {
-    display: block !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 8px 1cm;
-    font-size: 9pt;
-    background: white;
-  }
-
-  .print-only-footer::after {
-    content: "Page " counter(page);
-    position: absolute;
-    right: 1cm;
-    bottom: 8px;
+    page-break-after: auto;
   }
 }
 
