@@ -40,7 +40,7 @@ export const sqlExecutorApi = {
    */
   getBranches: async () => {
     const query =
-      "SELECT 0 as id, 'ALL' as name UNION ALL SELECT id, name_ln1 as name FROM gl_branch WHERE status = 1 ORDER BY id";
+      "SELECT id, name_ln1 as name FROM gl_branch ORDER BY name_ln1";
     const response = await sqlExecutorApi.executeQuery(query);
     return response.success ? response.data : [];
   },

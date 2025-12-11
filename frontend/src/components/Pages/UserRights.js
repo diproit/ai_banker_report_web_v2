@@ -28,7 +28,7 @@ const UserRights = () => {
         setError("");
         console.log("Fetching users...");
 
-        const data = await get('/user-management/users');
+        const data = await get("/user-management/users");
         console.log("Users API response:", data);
 
         if (data.success && Array.isArray(data.users)) {
@@ -56,12 +56,12 @@ const UserRights = () => {
     const rootItems = [];
 
     // First pass: create map and add children arrays
-    flatItems.forEach(item => {
+    flatItems.forEach((item) => {
       itemMap[item.id] = { ...item, children: [] };
     });
 
     // Second pass: build the tree structure
-    flatItems.forEach(item => {
+    flatItems.forEach((item) => {
       if (item.parent_id && itemMap[item.parent_id]) {
         // This is a child item - add to parent's children
         itemMap[item.parent_id].children.push(itemMap[item.id]);
@@ -74,7 +74,7 @@ const UserRights = () => {
     // Sort items by sort_order
     const sortItems = (items) => {
       items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-      items.forEach(item => {
+      items.forEach((item) => {
         if (item.children && item.children.length > 0) {
           sortItems(item.children);
         }
@@ -98,12 +98,20 @@ const UserRights = () => {
 
         // Handle the API response format
         if (data.success && Array.isArray(data.data)) {
-          console.log("Raw flat menu data from API:", data.data.length, "items");
+          console.log(
+            "Raw flat menu data from API:",
+            data.data.length,
+            "items"
+          );
 
           // Build tree structure from flat data
           const treeStructure = buildMenuTree(data.data);
           setMenuItems(treeStructure);
-          console.log("Menu tree built with", treeStructure.length, "root items");
+          console.log(
+            "Menu tree built with",
+            treeStructure.length,
+            "root items"
+          );
 
           // Debug: Log the tree structure
           treeStructure.forEach((item, index) => {
@@ -111,7 +119,7 @@ const UserRights = () => {
               id: item.id,
               title: item.title,
               level: item.level,
-              children: item.children ? item.children.length : 0
+              children: item.children ? item.children.length : 0,
             });
             if (item.children && item.children.length > 0) {
               item.children.forEach((child, childIndex) => {
@@ -119,14 +127,14 @@ const UserRights = () => {
                   id: child.id,
                   title: child.title,
                   level: child.level,
-                  children: child.children ? child.children.length : 0
+                  children: child.children ? child.children.length : 0,
                 });
                 if (child.children && child.children.length > 0) {
                   child.children.forEach((grandchild, grandchildIndex) => {
                     console.log(`    Level 2 child ${grandchildIndex}:`, {
                       id: grandchild.id,
                       title: grandchild.title,
-                      level: grandchild.level
+                      level: grandchild.level,
                     });
                   });
                 }
@@ -206,7 +214,14 @@ const UserRights = () => {
     };
     flatten(items);
 
-    console.log(`Flattened items for search:`, flatItems.map(item => ({ id: item.id, title: item.title, parent_id: item.parent_id })));
+    console.log(
+      `Flattened items for search:`,
+      flatItems.map((item) => ({
+        id: item.id,
+        title: item.title,
+        parent_id: item.parent_id,
+      }))
+    );
 
     const findChildren = (targetId) => {
       for (const item of flatItems) {
@@ -257,11 +272,11 @@ const UserRights = () => {
     const childrenIds = findAllChildrenIds(menuItems, parentId);
     if (childrenIds.length === 0) return true; // No children means parent can be standalone
 
-    const result = childrenIds.every(childId => {
+    const result = childrenIds.every((childId) => {
       if (currentChanges.hasOwnProperty(childId)) {
         return currentChanges[childId];
       }
-      return userRights.some(right => right.menu_item_id === childId);
+      return userRights.some((right) => right.menu_item_id === childId);
     });
 
     console.log(`allChildrenHaveAccess for parent ${parentId}: ${result}`);
@@ -271,9 +286,11 @@ const UserRights = () => {
   const handleRightChange = (menuItemId, hasAccess, isParent = false) => {
     if (!selectedUser) return;
 
-    console.log(`handleRightChange called: menuItemId=${menuItemId}, hasAccess=${hasAccess}, isParent=${isParent}`);
+    console.log(
+      `handleRightChange called: menuItemId=${menuItemId}, hasAccess=${hasAccess}, isParent=${isParent}`
+    );
 
-    setPendingChanges(prev => {
+    setPendingChanges((prev) => {
       const newChanges = { ...prev };
 
       if (isParent) {
@@ -285,7 +302,7 @@ const UserRights = () => {
         newChanges[menuItemId] = hasAccess;
 
         // Update all children with the same value
-        childrenIds.forEach(childId => {
+        childrenIds.forEach((childId) => {
           console.log(`Setting child ${childId} to ${hasAccess}`);
           newChanges[childId] = hasAccess;
         });
@@ -297,7 +314,7 @@ const UserRights = () => {
         const parentIds = findAllParentIds(menuItems, menuItemId);
         console.log(`Child ${menuItemId} parents:`, parentIds);
 
-        parentIds.forEach(parentId => {
+        parentIds.forEach((parentId) => {
           if (hasAccess) {
             // When selecting a child, check if ALL children are now selected
             // If so, auto-select the parent
@@ -331,15 +348,18 @@ const UserRights = () => {
     if (childrenIds.length === 0) return false;
 
     const currentChanges = pendingChanges;
-    const childrenWithAccess = childrenIds.filter(childId => {
+    const childrenWithAccess = childrenIds.filter((childId) => {
       if (currentChanges.hasOwnProperty(childId)) {
         return currentChanges[childId];
       }
-      return userRights.some(right => right.menu_item_id === childId);
+      return userRights.some((right) => right.menu_item_id === childId);
     });
 
     // Indeterminate if some (but not all) children have access
-    return childrenWithAccess.length > 0 && childrenWithAccess.length < childrenIds.length;
+    return (
+      childrenWithAccess.length > 0 &&
+      childrenWithAccess.length < childrenIds.length
+    );
   };
 
   const handleSave = async () => {
@@ -351,28 +371,33 @@ const UserRights = () => {
       setSuccess("");
       console.log("Saving changes:", pendingChanges);
 
-      const data = await post(`/user-rights/users/${selectedUser}/nav-rights/bulk`, {
-        changes: pendingChanges
-      });
+      const data = await post(
+        `/user-rights/users/${selectedUser}/nav-rights/bulk`,
+        {
+          changes: pendingChanges,
+        }
+      );
       console.log("Save API response:", data);
 
       if (data.success) {
-        setSuccess(t('user_rights_page.update_success'));
+        setSuccess(t("user_rights_page.update_success"));
         setPendingChanges({});
         console.log("Changes saved successfully");
 
         // Refresh user rights
-        const rightsData = await get(`/user-rights/users/${selectedUser}/nav-rights`);
+        const rightsData = await get(
+          `/user-rights/users/${selectedUser}/nav-rights`
+        );
         if (rightsData.success && Array.isArray(rightsData.rights)) {
           setUserRights(rightsData.rights);
           console.log("User rights refreshed");
         }
       } else {
-        setError(t('user_rights_page.update_failed'));
+        setError(t("user_rights_page.update_failed"));
         console.error("Failed to update user rights:", data);
       }
     } catch (error) {
-      setError(t('user_rights_page.update_failed') + ': ' + error.message);
+      setError(t("user_rights_page.update_failed") + ": " + error.message);
       console.error("Error updating user rights:", error);
     } finally {
       setSaving(false);
@@ -390,7 +415,11 @@ const UserRights = () => {
 
   const renderMenuItems = (items, level = 0) => {
     if (!items || items.length === 0) {
-      return <p className="no-items-message">{t('user_rights_page.no_menu_items')}</p>;
+      return (
+        <p className="no-items-message">
+          {t("user_rights_page.no_menu_items")}
+        </p>
+      );
     }
 
     return items.map((item) => {
@@ -403,7 +432,9 @@ const UserRights = () => {
       return (
         <div key={item.id} className="menu-item-container">
           <div
-            className={`menu-item level-${level} ${hasChildren ? 'has-children' : ''}`}
+            className={`menu-item level-${level} ${
+              hasChildren ? "has-children" : ""
+            }`}
             onClick={(e) => handleMenuItemClick(item, e)}
           >
             <div className="menu-item-content">
@@ -421,7 +452,9 @@ const UserRights = () => {
               </div>
               {selectedUser && (
                 <div className="access-section">
-                  <span className="access-label">{t('user_rights_page.access_label')}</span>
+                  <span className="access-label">
+                    {t("user_rights_page.access_label")}
+                  </span>
                   <label className="access-checkbox">
                     <input
                       type="checkbox"
@@ -455,7 +488,7 @@ const UserRights = () => {
   return (
     <div className="user-rights-container">
       <div className="header-section">
-        <h1>{t('user_rights_page.title')}</h1>
+        <h1>{t("user_rights_page.title")}</h1>
         {selectedUser && hasPendingChanges && (
           <button
             className="save-button"
@@ -463,11 +496,13 @@ const UserRights = () => {
             disabled={saving}
           >
             {saving ? (
-              <span className="saving-text">{t('user_rights_page.saving')}</span>
+              <span className="saving-text">
+                {t("user_rights_page.saving")}
+              </span>
             ) : (
               <>
                 <FiSave size={16} />
-                <span>{t('user_rights_page.save_changes')}</span>
+                <span>{t("user_rights_page.save_changes")}</span>
               </>
             )}
           </button>
@@ -475,21 +510,29 @@ const UserRights = () => {
       </div>
 
       <div className="user-selection">
-        <label htmlFor="user-select">{t('user_rights_page.select_user_label')}</label>
+        <label htmlFor="user-select">
+          {t("user_rights_page.select_user_label")}
+        </label>
         <select
           id="user-select"
           value={selectedUser}
           onChange={(e) => setSelectedUser(e.target.value)}
           disabled={userLoading}
         >
-          <option value="">{t('user_rights_page.select_user_placeholder')}</option>
+          <option value="">
+            {t("user_rights_page.select_user_placeholder")}
+          </option>
           {users.map((user) => (
             <option key={user.id} value={user.id}>
               {user.username}
             </option>
           ))}
         </select>
-        {userLoading && <span className="loading-indicator">{t('user_rights_page.loading_users')}</span>}
+        {userLoading && (
+          <span className="loading-indicator">
+            {t("user_rights_page.loading_users")}
+          </span>
+        )}
       </div>
 
       {error && <div className="error-message">{error}</div>}
@@ -498,32 +541,34 @@ const UserRights = () => {
       {selectedUser && (
         <div className="menu-section">
           <h2>
-            {t('user_rights_page.menu_access_for', { username: users.find(u => u.id.toString() === selectedUser)?.username || 'User' })}
+            {t("user_rights_page.menu_access_for", {
+              username:
+                users.find((u) => u.id.toString() === selectedUser)?.username ||
+                "User",
+            })}
           </h2>
 
           {hasPendingChanges && (
             <div className="changes-notice">
-              {t('user_rights_page.unsaved_changes')}
+              {t("user_rights_page.unsaved_changes")}
             </div>
           )}
 
-          {loading ? (
-            <div className="loading-spinner">{t('user_rights_page.loading_menu_items')}</div>
-          ) : (
-            <div className="menu-list">
-              {menuItems.length > 0 ? (
-                renderMenuItems(menuItems)
-              ) : (
-                <p className="no-items-message">{t('user_rights_page.no_menu_items')}</p>
-              )}
-            </div>
-          )}
+          <div className="menu-list">
+            {menuItems.length > 0 ? (
+              renderMenuItems(menuItems)
+            ) : (
+              <p className="no-items-message">
+                {t("user_rights_page.no_menu_items")}
+              </p>
+            )}
+          </div>
         </div>
       )}
 
       {!selectedUser && (
         <div className="no-user-selected-message">
-          <p>{t('user_rights_page.no_user_selected')}</p>
+          <p>{t("user_rights_page.no_user_selected")}</p>
         </div>
       )}
     </div>
