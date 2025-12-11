@@ -12,6 +12,12 @@ import { sqlExecutorApi } from "../../clients/sqlExecutorClient";
 
 const ROWS_PER_PAGE = 20;
 
+const parseNumber = (value) => {
+  if (value === null || value === undefined) return 0;
+  const num = Number(String(value).replace(/,/g, "").replace(/%/g, ""));
+  return Number.isFinite(num) ? num : 0;
+};
+
 const getVisiblePages = (currentPage, totalPages, maxVisible = 5) => {
   if (totalPages <= maxVisible) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -46,8 +52,10 @@ const buildLoanPastDueQuery = ({
 }) => {
   const filters = [];
 
-  // Mandatory branch filter
-  filters.push(`gl_branch.id = ${branchId}`);
+  // Branch filter (skip if ALL = 0)
+  if (branchId !== 0) {
+    filters.push(`gl_branch.id = ${branchId}`);
+  }
 
   // Only loans (category = 2)
   filters.push(`pl_account_type.pl_account_category_id = 2`);
@@ -86,6 +94,7 @@ const buildLoanPastDueQuery = ({
     SELECT
       gl_branch.id AS branch_id,
       gl_branch.name_ln1 AS branch_name,
+      pl_account_type.id AS product_id,
       pl_account.ref_account_number AS account_number,
       ci_customer.customer_number,
       ci_customer.full_name_ln1,
@@ -136,24 +145,17 @@ const LoanPastDueReports = () => {
   const [loanReportData, setLoanReportData] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [drillLevel, setDrillLevel] = useState("detail");
+  const [drillBranch, setDrillBranch] = useState(null);
+  const [drillProduct, setDrillProduct] = useState(null);
 
   // Derived
   const hasResults = loanReportData && loanReportData.length > 0;
 
-  const columns = useMemo(() => {
+  const detailColumns = useMemo(() => {
     if (!loanReportData || loanReportData.length === 0) return [];
     return Object.keys(loanReportData[0]);
   }, [loanReportData]);
-
-  const totalPages = hasResults
-    ? Math.ceil(loanReportData.length / ROWS_PER_PAGE)
-    : 0;
-  const pages = getVisiblePages(currentPage, totalPages);
-  const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
-  const endIndex = startIndex + ROWS_PER_PAGE;
-  const paginatedData = hasResults
-    ? loanReportData.slice(startIndex, endIndex)
-    : [];
 
   const selectedBranchObj = selectedBranchId
     ? branches.find((b) => b.id === parseInt(selectedBranchId, 10))
@@ -162,9 +164,147 @@ const LoanPastDueReports = () => {
     ? loanProducts.find((p) => p.id === parseInt(selectedLoanProductId, 10))
     : null;
 
-  const displayBranchName =
-    selectedBranchObj?.name || "Selected Branch";
+  const branchIsAll = selectedBranchId === "0";
+
+  const displayBranchName = branchIsAll
+    ? "ALL"
+    : selectedBranchObj?.name || "Selected Branch";
   const displayLoanProductName = selectedLoanProductObj?.name || "";
+
+  const branchSummary = useMemo(() => {
+    if (!loanReportData || !branchIsAll) return [];
+    const map = {};
+    loanReportData.forEach((row) => {
+      const id = row.branch_id ?? row.branchId;
+      if (id === undefined || id === null) return;
+      const name = row.branch_name ?? row.branchName ?? "Unknown";
+      const pastDue = parseNumber(row.past_due_amount ?? row.pastDueAmount);
+      if (!map[id]) {
+        map[id] = { id, name, count: 0, totalPastDue: 0 };
+      }
+      map[id].count += 1;
+      map[id].totalPastDue += pastDue;
+    });
+    return Object.values(map).sort((a, b) => a.name.localeCompare(b.name));
+  }, [loanReportData, branchIsAll]);
+
+  const productSummary = useMemo(() => {
+    if (!loanReportData) return [];
+    const filteredRows =
+      branchIsAll && drillBranch
+        ? loanReportData.filter(
+            (row) => (row.branch_id ?? row.branchId) === drillBranch.id
+          )
+        : !branchIsAll
+        ? loanReportData
+        : [];
+
+    const map = {};
+    filteredRows.forEach((row) => {
+      const id = row.product_id ?? row.productId;
+      if (id === undefined || id === null) return;
+      const name = row.product_name ?? row.productName ?? "Unknown";
+      const pastDue = parseNumber(row.past_due_amount ?? row.pastDueAmount);
+      if (!map[id]) {
+        map[id] = { id, name, count: 0, totalPastDue: 0 };
+      }
+      map[id].count += 1;
+      map[id].totalPastDue += pastDue;
+    });
+    return Object.values(map).sort((a, b) => a.name.localeCompare(b.name));
+  }, [loanReportData, branchIsAll, drillBranch]);
+
+  const detailRows = useMemo(() => {
+    if (!loanReportData) return [];
+    let rows = loanReportData;
+    if (branchIsAll && drillBranch) {
+      rows = rows.filter(
+        (row) => (row.branch_id ?? row.branchId) === drillBranch.id
+      );
+    }
+    if (drillProduct) {
+      rows = rows.filter(
+        (row) => (row.product_id ?? row.productId) === drillProduct.id
+      );
+    }
+    return rows;
+  }, [loanReportData, branchIsAll, drillBranch, drillProduct]);
+
+  const tableConfig = useMemo(() => {
+    if (!hasResults) return { columns: [], rows: [], isSummary: false };
+
+    const formatCurrency = (value) =>
+      parseNumber(value).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
+    if (branchIsAll && drillLevel === "branch") {
+      const rows = branchSummary.map((b) => ({
+        Branch: b.name,
+        Accounts: b.count,
+        "Total Past Due": formatCurrency(b.totalPastDue),
+        _drillBranch: { id: b.id, name: b.name },
+      }));
+      return {
+        columns: ["Branch", "Accounts", "Total Past Due"],
+        rows,
+        isSummary: true,
+      };
+    }
+
+    if (drillLevel === "product") {
+      const rows = productSummary.map((p) => ({
+        Product: p.name,
+        Accounts: p.count,
+        "Total Past Due": formatCurrency(p.totalPastDue),
+        _drillProduct: { id: p.id, name: p.name },
+      }));
+      return {
+        columns: ["Product", "Accounts", "Total Past Due"],
+        rows,
+        isSummary: true,
+      };
+    }
+
+    const rows = detailRows;
+    return { columns: detailColumns, rows, isSummary: false };
+  }, [hasResults, branchIsAll, drillLevel, branchSummary, productSummary, detailRows, detailColumns]);
+
+  const totalPages = tableConfig.rows.length
+    ? Math.ceil(tableConfig.rows.length / ROWS_PER_PAGE)
+    : 0;
+  const pages = getVisiblePages(currentPage, totalPages);
+  const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+  const endIndex = startIndex + ROWS_PER_PAGE;
+  const paginatedData = tableConfig.rows.slice(startIndex, endIndex);
+
+  const baseLevel = branchIsAll ? "branch" : "product";
+  const canDrillUp = drillLevel !== baseLevel;
+
+  const handleBranchDrill = (branch) => {
+    setDrillBranch(branch);
+    setDrillLevel("product");
+    setDrillProduct(null);
+    setCurrentPage(1);
+  };
+
+  const handleProductDrill = (product) => {
+    setDrillProduct(product);
+    setDrillLevel("detail");
+    setCurrentPage(1);
+  };
+
+  const handleDrillUp = () => {
+    if (drillLevel === "detail") {
+      setDrillLevel("product");
+      setDrillProduct(null);
+    } else if (drillLevel === "product" && branchIsAll) {
+      setDrillLevel("branch");
+      setDrillBranch(null);
+    }
+    setCurrentPage(1);
+  };
 
   // ----------------------------------
   // Load dropdowns on mount
@@ -206,6 +346,9 @@ const LoanPastDueReports = () => {
     setReportError(null);
     setLoanReportData(null);
     setCurrentPage(1);
+    setDrillProduct(null);
+    setDrillBranch(null);
+    setDrillLevel("detail");
 
     const branchId = parseInt(selectedBranchId, 10);
     const loanProductId = selectedLoanProductId
@@ -250,11 +393,12 @@ const LoanPastDueReports = () => {
 
       if (response.success && response.data) {
         setLoanReportData(response.data);
-        console.log(
-          "Loan report rows:",
-          response.data.length,
-          response.data
-        );
+        if (branchId === 0) {
+          setDrillLevel("branch");
+        } else {
+          setDrillBranch({ id: branchId, name: displayBranchName });
+          setDrillLevel("product");
+        }
       } else {
         setLoanReportData(null);
         setReportError(
@@ -276,18 +420,18 @@ const LoanPastDueReports = () => {
   // Print & Export
   // ----------------------------------
   const handlePrint = () => {
-    if (!hasResults || !loanReportData) return;
+    if (!hasResults || !tableConfig.rows.length) return;
 
-    const printableHeader = columns
+    const printableHeader = tableConfig.columns
       .map(
         (col) =>
           `<th style="padding:8px 8px;border:1px solid #ccc;background:#f1f3f5;text-align:left;">${col}</th>`
       )
       .join("");
 
-    const printableRows = loanReportData
+    const printableRows = tableConfig.rows
       .map((row) => {
-        const cells = columns
+        const cells = tableConfig.columns
           .map(
             (col) =>
               `<td style="padding:6px 8px;border:1px solid #ccc;">${String(
@@ -337,11 +481,11 @@ const LoanPastDueReports = () => {
   };
 
   const handleExport = () => {
-    if (!hasResults || !loanReportData) return;
+    if (!hasResults || !tableConfig.rows.length) return;
 
-    const header = columns.join(",");
-    const rows = loanReportData.map((row) =>
-      columns
+    const header = tableConfig.columns.join(",");
+    const rows = tableConfig.rows.map((row) =>
+      tableConfig.columns
         .map((col) => {
           const cell = String(row[col] ?? "");
           const escaped = cell.replace(/"/g, '""');
@@ -560,8 +704,8 @@ const LoanPastDueReports = () => {
                   <div className="report-title">Loan Past Due Report</div>
                   <div className="report-meta">
                     Generated {getTodayDate()} -{" "}
-                    {loanReportData.length} row
-                    {loanReportData.length === 1 ? "" : "s"}
+                    {tableConfig.rows.length} row
+                    {tableConfig.rows.length === 1 ? "" : "s"}
                   </div>
                   <div className="report-filters">
                     <span className="filter-chip">
@@ -592,26 +736,67 @@ const LoanPastDueReports = () => {
                 </div>
               </div>
 
+              <div className="drill-controls">
+                <div className="drill-path">
+                  <span className="filter-chip">
+                    View:
+                    {branchIsAll && drillLevel === "branch" && " Branches"}
+                    {drillLevel === "product" &&
+                      ` Products${drillBranch ? ` (${drillBranch.name})` : ""}`}
+                    {drillLevel === "detail" && " Details"}
+                  </span>
+                  {branchIsAll && drillBranch && (
+                    <span className="filter-chip">Branch: {drillBranch.name}</span>
+                  )}
+                  {drillProduct && (
+                    <span className="filter-chip">Product: {drillProduct.name}</span>
+                  )}
+                </div>
+                {canDrillUp && (
+                  <button
+                    className="btn-action"
+                    type="button"
+                    onClick={handleDrillUp}
+                  >
+                    Fold
+                  </button>
+                )}
+              </div>
+
               <div className="report-table-section">
                 <div className="table-wrap">
                   <table className="report-table">
                     <thead>
                       <tr>
-                        {columns.map((col) => (
+                        {tableConfig.columns.map((col) => (
                           <th key={col}>{col}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {paginatedData.map((row, idx) => (
-                        <tr key={idx}>
-                          {columns.map((col) => (
-                            <td key={col}>
-                              {String(row[col] ?? "")}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
+                      {paginatedData.map((row, idx) => {
+                        const isClickable = !!row._drillBranch || !!row._drillProduct;
+                        const handleRowClick = () => {
+                          if (row._drillBranch) {
+                            handleBranchDrill(row._drillBranch);
+                          } else if (row._drillProduct) {
+                            handleProductDrill(row._drillProduct);
+                          }
+                        };
+                        return (
+                          <tr
+                            key={idx}
+                            className={isClickable ? "clickable-row" : ""}
+                            onClick={isClickable ? handleRowClick : undefined}
+                          >
+                            {tableConfig.columns.map((col) => (
+                              <td key={col}>
+                                {String(row[col] ?? "")}
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
