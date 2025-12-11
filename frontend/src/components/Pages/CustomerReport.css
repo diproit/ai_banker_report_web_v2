@@ -1,13 +1,13 @@
 /* CustomerReport.css */
 
-.customer-report-card {
+.cr-customer-report-card {
   background: white;
   padding: 20px;
   border-radius: 6px;
   margin-bottom: 20px;
 }
 
-.report-main-heading {
+.cr-customer-report-card .cr-report-main-heading {
   font-size: 14px;
   color: #2c3e50;
   text-align: center;
@@ -15,7 +15,7 @@
   font-weight: 600;
 }
 
-.report-sub-heading {
+.cr-customer-report-card .cr-report-sub-heading {
   font-size: 12px;
   color: #34495e;
   text-align: center;
@@ -25,19 +25,19 @@
 
 /* Filter Section */
 /* Filter Section */
-.filter-section {
+.cr-customer-report-card .cr-filter-section {
   display: flex;
   gap: 15px;
   margin-bottom: 15px;
   flex-wrap: wrap;
 }
 
-.filter-group {
+.cr-customer-report-card .cr-filter-group {
   flex: 1;
   min-width: 180px;
 }
 
-.filter-group label {
+.cr-customer-report-card .cr-filter-group label {
   display: block;
   margin-bottom: 6px;
   color: #34495e;
@@ -45,7 +45,7 @@
   font-size: 11px;
 }
 
-.filter-select {
+.cr-customer-report-card .cr-filter-select {
   width: 100%;
   padding: 6px 10px;
   border: 1px solid #ddd;
@@ -53,21 +53,21 @@
   font-size: 11px;
   background-color: white;
 }
-.filter-select:focus {
+.cr-customer-report-card .cr-filter-select:focus {
   outline: none;
   border-color: #3498db;
 }
 
 /* Action Buttons */
-.report-actions {
+.cr-customer-report-card .cr-report-actions {
   display: flex;
   gap: 8px;
   margin-bottom: 15px;
   justify-content: flex-end;
 }
 
-.btn-print,
-.btn-export {
+.cr-customer-report-card .cr-btn-print,
+.cr-customer-report-card .cr-btn-export {
   padding: 6px 16px;
   border: none;
   border-radius: 4px;
@@ -77,62 +77,62 @@
   transition: all 0.3s;
 }
 
-.btn-print {
+.cr-customer-report-card .cr-btn-print {
   background-color: #1976d2;
   color: white;
 }
 
-.btn-print:hover {
+.cr-customer-report-card .cr-btn-print:hover {
   background-color: #1565c0;
 }
 
-.btn-export {
+.cr-customer-report-card .cr-btn-export {
   background-color: #27ae60;
   color: white;
 }
 
-.btn-export:hover {
+.cr-customer-report-card .cr-btn-export:hover {
   background-color: #229954;
 }
 
 /* Table Section */
-.report-table-section {
+.cr-customer-report-card .cr-report-table-section {
   overflow-x: auto;
   margin-bottom: 15px;
 }
 
-.report-table {
+.cr-customer-report-card .cr-report-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 11px;
 }
 
-.report-table thead {
+.cr-customer-report-card .cr-report-table thead {
   background-color: #f8f9fa;
   color: #2c3e50;
 }
 
-.report-table th {
+.cr-customer-report-card .cr-report-table th {
   padding: 10px;
   text-align: left;
   font-weight: 600;
   border: 1px solid #dee2e6;
 }
 
-.report-table td {
+.cr-customer-report-card .cr-report-table td {
   padding: 8px 10px;
   border: 1px solid #dee2e6;
 }
 
-.report-table tbody tr:nth-child(even) {
+.cr-customer-report-card .cr-report-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.report-table tbody tr:hover {
+.cr-customer-report-card .cr-report-table tbody tr:hover {
   background-color: #f0f0f0;
 }
 
-.no-data-message {
+.cr-customer-report-card .cr-no-data-message {
   text-align: center;
   padding: 40px;
   color: #7f8c8d;
@@ -140,7 +140,7 @@
 }
 
 /* Pagination */
-.pagination {
+.cr-customer-report-card .cr-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -149,7 +149,7 @@
   flex-wrap: wrap;
 }
 
-.pagination-btn {
+.cr-customer-report-card .cr-pagination-btn {
   padding: 8px 12px;
   border: 1px solid #ddd;
   background-color: white;
@@ -160,33 +160,33 @@
   transition: all 0.3s;
 }
 
-.pagination-btn:hover:not(:disabled) {
+.cr-customer-report-card .cr-pagination-btn:hover:not(:disabled) {
   background-color: #3498db;
   color: white;
   border-color: #3498db;
 }
 
-.pagination-btn.active {
+.cr-customer-report-card .cr-pagination-btn.active {
   background-color: #3498db;
   color: white;
   border-color: #3498db;
   font-weight: 600;
 }
 
-.pagination-btn:disabled {
+.cr-customer-report-card .cr-pagination-btn:disabled {
   background-color: #ecf0f1;
   color: #95a5a6;
   cursor: not-allowed;
 }
 
-.pagination-info {
+.cr-customer-report-card .cr-pagination-info {
   margin-left: 10px;
   color: #7f8c8d;
   font-size: 14px;
 }
 
 /* Footer */
-.report-footer {
+.cr-customer-report-card .cr-report-footer {
   margin-top: 20px;
   padding-top: 15px;
   border-top: 1px solid #ddd;
@@ -196,15 +196,15 @@
 }
 
 /* Screen-only elements (visible on screen, hidden in print) */
-.screen-only {
+.cr-customer-report-card .cr-screen-only {
   display: block;
 }
 
-.print-only {
+.cr-customer-report-card .cr-print-only {
   display: none;
 }
 
-.print-only-footer {
+.cr-customer-report-card .cr-print-only-footer {
   display: none;
 }
 
@@ -224,23 +224,23 @@
   }
 
   /* Hide screen elements */
-  .screen-only {
+  .cr-customer-report-card .cr-screen-only {
     display: none !important;
   }
 
-  .print-only {
+  .cr-customer-report-card .cr-print-only {
     display: block !important;
   }
 
   /* Hide UI controls */
-  .filter-section,
-  .report-actions,
-  .pagination,
-  .report-footer {
+  .cr-customer-report-card .cr-filter-section,
+  .cr-customer-report-card .cr-report-actions,
+  .cr-customer-report-card .cr-pagination,
+  .cr-customer-report-card .cr-report-footer {
     display: none !important;
   }
 
-  .customer-report-card {
+  .cr-customer-report-card {
     padding: 0;
     margin: 0;
     box-shadow: none;
@@ -249,39 +249,39 @@
   }
 
   /* Show headers only on first page */
-  .report-main-heading,
-  .report-sub-heading {
+  .cr-customer-report-card .cr-report-main-heading,
+  .cr-customer-report-card .cr-report-sub-heading {
     display: block !important;
     text-align: center;
     color: #000 !important;
     page-break-after: avoid;
   }
 
-  .report-main-heading {
+  .cr-customer-report-card .cr-report-main-heading {
     font-size: 18pt;
     margin: 0 0 10px 0;
     font-weight: bold;
   }
 
-  .report-sub-heading {
+  .cr-customer-report-card .cr-report-sub-heading {
     font-size: 14pt;
     margin: 0 0 20px 0;
     font-weight: normal;
   }
 
   /* Table styling for print */
-  .report-table {
+  .cr-customer-report-card .cr-report-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 8pt;
     margin-bottom: 50px;
   }
 
-  .report-table thead {
+  .cr-customer-report-card .cr-report-table thead {
     display: table-header-group;
   }
 
-  .report-table th {
+  .cr-customer-report-card .cr-report-table th {
     background-color: #f5f5f5 !important;
     border: 1px solid #000;
     padding: 6px 4px;
@@ -291,24 +291,24 @@
     print-color-adjust: exact;
   }
 
-  .report-table td {
+  .cr-customer-report-card .cr-report-table td {
     border: 1px solid #000;
     padding: 5px 4px;
     font-size: 8pt;
   }
 
   /* Page break after every 15 rows */
-  .report-table tbody tr:nth-child(15n) {
+  .cr-customer-report-card .cr-report-table tbody tr:nth-child(15n) {
     page-break-after: always;
   }
 
   /* Avoid breaking rows */
-  .report-table tr {
+  .cr-customer-report-card .cr-report-table tr {
     page-break-inside: avoid;
   }
 
   /* Print footer on every page */
-  .print-only-footer {
+  .cr-customer-report-card .cr-print-only-footer {
     display: block !important;
     position: fixed;
     bottom: 0;
@@ -319,7 +319,7 @@
     background: white;
   }
 
-  .print-only-footer::after {
+  .cr-customer-report-card .cr-print-only-footer::after {
     content: "Page " counter(page);
     position: absolute;
     right: 1cm;
@@ -329,40 +329,40 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .customer-report-card {
+  .cr-customer-report-card {
     padding: 15px;
   }
 
-  .report-main-heading {
+  .cr-customer-report-card .cr-report-main-heading {
     font-size: 22px;
   }
 
-  .report-sub-heading {
+  .cr-customer-report-card .cr-report-sub-heading {
     font-size: 16px;
   }
 
-  .filter-section {
+  .cr-customer-report-card .cr-filter-section {
     flex-direction: column;
   }
 
-  .report-actions {
+  .cr-customer-report-card .cr-report-actions {
     justify-content: center;
   }
 
-  .report-table {
+  .cr-customer-report-card .cr-report-table {
     font-size: 12px;
   }
 
-  .report-table th,
-  .report-table td {
+  .cr-customer-report-card .cr-report-table th,
+  .cr-customer-report-card .cr-report-table td {
     padding: 8px;
   }
 
-  .pagination {
+  .cr-customer-report-card .cr-pagination {
     font-size: 12px;
   }
 
-  .pagination-btn {
+  .cr-customer-report-card .cr-pagination-btn {
     padding: 6px 10px;
   }
 }

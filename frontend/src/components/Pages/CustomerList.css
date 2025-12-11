@@ -1,12 +1,12 @@
 /* CustomerList.css */
 
-.customer-list-container {
+.cl-customer-list-container {
   padding: 20px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.customer-list-card {
+.cl-customer-list-card {
   background: white;
   padding: 30px;
   border-radius: 8px;
@@ -14,7 +14,7 @@
   margin-bottom: 30px;
 }
 
-.customer-list-heading {
+.cl-customer-list-card .cl-customer-list-heading {
   font-size: 14px;
   color: #2c3e50;
   margin-bottom: 30px;
@@ -22,11 +22,11 @@
   font-weight: 600;
 }
 
-.form-group {
+.cl-customer-list-card .cl-form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.cl-customer-list-card .cl-form-group label {
   display: block;
   margin-bottom: 8px;
   color: #34495e;
@@ -34,12 +34,13 @@
   font-size: 12px;
 }
 
-.required {
+.cl-customer-list-card .cl-required {
   color: #e74c3c;
   margin-left: 4px;
 }
 
-.form-select {
+.cl-customer-list-card .cl-form-select,
+.cl-customer-list-card .cl-form-group select {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #ddd;
@@ -49,24 +50,26 @@
   transition: border-color 0.3s;
 }
 
-.form-select:focus {
+.cl-customer-list-card .cl-form-select:focus,
+.cl-customer-list-card .cl-form-group select:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.form-select:disabled {
+.cl-customer-list-card .cl-form-select:disabled,
+.cl-customer-list-card .cl-form-group select:disabled {
   background-color: #f5f5f5;
   cursor: not-allowed;
 }
 
-.form-actions {
+.cl-customer-list-card .cl-form-actions {
   margin-top: 30px;
   display: flex;
   justify-content: flex-end;
 }
 
-.btn-generate-report {
+.cl-customer-list-card .cl-btn-generate-report {
   background-color: #1976d2;
   color: white;
   padding: 12px 30px;
@@ -81,11 +84,11 @@
   justify-content: center;
 }
 
-.btn-generate-report .button-icon {
+.cl-customer-list-card .cl-btn-generate-report .cl-button-icon {
   display: inline-block;
 }
 
-.btn-generate-report .spinning {
+.cl-customer-list-card .cl-btn-generate-report .cl-spinning {
   animation: spin 1s linear infinite;
 }
 
@@ -98,16 +101,16 @@
   }
 }
 
-.btn-generate-report:hover:not(:disabled) {
+.cl-customer-list-card .cl-btn-generate-report:hover:not(:disabled) {
   background-color: #1565c0;
 }
 
-.btn-generate-report:disabled {
+.cl-customer-list-card .cl-btn-generate-report:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
 }
 
-.error-message {
+.cl-customer-list-card .cl-error-message {
   margin-top: 20px;
   padding: 12px;
   background-color: #fee;
@@ -116,27 +119,27 @@
   color: #c33;
 }
 
-.error-message strong {
+.cl-customer-list-card .cl-error-message strong {
   margin-right: 8px;
 }
 
 @media (max-width: 768px) {
-  .customer-list-container {
+  .cl-customer-list-container {
     padding: 10px;
   }
 
-  .customer-list-card {
+  .cl-customer-list-card {
     padding: 20px;
   }
 
-  .customer-list-heading {
+  .cl-customer-list-heading {
     font-size: 20px;
   }
 }
 
 /* Print styles - hide CustomerList form during print */
 @media print {
-  .customer-list-container,
+  .cl-customer-list-container,
   .CustomerList {
     display: none !important;
   }

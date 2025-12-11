@@ -147,13 +147,13 @@ ORDER BY
   };
 
   return (
-    <div className="customer-list-container">
-      <div className="customer-list-card">
-        <h1 className="customer-list-heading">Customer List</h1>
+    <div className="cl-customer-list-container">
+      <div className="cl-customer-list-card">
+        <h1 className="cl-customer-list-heading">Customer List</h1>
 
-        <div className="form-group">
+        <div className="cl-form-group">
           <label htmlFor="branch-name">
-            Branch Name <span className="required">*</span>
+            Branch Name <span className="cl-required">*</span>
           </label>
           <select
             id="branch-name"
@@ -192,7 +192,7 @@ ORDER BY
                 selectedBranchObj?.name || ""
               );
             }}
-            className="form-select"
+            className="cl-form-select"
             disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Branch</option>
@@ -204,7 +204,7 @@ ORDER BY
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="cl-form-group">
           <label htmlFor="customer-type">Customer Type</label>
           <select
             id="customer-type"
@@ -219,7 +219,7 @@ ORDER BY
               setCustomerTypeId(selectedTypeId);
               setCustomerType(selectedTypeObj?.name || "");
             }}
-            className="form-select"
+            className="cl-form-select"
             disabled={isLoading || isLoadingDropdowns}
           >
             <option value="">Select Customer Type</option>
@@ -231,16 +231,16 @@ ORDER BY
           </select>
         </div>
 
-        <div className="form-actions">
+        <div className="cl-form-actions">
           <button
-            className="btn-generate-report"
+            className="cl-btn-generate-report"
             onClick={handleGenerateReport}
             disabled={isLoading}
           >
             {isLoading ? (
               <>
                 <svg
-                  className="button-icon spinning"
+                  className="cl-button-icon cl-spinning"
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
@@ -265,7 +265,7 @@ ORDER BY
         </div>
 
         {error && (
-          <div className="error-message">
+          <div className="cl-error-message">
             <strong>Error:</strong> {error}
           </div>
         )}

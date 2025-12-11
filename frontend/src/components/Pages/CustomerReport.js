@@ -134,22 +134,22 @@ const CustomerReport = ({
   };
 
   return (
-    <div className="customer-report-card">
-      <h1 className="report-main-heading">{instituteName}</h1>
-      <h2 className="report-sub-heading">
+    <div className="cr-customer-report-card">
+      <h1 className="cr-report-main-heading">{instituteName}</h1>
+      <h2 className="cr-report-sub-heading">
         Customer List for {branchName}
         {customerType && ` - ${customerType}`}
       </h2>
 
       {/* Filter Section */}
-      <div className="filter-section">
-        <div className="filter-group">
+      <div className="cr-filter-section">
+        <div className="cr-filter-group">
           <label htmlFor="filter-branch">Filter by Branch:</label>
           <select
             id="filter-branch"
             value={filterBranch}
             onChange={(e) => setFilterBranch(e.target.value)}
-            className="filter-select"
+            className="cr-filter-select"
           >
             <option value="all">All Branches</option>
             {uniqueBranches.map((branch) => (
@@ -160,13 +160,13 @@ const CustomerReport = ({
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="cr-filter-group">
           <label htmlFor="filter-customer-type">Filter by Customer Type:</label>
           <select
             id="filter-customer-type"
             value={filterCustomerType}
             onChange={(e) => setFilterCustomerType(e.target.value)}
-            className="filter-select"
+            className="cr-filter-select"
           >
             <option value="all">All Types</option>
             {uniqueCustomerTypes.map((type) => (
@@ -179,18 +179,18 @@ const CustomerReport = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="report-actions">
-        <button className="btn-print" onClick={handlePrint}>
+      <div className="cr-report-actions">
+        <button className="cr-btn-print" onClick={handlePrint}>
           Print
         </button>
-        <button className="btn-export" onClick={handleExport}>
+        <button className="cr-btn-export" onClick={handleExport}>
           Export
         </button>
       </div>
 
       {/* Screen view - paginated data */}
-      <div className="report-table-section screen-only">
-        <table className="report-table">
+      <div className="cr-report-table-section cr-screen-only">
+        <table className="cr-report-table">
           <thead>
             <tr>
               <th>Ref member number</th>
@@ -226,13 +226,13 @@ const CustomerReport = ({
         </table>
 
         {filteredData.length === 0 && (
-          <p className="no-data-message">No data available</p>
+          <p className="cr-no-data-message">No data available</p>
         )}
       </div>
 
       {/* Print view - all data */}
-      <div className="report-table-section print-only">
-        <table className="report-table">
+      <div className="cr-report-table-section cr-print-only">
+        <table className="cr-report-table">
           <thead>
             <tr>
               <th>Ref member number</th>
@@ -270,11 +270,11 @@ const CustomerReport = ({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="pagination">
+        <div className="cr-pagination">
           <button
             onClick={handlePrevPage}
             disabled={currentPage === 1}
-            className="pagination-btn"
+            className="cr-pagination-btn"
           >
             Previous
           </button>
@@ -283,7 +283,7 @@ const CustomerReport = ({
             <button
               key={page}
               onClick={() => handlePageClick(page)}
-              className={`pagination-btn ${
+              className={`cr-pagination-btn ${
                 currentPage === page ? "active" : ""
               }`}
             >
@@ -294,12 +294,12 @@ const CustomerReport = ({
           <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages}
-            className="pagination-btn"
+            className="cr-pagination-btn"
           >
             Next
           </button>
 
-          <span className="pagination-info">
+          <span className="cr-pagination-info">
             Page {currentPage} of {totalPages} (Total: {filteredData.length}{" "}
             records)
           </span>
@@ -307,12 +307,12 @@ const CustomerReport = ({
       )}
 
       {/* Footer */}
-      <div className="report-footer">
+      <div className="cr-report-footer">
         <p>Printed On: {getTodayDate()}</p>
       </div>
 
       {/* Print-only footer */}
-      <div className="print-only-footer">{getPrintDate()}</div>
+      <div className="cr-print-only-footer">{getPrintDate()}</div>
     </div>
   );
 };
