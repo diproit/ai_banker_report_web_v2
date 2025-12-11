@@ -72,4 +72,11 @@ export const sqlExecutorApi = {
     // return an array (empty array when no results) so callers can safely use .map()
     return response.success ? response.data : [];
   },
+
+  getLoanProducts: async () => {
+    const query = "SELECT id, name_ln1 as name FROM pl_account_type WHERE pl_account_category_id = 2 ORDER BY name_ln1";
+    const response = await sqlExecutorApi.executeQuery(query);
+    // return an array (empty array when no results) so callers can safely use .map()
+    return response.success ? response.data : [];
+  },
 };

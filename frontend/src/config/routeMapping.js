@@ -6,6 +6,7 @@ import UserRights from "../components/Pages/UserRights";
 import ReportDesignPage from "../components/Pages/Report&DesignPage";
 import DesignReport from "../components/Pages/DesignReport";
 import Team from "../components/Pages/Team";
+import LoanPastDueReports from "../components/Pages/LoanPastDueReports";
 
 /**
  * Maps database URLs to React components
@@ -22,6 +23,7 @@ export const routeComponentMap = {
   "/design-report": DesignReport,
   "/about/team": Team,
   "/transactions/personal-savings/savings": PersonalSavingsReport,
+  "/transactions/past-due/loan-past-due": LoanPastDueReports,
   // Add more mappings as you create components
 };
 
