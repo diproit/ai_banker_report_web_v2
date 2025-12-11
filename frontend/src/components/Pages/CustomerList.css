@@ -133,3 +133,11 @@
     font-size: 20px;
   }
 }
+
+/* Print styles - hide CustomerList form during print */
+@media print {
+  .customer-list-container,
+  .CustomerList {
+    display: none !important;
+  }
+}
