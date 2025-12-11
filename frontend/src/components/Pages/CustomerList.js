@@ -54,6 +54,8 @@ const CustomerList = () => {
       return;
     }
 
+    // Clear old report data first to force component remount
+    setReportData(null);
     setIsLoading(true);
     setError(null);
 
@@ -126,7 +128,8 @@ ORDER BY
         setSelectedBranch(branchName);
         setSelectedType(customerType);
         // Pass through the data as-is from the SQL query
-        setReportData(response.data);
+        // Create new array reference to ensure React detects the change
+        setReportData([...response.data]);
         toast.success("Report generated successfully!");
       } else {
         setError(response.error || "Failed to fetch data");
@@ -270,6 +273,7 @@ ORDER BY
 
       {reportData && (
         <CustomerReport
+          key={`report-${selectedBranch}-${selectedType}-${reportData.length}`}
           branchName={selectedBranch}
           customerType={selectedType}
           data={reportData}
