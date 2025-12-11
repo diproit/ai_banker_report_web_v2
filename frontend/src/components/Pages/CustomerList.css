@@ -76,6 +76,26 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-generate-report .button-icon {
+  display: inline-block;
+}
+
+.btn-generate-report .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-generate-report:hover:not(:disabled) {
