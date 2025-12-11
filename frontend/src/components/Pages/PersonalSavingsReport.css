@@ -198,6 +198,22 @@
   background-color: #1f8f4c;
 }
 
+.drill-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.drill-path {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 /* Table */
 .report-table-section {
   margin-top: 10px;
@@ -219,6 +235,14 @@
 .report-table thead {
   background-color: #f8f9fa;
   color: #2c3e50;
+}
+
+.report-table .clickable-row {
+  cursor: pointer;
+}
+
+.report-table .clickable-row:hover {
+  background-color: #eef6ff;
 }
 
 /* Pagination */
