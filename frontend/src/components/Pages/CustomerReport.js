@@ -58,6 +58,15 @@ const CustomerReport = ({
     return `${day}/${month}/${year}`;
   };
 
+  // Get today's date in YYYY-MM-DD format for printing
+  const getPrintDate = () => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const year = today.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -179,7 +188,8 @@ const CustomerReport = ({
         </button>
       </div>
 
-      <div className="report-table-section">
+      {/* Screen view - paginated data */}
+      <div className="report-table-section screen-only">
         <table className="report-table">
           <thead>
             <tr>
@@ -218,6 +228,44 @@ const CustomerReport = ({
         {filteredData.length === 0 && (
           <p className="no-data-message">No data available</p>
         )}
+      </div>
+
+      {/* Print view - all data */}
+      <div className="report-table-section print-only">
+        <table className="report-table">
+          <thead>
+            <tr>
+              <th>Ref member number</th>
+              <th>Customer type</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Mobile</th>
+              <th>Date of Birth</th>
+              <th>Sex</th>
+              <th>Branch Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.map((customer, index) => (
+              <tr key={index}>
+                <td>{customer["Ref member number"]}</td>
+                <td>{customer["Customer type"]}</td>
+                <td>{customer["Name"]}</td>
+                <td>{customer["Address"]}</td>
+                <td>{customer["Phone"]}</td>
+                <td>{customer["Mobile"]}</td>
+                <td>
+                  {customer["Date of Birth"]
+                    ? new Date(customer["Date of Birth"]).toLocaleDateString()
+                    : ""}
+                </td>
+                <td>{customer["Sex"]}</td>
+                <td>{customer["Branch Name"]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Pagination */}
@@ -262,6 +310,9 @@ const CustomerReport = ({
       <div className="report-footer">
         <p>Printed On: {getTodayDate()}</p>
       </div>
+
+      {/* Print-only footer */}
+      <div className="print-only-footer">{getPrintDate()}</div>
     </div>
   );
 };

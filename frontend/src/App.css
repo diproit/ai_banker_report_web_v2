@@ -11,7 +11,42 @@
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}.App {
+}
+.App {
   min-height: 100vh;
   background-color: var(--bg);
+}
+
+/* Global print styles */
+@media print {
+  /* Hide all app-level UI elements */
+  nav,
+  .navbar,
+  .sidebar,
+  header,
+  .app-header,
+  .top-nav,
+  .logo,
+  .language-switcher,
+  .user-info,
+  .manage-menu,
+  .customer-list-card {
+    display: none !important;
+  }
+
+  /* Show only the report */
+  .customer-list-container {
+    display: block !important;
+  }
+
+  /* Make sure the report takes full width */
+  .customer-report-card {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
