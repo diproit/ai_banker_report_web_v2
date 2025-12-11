@@ -168,8 +168,7 @@ const CustomerReport = ({
             }
 
             .print-heading-box {
-              border: 2px solid #000;
-              padding: 15px;
+              padding: 15px 0;
               margin-bottom: 10px;
               text-align: center;
             }
@@ -182,8 +181,7 @@ const CustomerReport = ({
             }
 
             .print-subheading-box {
-              border: 2px solid #000;
-              padding: 10px;
+              padding: 10px 0;
               margin-bottom: 15px;
               text-align: center;
             }
@@ -196,8 +194,6 @@ const CustomerReport = ({
             }
 
             .print-table-box {
-              border: 2px solid #000;
-              padding: 10px;
               flex: 1;
               margin-bottom: 15px;
             }
@@ -206,21 +202,44 @@ const CustomerReport = ({
               width: 100%;
               border-collapse: collapse;
               font-size: 11px;
+              color: #333;
             }
 
             .print-table thead {
-              background-color: #f0f0f0;
-            }
-
-            .print-table th,
-            .print-table td {
-              border: 1px solid #000;
-              padding: 6px;
-              text-align: left;
+              background-color: #f5f5f5;
+              border-bottom: 2px solid #333;
             }
 
             .print-table th {
+              padding: 10px 8px;
+              text-align: left;
               font-weight: 600;
+              font-size: 11px;
+              border: 1px solid #666;
+              color: #333;
+              letter-spacing: 0.3px;
+            }
+
+            .print-table td {
+              padding: 9px 8px;
+              border: 1px solid #999;
+              text-align: left;
+              color: #333;
+            }
+
+            .print-table tbody tr:nth-child(even) {
+              background-color: #fafafa;
+            }
+
+            .print-table tbody tr:nth-child(odd) {
+              background-color: white;
+            }
+
+            .print-table th:nth-child(6),
+            .print-table td:nth-child(6),
+            .print-table th:nth-child(7),
+            .print-table td:nth-child(7) {
+              text-align: right;
             }
 
             .print-footer {
@@ -244,8 +263,14 @@ const CustomerReport = ({
 
               .print-heading-box,
               .print-subheading-box,
-              .print-table-box,
               .print-table thead {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color-adjust: exact;
+              }
+
+              .print-table tbody tr:nth-child(even) {
+                background-color: #fafafa !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
               }
