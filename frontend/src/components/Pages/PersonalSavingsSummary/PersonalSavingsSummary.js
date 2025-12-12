@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { sqlExecutorApi } from "../../../clients/sqlExecutorClient";
 import { toast } from "react-toastify";
 import "./PersonalSavingsSummary.css";
-import PersonalSavingsPrintPreview from "./PersonalSavingsPrintPreview";
+import PersonalSavingsSummaryReport from "./PersonalSavingsSummaryReport";
 
 const PersonalSavingsSummary = () => {
   const [branchId, setBranchId] = useState(null);
@@ -40,8 +40,8 @@ const PersonalSavingsSummary = () => {
 
         // Load institute name
         const instituteData = await sqlExecutorApi.getInstitute();
-        if (instituteData && instituteData.length > 0) {
-          setInstituteName(instituteData[0].name || "Institute");
+        if (instituteData) {
+          setInstituteName(instituteData.name);
         }
       } catch (err) {
         console.error("Error loading dropdown data:", err);
@@ -59,7 +59,10 @@ const PersonalSavingsSummary = () => {
     const value = e.target.value;
     setSelectedBranch(value);
 
-    if (value) {
+    if (value === "0") {
+      setBranchId(0);
+      setBranchName("All Branches");
+    } else if (value) {
       const branch = branches.find((b) => b.id === parseInt(value));
       setBranchId(parseInt(value));
       setBranchName(branch ? branch.name : "");
@@ -84,7 +87,9 @@ const PersonalSavingsSummary = () => {
     setError(null);
 
     try {
-      // Build SQL query for savings products
+      // Build SQL query for savings products with conditional branch filter
+      const branchFilter = branchId === 0 ? "" : `AND b.id = ${branchId}`;
+
       const query = `
         SELECT 
           t.name_ln1 AS 'Product Name',
@@ -102,7 +107,7 @@ const PersonalSavingsSummary = () => {
         WHERE 
           t.pl_account_category_id = 1
           AND DATE(a.last_transaction_date) <= '${selectedDate}'
-          AND b.id = ${branchId}
+          ${branchFilter}
         GROUP BY 
           t.name_ln1, b.id
         ORDER BY 
@@ -138,10 +143,6 @@ const PersonalSavingsSummary = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   return (
@@ -207,22 +208,13 @@ const PersonalSavingsSummary = () => {
               "Generate Report"
             )}
           </button>
-          {reportData.length > 0 && (
-            <button
-              className="pss-btn-print"
-              onClick={handlePrint}
-              disabled={isLoading}
-            >
-              Print Report
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Print Preview */}
+      {/* Report Display */}
       {reportData.length > 0 && (
         <div ref={printPreviewRef}>
-          <PersonalSavingsPrintPreview
+          <PersonalSavingsSummaryReport
             instituteName={instituteName}
             branchName={branchName}
             selectedDate={selectedDate}
