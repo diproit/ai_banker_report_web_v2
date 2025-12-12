@@ -7,6 +7,7 @@ import ReportDesignPage from "../components/Pages/Report&DesignPage";
 import DesignReport from "../components/Pages/DesignReport";
 import Team from "../components/Pages/Team";
 import LoanPastDueReports from "../components/Pages/LoanPastDueReports";
+import LoanPastDueReportsPrevousMonth from "../components/Pages/LoanPastDuePrevMonth";
 
 /**
  * Maps database URLs to React components
@@ -24,6 +25,7 @@ export const routeComponentMap = {
   "/about/team": Team,
   "/transactions/personal-savings/savings": PersonalSavingsReport,
   "/transactions/past-due/loan-past-due": LoanPastDueReports,
+  "/transactions/past-due/loan-past-due-previous-month": LoanPastDueReportsPrevousMonth,
   // Add more mappings as you create components
 };
 
