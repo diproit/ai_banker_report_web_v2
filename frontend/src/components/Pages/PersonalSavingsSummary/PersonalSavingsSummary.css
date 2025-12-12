@@ -1,0 +1,136 @@
+/* PersonalSavingsSummary.css */
+
+.pss-personal-savings-summary-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.pss-personal-savings-summary-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.pss-personal-savings-summary-card .pss-personal-savings-summary-heading {
+  font-size: 14px;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.pss-personal-savings-summary-card .pss-form-group {
+  margin-bottom: 20px;
+}
+
+.pss-personal-savings-summary-card .pss-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #34495e;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.pss-personal-savings-summary-card .pss-required {
+  color: #e74c3c;
+  margin-left: 4px;
+}
+
+.pss-personal-savings-summary-card .pss-form-select,
+.pss-personal-savings-summary-card .pss-form-input,
+.pss-personal-savings-summary-card .pss-form-group select,
+.pss-personal-savings-summary-card .pss-form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  transition: border-color 0.3s;
+}
+
+.pss-personal-savings-summary-card .pss-form-select:focus,
+.pss-personal-savings-summary-card .pss-form-input:focus,
+.pss-personal-savings-summary-card .pss-form-group select:focus,
+.pss-personal-savings-summary-card .pss-form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.pss-personal-savings-summary-card .pss-form-select:disabled,
+.pss-personal-savings-summary-card .pss-form-input:disabled,
+.pss-personal-savings-summary-card .pss-form-group select:disabled,
+.pss-personal-savings-summary-card .pss-form-group input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.pss-personal-savings-summary-card .pss-form-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pss-personal-savings-summary-card .pss-btn-generate-report {
+  background-color: #1976d2;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pss-personal-savings-summary-card
+  .pss-btn-generate-report:hover:not(:disabled) {
+  background-color: #1565c0;
+}
+
+.pss-personal-savings-summary-card .pss-btn-generate-report:disabled {
+  background-color: #90caf9;
+  cursor: not-allowed;
+}
+
+.pss-personal-savings-summary-card .pss-button-icon {
+  display: inline-block;
+}
+
+.pss-personal-savings-summary-card .pss-btn-generate-report .pss-spinning {
+  animation: pss-spin 1s linear infinite;
+}
+
+@keyframes pss-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pss-personal-savings-summary-card .pss-error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  border-left: 4px solid #c62828;
+}
+
+/* Ensure print styles don't interfere */
+@media print {
+  .pss-personal-savings-summary-container {
+    display: none;
+  }
+}
