@@ -141,50 +141,50 @@
 
 /* Drill-down table styles */
 .cr-customer-report-card .cr-group-header {
-  background-color: #e3f2fd !important;
+  background-color: #f5f5f5 !important;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s ease;
 }
 
 .cr-customer-report-card .cr-group-header:hover {
-  background-color: #bbdefb !important;
+  background-color: #e0e0e0 !important;
 }
 
 .cr-customer-report-card .cr-branch-header {
-  background-color: #fff3e0 !important;
+  background-color: #f5f5f5 !important;
   font-weight: 600;
 }
 
 .cr-customer-report-card .cr-branch-header:hover {
-  background-color: #ffe0b2 !important;
+  background-color: #e0e0e0 !important;
 }
 
 .cr-customer-report-card .cr-type-header {
-  background-color: #f3e5f5 !important;
+  background-color: #fafafa !important;
 }
 
 .cr-customer-report-card .cr-type-header:hover {
-  background-color: #e1bee7 !important;
+  background-color: #e8e8e8 !important;
 }
 
 .cr-customer-report-card .cr-group-header td {
   padding: 12px 10px;
   font-weight: 600;
-  color: #1976d2;
-  border: 1px solid #90caf9;
+  color: #333;
+  border: 1px solid #ddd;
 }
 
 .cr-customer-report-card .cr-branch-header td {
-  color: #f57c00;
-  border: 1px solid #ffb74d;
+  color: #333;
+  border: 1px solid #ddd;
 }
 
 .cr-customer-report-card .cr-type-header td {
   padding-left: 30px;
-  color: #7b1fa2;
+  color: #555;
   font-weight: 500;
-  border: 1px solid #ce93d8;
+  border: 1px solid #ddd;
 }
 
 .cr-customer-report-card .cr-group-toggle {
@@ -192,15 +192,15 @@
   width: 20px;
   font-size: 12px;
   margin-right: 8px;
-  color: #1976d2;
+  color: #666;
 }
 
 .cr-customer-report-card .cr-branch-header .cr-group-toggle {
-  color: #f57c00;
+  color: #666;
 }
 
 .cr-customer-report-card .cr-type-header .cr-group-toggle {
-  color: #7b1fa2;
+  color: #666;
 }
 
 .cr-customer-report-card .cr-sub-toggle {
@@ -236,7 +236,7 @@
 }
 
 .cr-customer-report-card .cr-btn-expand-all {
-  background-color: #9c27b0;
+  background-color: #666;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -248,7 +248,7 @@
 }
 
 .cr-customer-report-card .cr-btn-expand-all:hover {
-  background-color: #7b1fa2;
+  background-color: #555;
 }
 
 /* Summary info for drill-down mode */
