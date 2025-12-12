@@ -475,11 +475,11 @@ const LoanPastDuePrevMonth = () => {
         <h1 className="prevmonth-heading">Loan pastdue for previous month</h1>
 
         <div className="form-group">
-          <label htmlFor="branch-name">
+          <label htmlFor="prevmonth-branch-name">
             Branch Name <span className="required">*</span>
           </label>
           <select
-            id="branch-name"
+            id="prevmonth-branch-name"
             value={selectedBranchId}
             onChange={(e) => setSelectedBranchId(e.target.value)}
             className="form-select"
@@ -502,9 +502,9 @@ const LoanPastDuePrevMonth = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="loan-product">Loan Product</label>
+          <label htmlFor="prevmonth-loan-product">Loan Product</label>
           <select
-            id="loan-product"
+            id="prevmonth-loan-product"
             value={selectedLoanProductId}
             onChange={(e) => setSelectedLoanProductId(e.target.value)}
             className="form-select"
@@ -521,11 +521,14 @@ const LoanPastDuePrevMonth = () => {
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Pastdue Installment</label>
-          <div className="range-row">
-            <label className="small-label">From</label>
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Pastdue Installment</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="prevmonth-installment-from">
+              From
+            </label>
             <input
+              id="prevmonth-installment-from"
               type="number"
               min="0"
               step="1"
@@ -534,8 +537,11 @@ const LoanPastDuePrevMonth = () => {
               className="form-input"
               placeholder="0"
             />
-            <label className="small-label">To</label>
+            <label className="small-label" htmlFor="prevmonth-installment-to">
+              To
+            </label>
             <input
+              id="prevmonth-installment-to"
               type="number"
               min="0"
               step="1"
@@ -547,11 +553,14 @@ const LoanPastDuePrevMonth = () => {
           </div>
         </div>
 
-        <div className="form-group">
-          <label>Pastdue Days</label>
-          <div className="range-row">
-            <label className="small-label">From</label>
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Pastdue Days</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="prevmonth-days-from">
+              From
+            </label>
             <input
+              id="prevmonth-days-from"
               type="number"
               min="0"
               step="1"
@@ -560,8 +569,11 @@ const LoanPastDuePrevMonth = () => {
               className="form-input"
               placeholder="0"
             />
-            <label className="small-label">To</label>
+            <label className="small-label" htmlFor="prevmonth-days-to">
+              To
+            </label>
             <input
+              id="prevmonth-days-to"
               type="number"
               min="0"
               step="1"
@@ -573,11 +585,14 @@ const LoanPastDuePrevMonth = () => {
           </div>
         </div>
 
-        <div className="form-group">
-          <label>Capital (Amount)</label>
-          <div className="range-row">
-            <label className="small-label">From</label>
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Capital (Amount)</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="prevmonth-capital-from">
+              From
+            </label>
             <input
+              id="prevmonth-capital-from"
               type="number"
               min="0"
               step="1.00"
@@ -586,8 +601,11 @@ const LoanPastDuePrevMonth = () => {
               className="form-input"
               placeholder="0.00"
             />
-            <label className="small-label">To</label>
+            <label className="small-label" htmlFor="prevmonth-capital-to">
+              To
+            </label>
             <input
+              id="prevmonth-capital-to"
               type="number"
               min="0"
               step="1.00"
@@ -680,7 +698,7 @@ const LoanPastDuePrevMonth = () => {
                     type="button"
                     onClick={handleDrillUp}
                   >
-                    Drill Up
+                    Fold Up
                   </button>
                 )}
               </div>

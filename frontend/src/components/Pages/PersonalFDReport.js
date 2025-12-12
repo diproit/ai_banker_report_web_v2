@@ -424,9 +424,9 @@ const PersonalFDReport = () => {
         <h1 className="personal-fd-heading">Personal FD Report</h1>
 
         <div className="form-group">
-          <label htmlFor="branch-name">Branch Name</label>
+          <label htmlFor="personal-branch-name">Branch Name</label>
           <select
-            id="branch-name"
+            id="personal-branch-name"
             value={selectedBranchId}
             onChange={(e) => setSelectedBranchId(e.target.value)}
             className="form-select"
@@ -450,9 +450,9 @@ const PersonalFDReport = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="fd-product">FD Product</label>
+          <label htmlFor="personal-fd-product">FD Product</label>
           <select
-            id="fd-product"
+            id="personal-fd-product"
             value={selectedProductId}
             onChange={(e) => setSelectedProductId(e.target.value)}
             className="form-select"
@@ -470,9 +470,9 @@ const PersonalFDReport = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="last-transaction-date">Last Transaction Date</label>
+          <label htmlFor="personal-last-transaction-date">Last Transaction Date</label>
           <input
-            id="last-transaction-date"
+            id="personal-last-transaction-date"
             type="date"
             value={lastTransactionDate}
             onChange={(e) => setLastTransactionDate(e.target.value)}
@@ -480,24 +480,24 @@ const PersonalFDReport = () => {
           />
         </div>
 
-        <div className="form-group">
-          <label>Date Range (Open Date)</label>
-          <div className="range-row">
-            <label className="small-label" htmlFor="from-date">
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Date Range (Open Date)</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="personal-from-date">
               From
             </label>
             <input
-              id="from-date"
+              id="personal-from-date"
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
               className="form-input"
             />
-            <label className="small-label" htmlFor="to-date">
+            <label className="small-label" htmlFor="personal-to-date">
               To
             </label>
             <input
-              id="to-date"
+              id="personal-to-date"
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}

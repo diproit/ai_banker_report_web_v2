@@ -524,11 +524,11 @@ const LoanPastDueReports = () => {
 
         {/* Branch */}
         <div className="form-group">
-          <label htmlFor="branch-name">
+          <label htmlFor="loan-pastdue-branch-name">
             Branch Name <span className="required">*</span>
           </label>
           <select
-            id="branch-name"
+            id="loan-pastdue-branch-name"
             value={selectedBranchId}
             onChange={(e) => setSelectedBranchId(e.target.value)}
             className="form-select"
@@ -558,9 +558,9 @@ const LoanPastDueReports = () => {
 
         {/* Loan Product */}
         <div className="form-group">
-          <label htmlFor="loan-product">Loan Product</label>
+          <label htmlFor="loan-pastdue-loan-product">Loan Product</label>
           <select
-            id="loan-product"
+            id="loan-pastdue-loan-product"
             value={selectedLoanProductId}
             onChange={(e) => setSelectedLoanProductId(e.target.value)}
             className="form-select"
@@ -580,99 +580,101 @@ const LoanPastDueReports = () => {
         </div>
 
         {/* Pastdue Installment range */}
-        <div className="form-group">
-          <label>Pastdue Installment</label>
-          <div className="controls">
-            <div className="range-row">
-              <label className="small-label">From</label>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                value={installmentFrom}
-                onChange={(e) =>
-                  setInstallmentFrom(e.target.value)
-                }
-                className="form-input"
-                placeholder="0"
-              />
-              <label className="small-label">To</label>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                value={installmentTo}
-                onChange={(e) => setInstallmentTo(e.target.value)}
-                className="form-input"
-                placeholder="0"
-              />
-            </div>
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Pastdue Installment</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="loan-pastdue-installment-from">
+              From
+            </label>
+            <input
+              id="loan-pastdue-installment-from"
+              type="number"
+              min="0"
+              step="1"
+              value={installmentFrom}
+              onChange={(e) => setInstallmentFrom(e.target.value)}
+              className="form-input"
+              placeholder="0"
+            />
+            <label className="small-label" htmlFor="loan-pastdue-installment-to">
+              To
+            </label>
+            <input
+              id="loan-pastdue-installment-to"
+              type="number"
+              min="0"
+              step="1"
+              value={installmentTo}
+              onChange={(e) => setInstallmentTo(e.target.value)}
+              className="form-input"
+              placeholder="0"
+            />
           </div>
         </div>
 
         {/* Passdue Days range */}
-        <div className="form-group">
-          <label>Passdue Days</label>
-          <div className="controls">
-            <div className="range-row">
-              <label className="small-label">From</label>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                value={passdueDaysFrom}
-                onChange={(e) =>
-                  setPassdueDaysFrom(e.target.value)
-                }
-                className="form-input"
-                placeholder="0"
-              />
-              <label className="small-label">To</label>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                value={passdueDaysTo}
-                onChange={(e) =>
-                  setPassdueDaysTo(e.target.value)
-                }
-                className="form-input"
-                placeholder="0"
-              />
-            </div>
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Passdue Days</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="loan-pastdue-days-from">
+              From
+            </label>
+            <input
+              id="loan-pastdue-days-from"
+              type="number"
+              min="0"
+              step="1"
+              value={passdueDaysFrom}
+              onChange={(e) => setPassdueDaysFrom(e.target.value)}
+              className="form-input"
+              placeholder="0"
+            />
+            <label className="small-label" htmlFor="loan-pastdue-days-to">
+              To
+            </label>
+            <input
+              id="loan-pastdue-days-to"
+              type="number"
+              min="0"
+              step="1"
+              value={passdueDaysTo}
+              onChange={(e) => setPassdueDaysTo(e.target.value)}
+              className="form-input"
+              placeholder="0"
+            />
           </div>
         </div>
 
         {/* Capital range */}
-        <div className="form-group">
-          <label>Capital (Amount)</label>
-          <div className="controls">
-            <div className="range-row">
-              <label className="small-label">From</label>
-              <input
-                type="number"
-                min="0"
-                step="1.00"
-                value={capitalFrom}
-                onChange={(e) =>
-                  setCapitalFrom(e.target.value)
-                }
-                className="form-input"
-                placeholder="0.00"
-              />
-              <label className="small-label">To</label>
-              <input
-                type="number"
-                min="0"
-                step="1.00"
-                value={capitalTo}
-                onChange={(e) =>
-                  setCapitalTo(e.target.value)
-                }
-                className="form-input"
-                placeholder="0.00"
-              />
-            </div>
+        <div className="form-group range-filter-group">
+          <div className="range-filter-label">Capital (Amount)</div>
+          <div className="range-filter-controls">
+            <label className="small-label" htmlFor="loan-pastdue-capital-from">
+              From
+            </label>
+            <input
+              id="loan-pastdue-capital-from"
+              type="number"
+              min="0"
+              step="1.00"
+              value={capitalFrom}
+              onChange={(e) => setCapitalFrom(e.target.value)}
+              className="form-input"
+              placeholder="0.00"
+            />
+            <label className="small-label" htmlFor="loan-pastdue-capital-to">
+              To
+            </label>
+            <input
+              id="loan-pastdue-capital-to"
+              type="number"
+              min="0"
+              step="1.00"
+              value={capitalTo}
+              onChange={(e) => setCapitalTo(e.target.value)}
+              className="form-input"
+              placeholder="0.00"
+            />
           </div>
         </div>
 
