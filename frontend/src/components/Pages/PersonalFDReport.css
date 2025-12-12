@@ -23,11 +23,11 @@
 }
 
 /* Form groups */
-.form-group {
+.personal-fd-container .form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.personal-fd-container .form-group label {
   display: block;
   margin-bottom: 8px;
   color: #34495e;
@@ -35,13 +35,13 @@
   font-size: 12px;
 }
 
-.required {
+.personal-fd-container .required {
   color: #e74c3c;
   margin-left: 4px;
 }
 
-.form-select,
-.form-input {
+.personal-fd-container .form-select,
+.personal-fd-container .form-input {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #ddd;
@@ -49,36 +49,61 @@
   font-size: 12px;
   background-color: white;
   transition: border-color 0.3s;
+  max-width: 320px;
 }
 
-.form-select:focus,
-.form-input:focus {
+.personal-fd-container .form-select:focus,
+.personal-fd-container .form-input:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 /* Date range row */
-.range-row {
+.personal-fd-container .range-row {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.small-label {
+.personal-fd-container .range-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.personal-fd-container .range-filter-label {
+  min-width: 180px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.personal-fd-container .range-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.personal-fd-container .range-filter-controls .form-input {
+  width: 170px;
+  max-width: 170px;
+}
+
+.personal-fd-container .small-label {
   font-size: 11px;
   color: #7f8c8d;
 }
 
 /* Actions */
-.form-actions {
+.personal-fd-container .form-actions {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 }
 
-.btn-generate-report {
+.personal-fd-container .btn-generate-report {
   background-color: #1976d2;
   color: white;
   padding: 10px 24px;
@@ -90,17 +115,17 @@
   transition: background-color 0.3s;
 }
 
-.btn-generate-report:hover:not(:disabled) {
+.personal-fd-container .btn-generate-report:hover:not(:disabled) {
   background-color: #1565c0;
 }
 
-.btn-generate-report:disabled {
+.personal-fd-container .btn-generate-report:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
 }
 
 /* Error box */
-.error-message {
+.personal-fd-container .error-message {
   margin-top: 10px;
   padding: 10px;
   background-color: #fee;
@@ -110,19 +135,19 @@
   font-size: 12px;
 }
 
-.error-message strong {
+.personal-fd-container .error-message strong {
   margin-right: 4px;
 }
 
 /* Report card */
-.personal-fd-report-card {
+.personal-fd-container .personal-fd-report-card {
   background: white;
   padding: 20px;
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.report-header {
+.personal-fd-container .report-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -130,37 +155,37 @@
   gap: 10px;
 }
 
-.report-title-block {
+.personal-fd-container .report-title-block {
   max-width: 70%;
 }
 
-.report-main-heading {
+.personal-fd-container .report-main-heading {
   font-size: 14px;
   color: #2c3e50;
   margin: 0;
   font-weight: 600;
 }
 
-.report-sub-heading {
+.personal-fd-container .report-sub-heading {
   font-size: 12px;
   color: #34495e;
   margin-top: 4px;
 }
 
-.report-meta {
+.personal-fd-container .report-meta {
   margin-top: 4px;
   font-size: 11px;
   color: #7f8c8d;
 }
 
-.report-filters {
+.personal-fd-container .report-filters {
   margin-top: 6px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.filter-chip {
+.personal-fd-container .filter-chip {
   background-color: #ecf0f1;
   color: #34495e;
   font-size: 11px;
@@ -169,13 +194,13 @@
 }
 
 /* Header actions */
-.report-actions {
+.personal-fd-container .report-actions {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.btn-action {
+.personal-fd-container .btn-action {
   padding: 6px 16px;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -184,21 +209,21 @@
   cursor: pointer;
 }
 
-.btn-action.primary {
+.personal-fd-container .btn-action.primary {
   background-color: #27ae60;
   color: white;
   border-color: #27ae60;
 }
 
-.btn-action:hover {
+.personal-fd-container .btn-action:hover {
   background-color: #f4f4f4;
 }
 
-.btn-action.primary:hover {
+.personal-fd-container .btn-action.primary:hover {
   background-color: #1f8f4c;
 }
 
-.drill-controls {
+.personal-fd-container .drill-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -207,7 +232,7 @@
   margin-bottom: 10px;
 }
 
-.drill-path {
+.personal-fd-container .drill-path {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -215,38 +240,38 @@
 }
 
 /* Table */
-.report-table-section {
+.personal-fd-container .report-table-section {
   margin-top: 10px;
   overflow-x: auto;
 }
 
-.report-table {
+.personal-fd-container .report-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 11px;
 }
 
-.report-table th,
-.report-table td {
+.personal-fd-container .report-table th,
+.personal-fd-container .report-table td {
   padding: 8px 10px;
   border: 1px solid #dee2e6;
 }
 
-.report-table thead {
+.personal-fd-container .report-table thead {
   background-color: #f8f9fa;
   color: #2c3e50;
 }
 
-.report-table .clickable-row {
+.personal-fd-container .report-table .clickable-row {
   cursor: pointer;
 }
 
-.report-table .clickable-row:hover {
+.personal-fd-container .report-table .clickable-row:hover {
   background-color: #eef6ff;
 }
 
 /* Pagination */
-.pagination {
+.personal-fd-container .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -256,7 +281,7 @@
   font-size: 11px;
 }
 
-.pagination-btn {
+.personal-fd-container .pagination-btn {
   padding: 4px 10px;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -264,19 +289,19 @@
   cursor: pointer;
 }
 
-.pagination-btn.active {
+.personal-fd-container .pagination-btn.active {
   background-color: #3498db;
   color: white;
   border-color: #3498db;
 }
 
-.pagination-btn:disabled {
+.personal-fd-container .pagination-btn:disabled {
   background-color: #ecf0f1;
   cursor: not-allowed;
 }
 
 /* Footer */
-.report-footer {
+.personal-fd-container .report-footer {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
@@ -285,7 +310,7 @@
 }
 
 /* Empty state */
-.empty-state {
+.personal-fd-container .empty-state {
   padding: 30px;
   text-align: center;
   color: #7f8c8d;
@@ -300,16 +325,16 @@
     padding: 20px;
   }
 
-  .report-header {
+  .personal-fd-container .report-header {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .report-title-block {
+  .personal-fd-container .report-title-block {
     max-width: 100%;
   }
 
-  .report-actions {
+  .personal-fd-container .report-actions {
     flex-direction: row;
     justify-content: flex-end;
   }

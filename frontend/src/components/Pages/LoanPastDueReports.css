@@ -34,14 +34,14 @@
   color: #333;
 }
 
-.form-group {
+.loan-pastdue-container .form-group {
   margin-bottom: 1.25rem;
   display: flex;
   align-items: flex-start; /* align labels to top so multi-line controls start aligned */
   gap: 1rem;
 }
 
-.form-group label {
+.loan-pastdue-container .form-group label {
   font-weight: 500;
   color: #555;
   font-size: 0.95rem;
@@ -49,12 +49,12 @@
   margin: 0;
 }
 
-.required {
+.loan-pastdue-container .required {
   color: #dc3545;
   margin-left: 2px;
 }
 
-.form-select {
+.loan-pastdue-container .form-select {
   /* make selects narrower and consistent */
   flex: 0 0 320px;
   max-width: 320px;
@@ -66,13 +66,13 @@
   color: #333;
 }
 
-.range-group {
+.loan-pastdue-container .range-group {
   border: 1px solid #f0f0f0;
   padding: 0.75rem 1rem;
   border-radius: 6px;
 }
 
-.range-group legend {
+.loan-pastdue-container .range-group legend {
   font-weight: 600;
   color: #333;
   padding: 0 0.5rem;
@@ -80,7 +80,7 @@
   margin: 0 0 0.5rem 0;
 }
 
-.range-row {
+.loan-pastdue-container .range-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -88,41 +88,63 @@
   justify-content: flex-start; /* left-align the From/To row */
 }
 
-.range-row label {
+.loan-pastdue-container .range-row label {
   min-width: 40px;
   text-align: left;
 }
 
-.controls {
+.loan-pastdue-container .range-filter-group {
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.loan-pastdue-container .range-filter-label {
+  min-width: 180px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.loan-pastdue-container .range-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.loan-pastdue-container .range-filter-controls .form-input {
+  width: 170px;
+  max-width: 170px;
+}
+
+.loan-pastdue-container .controls {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: flex-start; /* ensure controls are left aligned */
 }
 
-.small-label {
+.loan-pastdue-container .small-label {
   font-size: 0.9rem;
   color: #444;
   min-width: 40px;
 }
 
-.form-input {
+.loan-pastdue-container .form-input {
   padding: 0.45rem 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.95rem;
-  /* make inline inputs shorter */
-  width: 160px;
-  max-width: 160px;
+  width: 100%;
+  max-width: 320px;
 }
 
-.form-actions {
+.loan-pastdue-container .form-actions {
   display: flex;
   justify-content: flex-start; /* keep action button left aligned with form */
   margin-top: 1.5rem;
 }
 
-.btn-generate-report {
+.loan-pastdue-container .btn-generate-report {
   padding: 0.6rem 1.6rem;
   background-color: #007bff;
   color: white;
@@ -133,31 +155,31 @@
   cursor: pointer;
 }
 
-.btn-generate-report:hover {
+.loan-pastdue-container .btn-generate-report:hover {
   background-color: #0056b3;
 }
 
-.btn-generate-report:focus {
+.loan-pastdue-container .btn-generate-report:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-.report-table {
+.loan-pastdue-container .report-table {
   margin-top: 0;
 }
 
-.report-table h3 {
+.loan-pastdue-container .report-table h3 {
   margin: 0 0 0.5rem 0;
 }
 
-.loan-report-card {
+.loan-pastdue-container .loan-report-card {
   background: white;
   border-radius: 8px;
   padding: 1.25rem 1.5rem;
   width: 100%;
 }
 
-.report-toolbar {
+.loan-pastdue-container .report-toolbar {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -167,40 +189,40 @@
   margin-bottom: 0.75rem;
 }
 
-.report-heading-block {
+.loan-pastdue-container .report-heading-block {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.report-title {
+.loan-pastdue-container .report-title {
   font-size: 1.15rem;
   font-weight: 700;
   color: #2f3e4d;
 }
 
-.report-institute {
+.loan-pastdue-container .report-institute {
   color: #000;
   font-weight: 600;
   font-size: 0.95rem;
 }
 
-.report-institute.sub {
+.loan-pastdue-container .report-institute.sub {
   margin-top: 2px;
 }
 
-.report-meta {
+.loan-pastdue-container .report-meta {
   font-size: 0.9rem;
   color: #6c757d;
 }
 
-.report-filters {
+.loan-pastdue-container .report-filters {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
 }
 
-.filter-chip {
+.loan-pastdue-container .filter-chip {
   background: #f1f3f5;
   color: #39424e;
   border: 1px solid #e1e5ea;
@@ -210,12 +232,12 @@
   font-weight: 500;
 }
 
-.report-actions {
+.loan-pastdue-container .report-actions {
   display: flex;
   gap: 0.5rem;
 }
 
-.btn-action {
+.loan-pastdue-container .btn-action {
   padding: 0.4rem 0.9rem;
   border: 1px solid #d0d7de;
   background: #f8f9fa;
@@ -226,76 +248,76 @@
   transition: background 0.2s, border-color 0.2s;
 }
 
-.btn-action.primary {
+.loan-pastdue-container .btn-action.primary {
   background: #0d6efd;
   color: #fff;
   border-color: #0d6efd;
 }
 
-.btn-action:hover {
+.loan-pastdue-container .btn-action:hover {
   background: #eef1f4;
   border-color: #c8d0d8;
 }
 
-.btn-action.primary:hover {
+.loan-pastdue-container .btn-action.primary:hover {
   background: #0b5ed7;
   border-color: #0b5ed7;
 }
 
-.btn-action:disabled {
+.loan-pastdue-container .btn-action:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.report-table-section {
+.loan-pastdue-container .report-table-section {
   margin-bottom: 0.75rem;
 }
 
-.report-table {
+.loan-pastdue-container .report-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
 
-.report-table thead {
+.loan-pastdue-container .report-table thead {
   background-color: #f8f9fa;
 }
 
-.report-table th {
+.loan-pastdue-container .report-table th {
   padding: 0.6rem 0.75rem;
   font-weight: 600;
   color: #333;
   border-bottom: 2px solid #dee2e6;
 }
 
-.report-table td {
+.loan-pastdue-container .report-table td {
   padding: 0.55rem 0.75rem;
   border-bottom: 1px solid #dee2e6;
   color: #555;
 }
 
-.report-table tbody tr:hover {
+.loan-pastdue-container .report-table tbody tr:hover {
   background-color: #f8f9fa;
 }
 
-.report-table tbody tr:nth-child(even) {
+.loan-pastdue-container .report-table tbody tr:nth-child(even) {
   background: #fbfcfd;
 }
 
-.report-table .clickable-row {
+.loan-pastdue-container .report-table .clickable-row {
   cursor: pointer;
 }
 
-.report-table .clickable-row:hover {
+.loan-pastdue-container .report-table .clickable-row:hover {
   background-color: #eef6ff;
 }
 
-.report-table th,
-.report-table td {
+.loan-pastdue-container .report-table th,
+.loan-pastdue-container .report-table td {
   text-align: left;
 }
 
-.table-wrap {
+.loan-pastdue-container .table-wrap {
   margin-top: 0;
   border: 1px solid #e6e6e6;
   border-radius: 6px;
@@ -303,28 +325,28 @@
   max-height: 60vh; /* keep table contained with vertical scroll */
 }
 
-.table-wrap table {
+.loan-pastdue-container .table-wrap table {
   width: 100%;
   min-width: 960px; /* allow horizontal scroll for wide datasets */
   border-collapse: collapse;
 }
 
-.table-wrap th,
-.table-wrap td {
+.loan-pastdue-container .table-wrap th,
+.loan-pastdue-container .table-wrap td {
   padding: 0.6rem 0.75rem;
   border-bottom: 1px solid #f0f0f0;
   text-align: left;
   font-size: 0.95rem;
 }
 
-.table-wrap thead th {
+.loan-pastdue-container .table-wrap thead th {
   position: sticky;
   top: 0;
   background: #f7f9fb;
   z-index: 1;
 }
 
-.pagination {
+.loan-pastdue-container .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -332,7 +354,7 @@
   margin-top: 0.75rem;
 }
 
-.pagination-btn {
+.loan-pastdue-container .pagination-btn {
   padding: 0.5rem 1rem;
   border: 1px solid #dee2e6;
   background-color: white;
@@ -343,22 +365,22 @@
   transition: all 0.2s;
 }
 
-.pagination-btn:hover:not(:disabled) {
+.loan-pastdue-container .pagination-btn:hover:not(:disabled) {
   background-color: #f8f9fa;
   border-color: #adb5bd;
 }
 
-.pagination-btn:disabled {
+.loan-pastdue-container .pagination-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.pagination-numbers {
+.loan-pastdue-container .pagination-numbers {
   display: flex;
   gap: 0.25rem;
 }
 
-.pagination-number {
+.loan-pastdue-container .pagination-number {
   padding: 0.5rem 0.75rem;
   border: 1px solid #dee2e6;
   background-color: white;
@@ -370,18 +392,18 @@
   min-width: 40px;
 }
 
-.pagination-number:hover {
+.loan-pastdue-container .pagination-number:hover {
   background-color: #f8f9fa;
   border-color: #adb5bd;
 }
 
-.pagination-number.active {
+.loan-pastdue-container .pagination-number.active {
   background-color: #007bff;
   color: white;
   border-color: #007bff;
 }
 
-.report-footer {
+.loan-pastdue-container .report-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -392,12 +414,12 @@
   font-weight: 500;
 }
 
-.footer-date,
-.footer-page {
+.loan-pastdue-container .footer-date,
+.loan-pastdue-container .footer-page {
   padding: 0.5rem 0;
 }
 
-.empty-state {
+.loan-pastdue-container .empty-state {
   padding: 0.75rem 1rem;
   background: #f8fafc;
   border: 1px dashed #d9e2ec;
@@ -406,20 +428,20 @@
   font-size: 0.95rem;
 }
 
-.branch-drilldown,
-.product-drilldown {
+.loan-pastdue-container .branch-drilldown,
+.loan-pastdue-container .product-drilldown {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.branch-panel {
+.loan-pastdue-container .branch-panel {
   border: 1px solid #e1e5ea;
   border-radius: 8px;
   overflow: hidden;
 }
 
-.branch-header {
+.loan-pastdue-container .branch-header {
   background: #f8f9fa;
   display: flex;
   justify-content: space-between;
@@ -428,7 +450,7 @@
   gap: 0.75rem;
 }
 
-.branch-toggle {
+.loan-pastdue-container .branch-toggle {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -441,19 +463,19 @@
   font-size: 1rem;
 }
 
-.branch-toggle:focus {
+.loan-pastdue-container .branch-toggle:focus {
   outline: none;
 }
 
-.branch-caret {
+.loan-pastdue-container .branch-caret {
   font-size: 1.1rem;
 }
 
-.branch-name {
+.loan-pastdue-container .branch-name {
   white-space: nowrap;
 }
 
-.branch-chip {
+.loan-pastdue-container .branch-chip {
   background: #e7f1ff;
   color: #0d6efd;
   border: 1px solid #cfe2ff;
@@ -463,7 +485,7 @@
   font-weight: 600;
 }
 
-.branch-metrics {
+.loan-pastdue-container .branch-metrics {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -471,18 +493,18 @@
   font-size: 0.9rem;
 }
 
-.branch-metrics span {
+.loan-pastdue-container .branch-metrics span {
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   padding: 0.25rem 0.55rem;
 }
 
-.branch-body {
+.loan-pastdue-container .branch-body {
   padding: 0 0.5rem 0.75rem 0.5rem;
 }
 
-.branch-pagination {
+.loan-pastdue-container .branch-pagination {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -490,13 +512,13 @@
   margin: 0.35rem 0 0.5rem 0;
 }
 
-.drilldown-toggle {
+.loan-pastdue-container .drilldown-toggle {
   display: flex;
   gap: 0.35rem;
   margin: 0.35rem 0 0.5rem 0;
 }
 
-.drilldown-tab {
+.loan-pastdue-container .drilldown-tab {
   padding: 0.45rem 0.9rem;
   border: 1px solid #d0d7de;
   background: #f8f9fa;
@@ -507,13 +529,13 @@
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
-.drilldown-tab.active {
+.loan-pastdue-container .drilldown-tab.active {
   background: #0d6efd;
   border-color: #0d6efd;
   color: #fff;
 }
 
-.drill-controls {
+.loan-pastdue-container .drill-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -522,21 +544,21 @@
   margin: 0.5rem 0;
 }
 
-.drill-path {
+.loan-pastdue-container .drill-path {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
-.product-sub-drilldown {
+.loan-pastdue-container .product-sub-drilldown {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
   margin: 0.35rem 0;
 }
 
-.branch-panel.nested {
+.loan-pastdue-container .branch-panel.nested {
   margin: 0.25rem 0 0.35rem 0.5rem;
   border-color: #dbe4f0;
 }
