@@ -124,6 +124,12 @@
   border: 1px solid #dee2e6;
 }
 
+/* Right-align numeric columns */
+.lpds-loan-summary-report-card .lpds-report-table th.lpds-right-align,
+.lpds-loan-summary-report-card .lpds-report-table td.lpds-right-align {
+  text-align: right;
+}
+
 .lpds-loan-summary-report-card .lpds-report-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }

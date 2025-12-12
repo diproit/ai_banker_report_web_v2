@@ -421,21 +421,25 @@ const PersonalSavingsSummaryReport = ({
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Number of Accounts</th>
-              <th>Interest Policy</th>
-              <th>Total Balance</th>
-              <th>Min Interest Rate</th>
+              <th className="psss-right-align">Number of Accounts</th>
+              <th className="psss-right-align">Interest Policy</th>
+              <th className="psss-right-align">Total Balance</th>
+              <th className="psss-right-align">Min Interest Rate</th>
               <th>Branch Name</th>
-              <th>Max Interest Rate</th>
+              <th className="psss-right-align">Max Interest Rate</th>
             </tr>
           </thead>
           <tbody>
             {currentData.map((record, index) => (
               <tr key={index}>
                 <td>{record["Product Name"]}</td>
-                <td>{record["Number of Accounts"]}</td>
-                <td>{record["Interest Policy"]}</td>
-                <td>
+                <td className="psss-right-align">
+                  {record["Number of Accounts"]}
+                </td>
+                <td className="psss-right-align">
+                  {record["Interest Policy"]}
+                </td>
+                <td className="psss-right-align">
                   {record["Total Balance"]
                     ? parseFloat(record["Total Balance"]).toLocaleString(
                         undefined,
@@ -446,9 +450,13 @@ const PersonalSavingsSummaryReport = ({
                       )
                     : "0.00"}
                 </td>
-                <td>{record["Min Interest Rate"]}</td>
+                <td className="psss-right-align">
+                  {record["Min Interest Rate"]}
+                </td>
                 <td>{record["Branch Name"]}</td>
-                <td>{record["Max Interest Rate"]}</td>
+                <td className="psss-right-align">
+                  {record["Max Interest Rate"]}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -465,21 +473,25 @@ const PersonalSavingsSummaryReport = ({
           <thead>
             <tr>
               <th>Product Name</th>
-              <th>Number of Accounts</th>
-              <th>Interest Policy</th>
-              <th>Total Balance</th>
-              <th>Min Interest Rate</th>
+              <th className="psss-right-align">Number of Accounts</th>
+              <th className="psss-right-align">Interest Policy</th>
+              <th className="psss-right-align">Total Balance</th>
+              <th className="psss-right-align">Min Interest Rate</th>
               <th>Branch Name</th>
-              <th>Max Interest Rate</th>
+              <th className="psss-right-align">Max Interest Rate</th>
             </tr>
           </thead>
           <tbody>
             {filteredData.map((record, index) => (
               <tr key={index}>
                 <td>{record["Product Name"]}</td>
-                <td>{record["Number of Accounts"]}</td>
-                <td>{record["Interest Policy"]}</td>
-                <td>
+                <td className="psss-right-align">
+                  {record["Number of Accounts"]}
+                </td>
+                <td className="psss-right-align">
+                  {record["Interest Policy"]}
+                </td>
+                <td className="psss-right-align">
                   {record["Total Balance"]
                     ? parseFloat(record["Total Balance"]).toLocaleString(
                         undefined,
@@ -490,9 +502,13 @@ const PersonalSavingsSummaryReport = ({
                       )
                     : "0.00"}
                 </td>
-                <td>{record["Min Interest Rate"]}</td>
+                <td className="psss-right-align">
+                  {record["Min Interest Rate"]}
+                </td>
                 <td>{record["Branch Name"]}</td>
-                <td>{record["Max Interest Rate"]}</td>
+                <td className="psss-right-align">
+                  {record["Max Interest Rate"]}
+                </td>
               </tr>
             ))}
           </tbody>

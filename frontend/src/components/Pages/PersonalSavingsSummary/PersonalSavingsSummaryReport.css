@@ -124,6 +124,12 @@
   border: 1px solid #dee2e6;
 }
 
+/* Right-align numeric columns */
+.psss-savings-summary-report-card .psss-report-table th.psss-right-align,
+.psss-savings-summary-report-card .psss-report-table td.psss-right-align {
+  text-align: right;
+}
+
 .psss-savings-summary-report-card .psss-report-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
