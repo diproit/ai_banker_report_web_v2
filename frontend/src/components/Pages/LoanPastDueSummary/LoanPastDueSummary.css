@@ -73,9 +73,11 @@
   margin-top: 30px;
   display: flex;
   justify-content: flex-end;
+  gap: 15px;
 }
 
-.pds-loan-pastdue-summary-card .pds-btn-generate-report {
+.pds-loan-pastdue-summary-card .pds-btn-generate-report,
+.pds-loan-pastdue-summary-card .pds-btn-print {
   background-color: #1976d2;
   color: white;
   padding: 12px 30px;
@@ -91,11 +93,13 @@
   gap: 8px;
 }
 
-.pds-loan-pastdue-summary-card .pds-btn-generate-report:hover:not(:disabled) {
+.pds-loan-pastdue-summary-card .pds-btn-generate-report:hover:not(:disabled),
+.pds-loan-pastdue-summary-card .pds-btn-print:hover:not(:disabled) {
   background-color: #1565c0;
 }
 
-.pds-loan-pastdue-summary-card .pds-btn-generate-report:disabled {
+.pds-loan-pastdue-summary-card .pds-btn-generate-report:disabled,
+.pds-loan-pastdue-summary-card .pds-btn-print:disabled {
   background-color: #90caf9;
   cursor: not-allowed;
 }

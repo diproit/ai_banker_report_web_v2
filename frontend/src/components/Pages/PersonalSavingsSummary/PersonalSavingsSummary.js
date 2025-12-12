@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { sqlExecutorApi } from "../../../clients/sqlExecutorClient";
 import { toast } from "react-toastify";
 import "./PersonalSavingsSummary.css";
+import PersonalSavingsPrintPreview from "./PersonalSavingsPrintPreview";
 
 const PersonalSavingsSummary = () => {
   const [branchId, setBranchId] = useState(null);
@@ -14,6 +15,11 @@ const PersonalSavingsSummary = () => {
   // Dropdown data
   const [branches, setBranches] = useState([]);
   const [isLoadingDropdowns, setIsLoadingDropdowns] = useState(true);
+
+  // Report data
+  const [reportData, setReportData] = useState([]);
+  const [instituteName, setInstituteName] = useState("");
+  const printPreviewRef = useRef(null);
 
   // Get today's date in YYYY-MM-DD format for max attribute
   const getTodayDate = () => {
@@ -31,6 +37,12 @@ const PersonalSavingsSummary = () => {
         setIsLoadingDropdowns(true);
         const branchesData = await sqlExecutorApi.getBranches();
         setBranches(branchesData);
+
+        // Load institute name
+        const instituteData = await sqlExecutorApi.getInstitute();
+        if (instituteData && instituteData.length > 0) {
+          setInstituteName(instituteData[0].name || "Institute");
+        }
       } catch (err) {
         console.error("Error loading dropdown data:", err);
         setError("Failed to load dropdown options");
@@ -72,14 +84,53 @@ const PersonalSavingsSummary = () => {
     setError(null);
 
     try {
-      // TODO: Build SQL query and fetch data
-      console.log("Generating report for:", {
-        branchId,
-        branchName,
-        selectedDate,
-      });
+      // Build SQL query for savings products
+      const query = `
+        SELECT 
+          t.name_ln1 AS 'Product Name',
+          COUNT(a.id) AS 'Number of Accounts',
+          t.interest_policy AS 'Interest Policy',
+          SUM(d.pl_account_balance) AS 'Total Balance',
+          t.interest_rate_min AS 'Min Interest Rate',
+          b.name_ln1 AS 'Branch Name',
+          t.interest_rate_max AS 'Max Interest Rate'
+        FROM 
+          pl_account a
+          INNER JOIN pl_account_type t ON a.pl_account_type_id = t.id
+          INNER JOIN pl_daily_balances d ON a.id = d.pl_account_id
+          INNER JOIN gl_branch b ON a.branch_id = b.id
+        WHERE 
+          t.pl_account_category_id = 1
+          AND DATE(a.last_transaction_date) <= '${selectedDate}'
+          AND b.id = ${branchId}
+        GROUP BY 
+          t.name_ln1, b.id
+        ORDER BY 
+          t.name_ln1
+      `;
 
-      toast.success("Report generation functionality coming soon!");
+      console.log("Personal Savings Summary Query:", query);
+
+      // Execute query
+      const response = await sqlExecutorApi.executeQuery(query);
+      console.log("Personal Savings Summary Response:", response);
+
+      if (response.success && response.data && response.data.length > 0) {
+        setReportData(response.data);
+        toast.success(
+          `Report generated successfully with ${response.data.length} records`
+        );
+
+        // Scroll to print preview
+        setTimeout(() => {
+          if (printPreviewRef.current) {
+            printPreviewRef.current.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      } else {
+        setReportData([]);
+        toast.info("No data found for the selected criteria");
+      }
     } catch (err) {
       console.error("Error generating report:", err);
       setError(err.message);
@@ -87,6 +138,10 @@ const PersonalSavingsSummary = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -152,8 +207,29 @@ const PersonalSavingsSummary = () => {
               "Generate Report"
             )}
           </button>
+          {reportData.length > 0 && (
+            <button
+              className="pss-btn-print"
+              onClick={handlePrint}
+              disabled={isLoading}
+            >
+              Print Report
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Print Preview */}
+      {reportData.length > 0 && (
+        <div ref={printPreviewRef}>
+          <PersonalSavingsPrintPreview
+            instituteName={instituteName}
+            branchName={branchName}
+            selectedDate={selectedDate}
+            data={reportData}
+          />
+        </div>
+      )}
     </div>
   );
 };
