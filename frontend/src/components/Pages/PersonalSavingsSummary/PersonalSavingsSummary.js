@@ -59,7 +59,10 @@ const PersonalSavingsSummary = () => {
     const value = e.target.value;
     setSelectedBranch(value);
 
-    if (value) {
+    if (value === "0") {
+      setBranchId(0);
+      setBranchName("All Branches");
+    } else if (value) {
       const branch = branches.find((b) => b.id === parseInt(value));
       setBranchId(parseInt(value));
       setBranchName(branch ? branch.name : "");
@@ -84,7 +87,9 @@ const PersonalSavingsSummary = () => {
     setError(null);
 
     try {
-      // Build SQL query for savings products
+      // Build SQL query for savings products with conditional branch filter
+      const branchFilter = branchId === 0 ? "" : `AND b.id = ${branchId}`;
+
       const query = `
         SELECT 
           t.name_ln1 AS 'Product Name',
@@ -102,7 +107,7 @@ const PersonalSavingsSummary = () => {
         WHERE 
           t.pl_account_category_id = 1
           AND DATE(a.last_transaction_date) <= '${selectedDate}'
-          AND b.id = ${branchId}
+          ${branchFilter}
         GROUP BY 
           t.name_ln1, b.id
         ORDER BY 
