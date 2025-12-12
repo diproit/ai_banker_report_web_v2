@@ -26,7 +26,8 @@ export const routeComponentMap = {
   "/about/team": Team,
   "/transactions/personal-savings/savings": PersonalSavingsReport,
   "/transactions/past-due/loan-past-due": LoanPastDueReports,
-  "/transactions/past-due/loan-past-due-previous-month": LoanPastDueReportsPrevousMonth,
+  "/transactions/past-due/loan-past-due-previous-month":
+    LoanPastDueReportsPrevousMonth,
   "/transactions/past-due/loan-pass-due-summary": LoanPastDueSummary,
   // Add more mappings as you create components
 };
