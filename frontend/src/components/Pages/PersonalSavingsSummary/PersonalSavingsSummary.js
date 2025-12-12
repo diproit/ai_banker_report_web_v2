@@ -40,8 +40,8 @@ const PersonalSavingsSummary = () => {
 
         // Load institute name
         const instituteData = await sqlExecutorApi.getInstitute();
-        if (instituteData && instituteData.length > 0) {
-          setInstituteName(instituteData[0].name || "Institute");
+        if (instituteData) {
+          setInstituteName(instituteData.name);
         }
       } catch (err) {
         console.error("Error loading dropdown data:", err);
