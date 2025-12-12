@@ -700,12 +700,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       return (
         <React.Fragment key={`${level}-${item.id}-${index}`}>
           <li
-            className={`nav-item 
-              ${isActive ? "active" : ""} 
-              ${isParent ? "active-parent" : ""}
-              ${hasChildren ? "has-children" : ""}
-              ${!userHasAccess ? "no-access" : ""}
-              level-${level}`}
+            className={`sb-nav-item 
+              ${isActive ? "sb-active" : ""} 
+              ${isParent ? "sb-active-parent" : ""}
+              ${hasChildren ? "sb-has-children" : ""}
+              ${!userHasAccess ? "sb-no-access" : ""}
+              sb-level-${level}`}
             onClick={(e) => handleItemClick(item, e)}
             style={{
               cursor:
@@ -716,11 +716,11 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               paddingLeft: `${level * 16 + 16}px`,
             }}
           >
-            <div className="menu-item-content">
+            <div className="sb-menu-item-content">
               {showMenuManager && (
-                <div className="menu-item-actions">
+                <div className="sb-menu-item-actions">
                   <button
-                    className="action-btn edit-btn"
+                    className="sb-action-btn sb-edit-btn"
                     title="Edit"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -731,7 +731,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                     {actionLoading.edit ? "..." : "✏️"}
                   </button>
                   <button
-                    className="action-btn delete-btn"
+                    className="sb-action-btn sb-delete-btn"
                     title={t("common.delete", "Delete")}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -743,7 +743,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   </button>
                 </div>
               )}
-              <span className="nav-title">
+              <span className="sb-nav-title">
                 {(item.translations &&
                   item.translations[i18n.language] &&
                   item.translations[i18n.language].title) ||
@@ -751,7 +751,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               </span>
               {hasChildren && (
                 <span
-                  className="chevron-icon"
+                  className="sb-chevron-icon"
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleExpand(item.id, item.url, e);
@@ -767,7 +767,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             </div>
           </li>
           {hasChildren && isExpanded && item.children && (
-            <ul className="submenu">
+            <ul className="sb-submenu">
               {renderMenuItems(item.children, level + 1)}
             </ul>
           )}
@@ -789,29 +789,29 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         pauseOnHover
       />
       <div
-        className={`sidebar-overlay ${isOpen ? "active" : ""}`}
+        className={`sb-sidebar-overlay ${isOpen ? "sb-active" : ""}`}
         onClick={closeSidebar}
       ></div>
       <nav
-        className={`sidebar ${isOpen ? "open" : ""} ${
-          showMenuManager ? "management-mode" : ""
+        className={`sb-sidebar ${isOpen ? "sb-open" : ""} ${
+          showMenuManager ? "sb-management-mode" : ""
         }`}
       >
-        <button className="sidebar-close-btn" onClick={closeSidebar}>
+        <button className="sb-sidebar-close-btn" onClick={closeSidebar}>
           <FiX size={24} />
         </button>
 
         {/* Only show sidebar-header for admin users */}
         {isAdmin && (
-          <div className="sidebar-header">
+          <div className="sb-sidebar-header">
             {showMenuManager ? (
-              <div className="menu-manager-header">
-                <button className="back-btn" onClick={closeMenuManager}>
+              <div className="sb-menu-manager-header">
+                <button className="sb-back-btn" onClick={closeMenuManager}>
                   <FiArrowLeft size={16} />
                 </button>
                 <h3>{t("menu.menu_management", "Menu Management")}</h3>
                 <button
-                  className="add-btn"
+                  className="sb-add-btn"
                   onClick={() => {
                     setEditingItem(null);
                     setFormData({
@@ -842,9 +842,9 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                 </button>
               </div>
             ) : (
-              <div className="sidebar-management">
+              <div className="sb-sidebar-management">
                 <button
-                  className="menu-management-btn"
+                  className="sb-menu-management-btn"
                   ref={manageBtnRef}
                   onClick={() => setShowMenuManager(true)}
                   title={t("menu.manage_menu", "Manage Menu")}
@@ -857,12 +857,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
           </div>
         )}
 
-        <ul className="nav-menu">{renderMenuItems(menuItems)}</ul>
+        <ul className="sb-nav-menu">{renderMenuItems(menuItems)}</ul>
 
         {/* Logout button placed at bottom center of the sidebar for consistent UX */}
-        <div className="sidebar-footer">
+        <div className="sb-sidebar-footer">
           <button
-            className="btn btn-logout"
+            className="sb-btn sb-btn-logout"
             onClick={async () => {
               try {
                 // perform logout via auth context then navigate to login
@@ -883,26 +883,26 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       {/* Menu Form Popup - Only show when editing or adding new item */}
       {(editingItem || (!editingItem && showMenuManager)) && (
         <div
-          className={`menu-form-popup ${
-            showMenuManager ? "management-active" : ""
+          className={`sb-menu-form-popup ${
+            showMenuManager ? "sb-management-active" : ""
           }`}
           style={popupStyle}
         >
-          <div className="menu-form-content">
-            <div className="menu-form-header">
+          <div className="sb-menu-form-content">
+            <div className="sb-menu-form-header">
               <h4>
                 {editingItem
                   ? `${t("common.edit", "Edit")}: ${editingItem.title}`
                   : t("menu.add_new_item", "Add New Menu Item")}
               </h4>
-              <button className="close-popup-btn" onClick={closeMenuManager}>
+              <button className="sb-close-popup-btn" onClick={closeMenuManager}>
                 <FiX size={18} />
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="sb-form-group">
                 <label>{t("form.url_label", "URL: *")}</label>
-                <div className="url-combobox">
+                <div className="sb-url-combobox">
                   <input
                     type="text"
                     value={formData.url}
@@ -913,29 +913,29 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       "form.url_placeholder",
                       "Select base URL and add your path"
                     )}
-                    className="url-input"
+                    className="sb-url-input"
                   />
                   <button
                     type="button"
-                    className="url-dropdown-toggle"
+                    className="sb-url-dropdown-toggle"
                     onClick={() => setShowUrlDropdown(!showUrlDropdown)}
                   >
                     <FiChevronDown size={16} />
                   </button>
                   {showUrlDropdown && (
-                    <div className="url-dropdown">
+                    <div className="sb-url-dropdown">
                       {filteredUrls.length > 0 ? (
                         filteredUrls.map((urlObj) => (
                           <div
                             key={urlObj.url}
-                            className="url-option"
+                            className="sb-url-option"
                             onClick={() => handleUrlSelect(urlObj.url)}
                           >
                             <strong>{urlObj.url}</strong>
                           </div>
                         ))
                       ) : (
-                        <div className="url-option no-results">
+                        <div className="sb-url-option sb-no-results">
                           {t("form.no_matching_urls", "No matching URLs found")}
                         </div>
                       )}
@@ -944,9 +944,9 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="sb-form-group">
                 <label>{t("form.title_label", "Title: *")} (English)</label>
-                <div className="title-input-container">
+                <div className="sb-title-input-container">
                   <input
                     type="text"
                     value={formData.title}
@@ -959,7 +959,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   />
                   <button
                     type="button"
-                    className="translate-btn"
+                    className="sb-translate-btn"
                     onClick={handleManualTranslate}
                     disabled={translating || !formData.title.trim()}
                     title="Auto-translate to all languages"
@@ -969,7 +969,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                 </div>
                 <button
                   type="button"
-                  className="expand-toggle-btn small"
+                  className="sb-expand-toggle-btn sb-small"
                   onClick={() => toggleFieldExpand("multi_language_titles")}
                   style={{ marginLeft: 8, marginTop: "8px" }}
                 >
@@ -980,12 +980,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               </div>
 
               {expandedFields.multi_language_titles && (
-                <div className="multi-lang-titles">
-                  <div className="form-group">
+                <div className="sb-multi-lang-titles">
+                  <div className="sb-form-group">
                     <label>
                       Sinhala{" "}
                       {translating && (
-                        <span className="translating-indicator">🔄</span>
+                        <span className="sb-translating-indicator">🔄</span>
                       )}
                     </label>
                     <input
@@ -998,11 +998,11 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       required
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="sb-form-group">
                     <label>
                       Tamil{" "}
                       {translating && (
-                        <span className="translating-indicator">🔄</span>
+                        <span className="sb-translating-indicator">🔄</span>
                       )}
                     </label>
                     <input
@@ -1015,11 +1015,11 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       required
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="sb-form-group">
                     <label>
                       Tagalog{" "}
                       {translating && (
-                        <span className="translating-indicator">🔄</span>
+                        <span className="sb-translating-indicator">🔄</span>
                       )}
                     </label>
                     <input
@@ -1032,11 +1032,11 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       required
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="sb-form-group">
                     <label>
                       Thai{" "}
                       {translating && (
-                        <span className="translating-indicator">🔄</span>
+                        <span className="sb-translating-indicator">🔄</span>
                       )}
                     </label>
                     <input
@@ -1052,9 +1052,9 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                 </div>
               )}
 
-              <div className="form-group">
+              <div className="sb-form-group">
                 <label>{t("form.group_label", "Group Name:")}</label>
-                <div className="group-combobox">
+                <div className="sb-group-combobox">
                   <input
                     type="text"
                     value={formData.group_name}
@@ -1063,12 +1063,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       "form.group_placeholder",
                       "Auto-filled from URL"
                     )}
-                    className="group-input"
+                    className="sb-group-input"
                   />
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="sb-form-group">
                 <label>{t("form.sort_label", "Sort Order: *")}</label>
                 <input
                   type="number"
@@ -1087,11 +1087,13 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               </div>
 
               {/* Base Query Field with Expand/Collapse */}
-              <div className="form-group">
-                <label className="field-header">Report Name (Optional):</label>
+              <div className="sb-form-group">
+                <label className="sb-field-header">
+                  Report Name (Optional):
+                </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="sb-form-control"
                   value={formData.report_name}
                   onChange={(e) =>
                     setFormData({ ...formData, report_name: e.target.value })
@@ -1099,12 +1101,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   placeholder="Enter report name..."
                 />
               </div>
-              <div className="form-group">
-                <label className="field-header">
+              <div className="sb-form-group">
+                <label className="sb-field-header">
                   Report Query (Optional):
                   <button
                     type="button"
-                    className="expand-toggle-btn"
+                    className="sb-expand-toggle-btn"
                     onClick={() => toggleFieldExpand("base_query")}
                     title={expandedFields.base_query ? "Collapse" : "Expand"}
                   >
@@ -1116,12 +1118,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   </button>
                 </label>
                 <div
-                  className={`textarea-container ${
-                    expandedFields.base_query ? "expanded" : ""
+                  className={`sb-textarea-container ${
+                    expandedFields.base_query ? "sb-expanded" : ""
                   }`}
                 >
                   <textarea
-                    className="sidebar-textarea code-textarea"
+                    className="sb-sidebar-textarea sb-code-textarea"
                     value={formData.base_query}
                     onChange={(e) =>
                       setFormData({ ...formData, base_query: e.target.value })
@@ -1131,14 +1133,14 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                     spellCheck="false"
                   />
                   {formData.base_query && (
-                    <div className="character-count">
+                    <div className="sb-character-count">
                       {formData.base_query.length} characters
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="form-group checkbox-group">
+              <div className="sb-form-group sb-checkbox-group">
                 <label>
                   <input
                     type="checkbox"
@@ -1151,10 +1153,10 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                 </label>
               </div>
 
-              <div className="form-actions">
+              <div className="sb-form-actions">
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="sb-btn sb-btn-primary"
                   disabled={
                     actionLoading.submit || (editingItem && !hasFormChanges)
                   }
@@ -1165,7 +1167,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   }
                 >
                   {actionLoading.submit ? (
-                    <Loader size={16} className="spinning-loader" />
+                    <Loader size={16} className="sb-spinning-loader" />
                   ) : (
                     <>
                       <FiSave size={14} />
@@ -1178,7 +1180,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                 {editingItem && (
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="sb-btn sb-btn-secondary"
                     onClick={closeMenuManager}
                     disabled={actionLoading.submit}
                     style={
