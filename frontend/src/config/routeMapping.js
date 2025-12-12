@@ -9,6 +9,8 @@ import DesignReport from "../components/Pages/DesignReport";
 import Team from "../components/Pages/Team";
 import LoanPastDueReports from "../components/Pages/LoanPastDueReports";
 import LoanPastDueReportsPrevousMonth from "../components/Pages/LoanPastDuePrevMonth";
+import LoanPastDueSummary from "../components/Pages/LoanPastDueSummary/LoanPastDueSummary";
+import PersonalSavingsSummary from "../components/Pages/PersonalSavingsSummary/PersonalSavingsSummary";
 
 /**
  * Maps database URLs to React components
@@ -27,7 +29,11 @@ export const routeComponentMap = {
   "/transactions/personal-savings/savings": PersonalSavingsReport,
   "/transactions/personal-savings/personal-fd-list": PersonalFDReport,
   "/transactions/past-due/loan-past-due": LoanPastDueReports,
-  "/transactions/past-due/loan-past-due-previous-month": LoanPastDueReportsPrevousMonth,
+  "/transactions/past-due/loan-past-due-previous-month":
+    LoanPastDueReportsPrevousMonth,
+  "/transactions/past-due/loan-pass-due-summary": LoanPastDueSummary,
+  "/transactions/personal-savings/personal-savings-summary":
+    PersonalSavingsSummary,
   // Add more mappings as you create components
 };
 

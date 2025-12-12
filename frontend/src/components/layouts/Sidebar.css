@@ -1,7 +1,7 @@
-.menu-management-btn span {
+.sb-menu-management-btn span {
   text-decoration: none !important;
 }
-.sidebar-textarea {
+.sb-sidebar-textarea {
   width: 100%;
   min-height: 60px;
   padding: 8px 10px;
@@ -16,7 +16,7 @@
   color: #222;
   transition: border 0.15s;
 }
-.sidebar-textarea:focus {
+.sb-sidebar-textarea:focus {
   outline: none;
   border-color: var(--primary-blue);
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
@@ -33,7 +33,7 @@
   --gray-border: #e0e0e0;
 }
 
-.sidebar {
+.sb-sidebar {
   width: var(--sidebar-width);
   height: calc(100vh - 80px);
   background-color: var(--white);
@@ -50,7 +50,7 @@
 }
 
 /* Footer logout button anchored bottom-center inside the sidebar */
-.sidebar-footer {
+.sb-sidebar-footer {
   position: absolute;
   bottom: 12px;
   left: 0;
@@ -63,7 +63,7 @@
   z-index: 1050;
 }
 
-.btn-logout {
+.sb-btn-logout {
   background: var(--primary-blue);
   color: var(--white);
   border: none;
@@ -75,28 +75,28 @@
   box-shadow: 0 2px 6px rgba(25, 118, 210, 0.12);
 }
 
-.btn-logout:hover {
+.sb-btn-logout:hover {
   background: var(--dark-blue);
 }
 
 /* On small screens when sidebar overlays, make logout full-width and more prominent */
 @media (max-width: 768px) {
-  .sidebar-footer {
+  .sb-sidebar-footer {
     padding: 12px;
   }
-  .btn-logout {
+  .sb-btn-logout {
     width: calc(100% - 32px);
     border-radius: 6px;
     padding: 10px 12px;
   }
 }
 
-.sidebar.management-mode {
+.sb-sidebar.sb-management-mode {
   width: var(--sidebar-management-width);
   z-index: 1002;
 }
 
-.sidebar-close-btn {
+.sb-sidebar-close-btn {
   display: none;
   position: absolute;
   top: 10px;
@@ -108,7 +108,7 @@
   z-index: 1001;
 }
 
-.sidebar-overlay {
+.sb-sidebar-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -121,24 +121,24 @@
   transition: all 0.3s ease;
 }
 
-.sidebar-overlay.active {
+.sb-sidebar-overlay.sb-active {
   opacity: 1;
   visibility: visible;
 }
 
-.sidebar-header {
+.sb-sidebar-header {
   padding: 20px 16px;
   border-bottom: 1px solid var(--gray-border);
   background-color: var(--light-blue);
   transition: all 0.3s ease;
 }
 
-/* .sidebar.management-mode .sidebar-header {
+/* .sb-sidebar.sb-management-mode .sb-sidebar-header {
   background-color:var(--light-blue);;
   color: var(--primary-blue);
 } */
 
-.sidebar-title {
+.sb-sidebar-title {
   font-size: 14px;
   font-weight: 600;
   color: var(--primary-blue);
@@ -147,7 +147,7 @@
   letter-spacing: 0.5px;
 }
 
-.nav-menu {
+.sb-nav-menu {
   list-style: none;
   padding: 8px 0;
   margin: 0;
@@ -155,7 +155,7 @@
   overflow-y: auto;
 }
 
-.nav-item {
+.sb-nav-item {
   margin: 2px 6px; /* reduced vertical spacing */
   border-radius: 6px;
   transition: all 0.18s ease;
@@ -163,30 +163,30 @@
   min-height: 28px;
 }
 
-.nav-item:hover {
+.sb-nav-item:hover {
   background-color: var(--light-blue);
 }
 
-.nav-item.active {
+.sb-nav-item.sb-active {
   background-color: var(--light-blue);
 }
 
-.nav-item.active > .menu-item-content {
+.sb-nav-item.sb-active > .sb-menu-item-content {
   color: var(--primary-blue);
   font-weight: 600;
 }
 
 /* Parent of active item - same styling as active */
-.nav-item.active-parent {
+.sb-nav-item.sb-active-parent {
   background-color: var(--light-blue);
 }
 
-.nav-item.active-parent > .menu-item-content {
+.sb-nav-item.sb-active-parent > .sb-menu-item-content {
   color: var(--primary-blue);
   font-weight: 600;
 }
 
-.menu-item-content {
+.sb-menu-item-content {
   display: flex;
   align-items: center;
   padding: 8px 8px 8px 12px; /* slightly smaller padding */
@@ -199,42 +199,42 @@
   position: relative;
 }
 
-.nav-icon-wrapper {
+.sb-nav-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.nav-icon {
+.sb-nav-icon {
   width: 18px;
   height: 18px;
 }
 
-.nav-title {
+.sb-nav-title {
   flex-grow: 1;
   text-align: left;
   min-width: 0; /* Allow text truncation */
 }
 
-.chevron-icon {
+.sb-chevron-icon {
   display: flex;
   align-items: center;
   color: #757575;
   flex-shrink: 0;
 }
 
-.chevron-icon {
+.sb-chevron-icon {
   cursor: pointer;
   padding: 6px;
   border-radius: 4px;
 }
 
-.chevron-icon:hover {
+.sb-chevron-icon:hover {
   background: #f0f0f0;
   color: #333;
 }
 
-.submenu {
+.sb-submenu {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -243,18 +243,18 @@
 }
 
 /* Indentation for nested items */
-.nav-item.level-1 {
+.sb-nav-item.sb-level-1 {
   margin-left: 0px;
   margin-right: 4px;
 }
 
-.nav-item.level-2 {
+.sb-nav-item.sb-level-2 {
   margin-left: 2px;
   margin-right: 4px;
 }
 
 /* Active state indicator */
-.nav-item.active::before {
+.sb-nav-item.sb-active::before {
   content: "";
   position: absolute;
   left: 0;
@@ -265,7 +265,7 @@
   border-radius: 3px 0 0 3px;
 }
 
-.nav-item.active-parent::before {
+.sb-nav-item.sb-active-parent::before {
   content: "";
   position: absolute;
   left: 0;
@@ -277,7 +277,7 @@
 }
 
 /* Menu Form Popup Styles - FIXED POSITIONING */
-.menu-form-popup {
+.sb-menu-form-popup {
   position: fixed;
   top: 80px;
   left: var(--sidebar-width);
@@ -292,15 +292,15 @@
   transition: transform 0.2s ease, opacity 0.2s ease, left 0.3s ease;
 }
 
-.menu-form-popup.management-active {
+.sb-menu-form-popup.sb-management-active {
   left: var(--sidebar-management-width);
 }
 
-.menu-form-content {
+.sb-menu-form-content {
   padding: 20px;
 }
 
-.menu-form-header {
+.sb-menu-form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -309,14 +309,14 @@
   border-bottom: 1px solid var(--gray-border);
 }
 
-.menu-form-header h4 {
+.sb-menu-form-header h4 {
   margin: 0;
   color: var(--primary-blue);
   font-size: 14px;
   font-weight: 600;
 }
 
-.close-popup-btn {
+.sb-close-popup-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -331,19 +331,19 @@
   transition: all 0.15s ease;
 }
 
-.close-popup-btn:hover {
+.sb-close-popup-btn:hover {
   background-color: #f5f5f5;
   color: #333;
 }
 
 /* URL Combobox Styles */
-.url-combobox {
+.sb-url-combobox {
   position: relative;
   width: 100%;
   font-weight: normal;
 }
 
-.url-input {
+.sb-url-input {
   width: 100%;
   padding: 8px 35px 8px 10px;
   border: 1px solid #ddd;
@@ -355,13 +355,13 @@
   line-height: 1.2;
 }
 
-.url-input:focus {
+.sb-url-input:focus {
   outline: none;
   border-color: var(--primary-blue);
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
 }
 
-.url-dropdown-toggle {
+.sb-url-dropdown-toggle {
   position: absolute;
   right: 8px;
   top: 65%;
@@ -380,12 +380,12 @@
   transition: all 0.15s ease;
 }
 
-.url-dropdown-toggle:hover {
+.sb-url-dropdown-toggle:hover {
   background-color: #f5f5f5;
   color: #333;
 }
 
-.url-dropdown {
+.sb-url-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
@@ -400,7 +400,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.url-option {
+.sb-url-option {
   padding: 8px 12px;
   cursor: pointer;
   font-size: 12px;
@@ -409,33 +409,33 @@
   transition: all 0.15s ease;
 }
 
-.url-option:hover {
+.sb-url-option:hover {
   background-color: var(--light-blue);
   color: var(--primary-blue);
 }
 
-.url-option:last-child {
+.sb-url-option:last-child {
   border-bottom: none;
 }
 
-.url-option.no-results {
+.sb-url-option.sb-no-results {
   color: #999;
   cursor: default;
   font-style: italic;
 }
 
-.url-option.no-results:hover {
+.sb-url-option.sb-no-results:hover {
   background-color: white;
   color: #999;
 }
 
 /* Group Combobox Styles - Similar to URL combobox */
-.group-combobox {
+.sb-group-combobox {
   position: relative;
   width: 100%;
 }
 
-.group-input {
+.sb-group-input {
   width: 100%;
   padding: 8px 35px 8px 10px;
   border: 1px solid #ddd;
@@ -447,13 +447,13 @@
   line-height: 1.2;
 }
 
-.group-input:focus {
+.sb-group-input:focus {
   outline: none;
   border-color: var(--primary-blue);
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
 }
 
-.group-dropdown-toggle {
+.sb-group-dropdown-toggle {
   position: absolute;
   right: 8px;
   top: 55%;
@@ -472,12 +472,12 @@
   transition: all 0.15s ease;
 }
 
-.group-dropdown-toggle:hover {
+.sb-group-dropdown-toggle:hover {
   background-color: #f5f5f5;
   color: #333;
 }
 
-.group-dropdown {
+.sb-group-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
@@ -492,7 +492,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.group-option {
+.sb-group-option {
   padding: 8px 12px;
   cursor: pointer;
   font-size: 12px;
@@ -501,50 +501,50 @@
   transition: all 0.15s ease;
 }
 
-.group-option:hover {
+.sb-group-option:hover {
   background-color: var(--light-blue);
   color: var(--primary-blue);
 }
 
-.group-option:last-child {
+.sb-group-option:last-child {
   border-bottom: none;
 }
 
-.group-option.no-results {
+.sb-group-option.sb-no-results {
   color: #999;
   cursor: default;
   font-style: italic;
 }
 
-.group-option.no-results:hover {
+.sb-group-option.sb-no-results:hover {
   background-color: white;
   color: #999;
 }
 
 /* Responsive styles */
 @media (max-width: 1024px) {
-  .sidebar {
+  .sb-sidebar {
     transform: translateX(-100%);
     height: 100vh;
     top: 0;
     z-index: 1000;
   }
 
-  .sidebar.open {
+  .sb-sidebar.sb-open {
     transform: translateX(0);
   }
 
-  .sidebar.management-mode {
+  .sb-sidebar.sb-management-mode {
     width: 100%;
     max-width: 340px;
     z-index: 1002;
   }
 
-  .sidebar-close-btn {
+  .sb-sidebar-close-btn {
     display: block;
   }
 
-  .menu-form-popup {
+  .sb-menu-form-popup {
     left: 0;
     top: 0;
     height: 100vh;
@@ -553,55 +553,55 @@
     z-index: 1003;
   }
 
-  .menu-form-popup.management-active {
+  .sb-menu-form-popup.sb-management-active {
     left: 340px;
   }
 }
 
 @media (max-width: 768px) {
-  .sidebar {
+  .sb-sidebar {
     width: 280px;
   }
 
-  .sidebar.management-mode {
+  .sb-sidebar.sb-management-mode {
     width: 100%;
     max-width: 320px;
   }
 
-  .menu-form-popup {
+  .sb-menu-form-popup {
     width: 100%;
     max-width: 320px;
     left: 0;
   }
 
-  .menu-form-popup.management-active {
+  .sb-menu-form-popup.sb-management-sb-active {
     left: 280px; /* Match the sidebar width exactly */
   }
 }
 
 @media (max-width: 480px) {
-  .sidebar {
+  .sb-sidebar {
     width: 100%;
     max-width: 280px;
   }
 
-  .sidebar.management-mode {
+  .sb-sidebar.sb-management-mode {
     width: 100%;
     max-width: 280px;
   }
 
-  .menu-form-popup {
+  .sb-menu-form-popup {
     width: 100%;
     max-width: 280px;
   }
 
-  .menu-form-popup.management-active {
+  .sb-menu-form-popup.sb-management-sb-active {
     left: 280px; /* Match the sidebar width exactly */
   }
 }
 
 /* Menu Management Styles - Compact & Perfect Alignment */
-.menu-management-btn {
+.sb-menu-management-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -619,13 +619,13 @@
   min-height: 28px;
 }
 
-.menu-management-btn:hover {
+.sb-menu-management-btn:hover {
   background-color: var(--primary-blue);
   color: white;
   transform: translateY(-1px);
 }
 
-.menu-manager-header {
+.sb-menu-manager-header {
   display: grid;
   grid-template-columns: 28px 1fr 28px;
   align-items: center;
@@ -637,7 +637,7 @@
   color: white;
 }
 
-.menu-manager-header h3 {
+.sb-menu-manager-header h3 {
   margin: 0;
   color: white;
   font-size: 12px;
@@ -646,8 +646,8 @@
   line-height: 1.2;
 }
 
-.back-btn,
-.add-btn {
+.sb-back-btn,
+.sb-add-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -662,15 +662,15 @@
   transition: all 0.15s ease;
 }
 
-.back-btn:hover,
-.add-btn:hover {
+.sb-back-btn:hover,
+.sb-add-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   transform: scale(1.05);
 }
 
 /* Menu Item Actions - Compact - MOVED TO LEFT SIDE */
-.menu-item-actions {
+.sb-menu-item-actions {
   display: flex !important;
   gap: 4px;
   margin-left: auto;
@@ -682,7 +682,7 @@
   pointer-events: auto !important;
 }
 
-.action-btn {
+.sb-action-btn {
   background: #f5f5f5;
   border: 1px solid #e0e0e0;
   padding: 4px;
@@ -700,38 +700,38 @@
   font-size: 16px;
 }
 
-.action-btn:hover {
+.sb-action-btn:hover {
   opacity: 1;
   transform: scale(1.1);
 }
 
-.action-btn:disabled {
+.sb-action-btn:disabled {
   cursor: not-allowed !important;
   opacity: 0.6 !important;
   transform: none !important;
 }
 
-.action-btn.edit-btn {
+.sb-action-btn.sb-edit-btn {
   background: #fff8e1;
   border: 1px solid #ffecb3;
 }
 
-.edit-btn:hover {
+.sb-edit-btn:hover {
   background-color: #ffc107;
   transform: scale(1.15);
 }
 
-.action-btn.delete-btn {
+.sb-action-btn.sb-delete-btn {
   background: #ffebee;
   border: 1px solid #ffcdd2;
 }
 
-.delete-btn:hover {
+.sb-delete-btn:hover {
   background-color: #ef5350;
   transform: scale(1.15);
 }
 
-.expand-toggle-btn {
+.sb-expand-toggle-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -741,13 +741,13 @@
   margin-left: auto;
 }
 
-.expand-toggle-btn:hover {
+.sb-expand-toggle-btn:hover {
   background: #f0f0f0;
   color: #333;
 }
 
-.title-input-container .translate-btn,
-.expand-toggle-btn.small {
+.sb-title-input-container .sb-translate-btn,
+.sb-expand-toggle-btn.sb-small {
   font-size: 12px;
   min-height: 36px;
   padding: 6px 10px;
@@ -757,27 +757,27 @@
   color: #333;
 }
 
-.title-input-container .translate-btn:hover,
-.expand-toggle-btn.small:hover {
+.sb-title-input-container .sb-translate-btn:hover,
+.sb-expand-toggle-btn.sb-small:hover {
   background: #e9f3ff;
 }
 
 /* Ensure translate button icon/text doesn't overflow */
-.title-input-container {
+.sb-title-input-container {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
 /* Prevent long words from being cut off in menu */
-.menu-item-content,
-.nav-title {
+.sb-menu-item-content,
+.sb-nav-title {
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
 /* Adjust active indicator so it doesn't push content */
-.nav-item.active::before {
+.sb-nav-item.sb-active::before {
   content: "";
   position: absolute;
   left: 8px;
@@ -789,25 +789,25 @@
 }
 
 /* Submenu indentation: slightly more to the right */
-.nav-item.level-1 .menu-item-content {
+.sb-nav-item.sb-level-1 .sb-menu-item-content {
   padding-left: 36px;
 }
-.nav-item.level-2 .menu-item-content {
+.sb-nav-item.sb-level-2 .sb-menu-item-content {
   padding-left: 52px;
 }
 
 /* Make the URL and group inputs show ellipsis for overflow (avoids layout break)
    and provide full value on hover via title attribute handled in JS (if needed) */
-.url-input,
-.group-input {
+.sb-url-input,
+.sb-group-input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 /* End custom adjustments */
-.title-input-container .translate-btn,
-.expand-toggle-btn.small {
+.sb-title-input-container .sb-translate-btn,
+.sb-expand-toggle-btn.sb-small {
   font-size: 12px;
   min-height: 36px;
   padding: 6px 10px;
@@ -817,27 +817,27 @@
   color: #333;
 }
 
-.title-input-container .translate-btn:hover,
-.expand-toggle-btn.small:hover {
+.sb-title-input-container .sb-translate-btn:hover,
+.sb-expand-toggle-btn.sb-small:hover {
   background: #e9f3ff;
 }
 
 /* Ensure translate button icon/text doesn't overflow */
-.title-input-container {
+.sb-title-input-container {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
 /* Prevent long words from being cut off in menu */
-.menu-item-content,
-.nav-title {
+.sb-menu-item-content,
+.sb-nav-title {
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
 /* Adjust active indicator so it doesn't push content */
-.nav-item.active::before {
+.sb-nav-item.sb-active::before {
   content: "";
   position: absolute;
   left: 8px;
@@ -849,17 +849,17 @@
 }
 
 /* Submenu indentation: slightly more to the right */
-.nav-item.level-1 .menu-item-content {
+.sb-nav-item.sb-level-1 .sb-menu-item-content {
   padding-left: 36px;
 }
-.nav-item.level-2 .menu-item-content {
+.sb-nav-item.sb-level-2 .sb-menu-item-content {
   padding-left: 52px;
 }
 
 /* Make the URL and group inputs show ellipsis for overflow (avoids layout break)
    and provide full value on hover via title attribute handled in JS (if needed) */
-.url-input,
-.group-input {
+.sb-url-input,
+.sb-group-input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -867,17 +867,17 @@
 
 /* End custom adjustments */
 /* Submenu indentation: slightly more to the right */
-.nav-item.level-1 .menu-item-content {
+.sb-nav-item.sb-level-1 .sb-menu-item-content {
   padding-left: 36px;
 }
-.nav-item.level-2 .menu-item-content {
+.sb-nav-item.sb-level-2 .sb-menu-item-content {
   padding-left: 52px;
 }
 
 /* Make the URL and group inputs show ellipsis for overflow (avoids layout break)
 +   and provide full value on hover via title attribute handled in JS (if needed) */
-.url-input,
-.group-input {
+.sb-url-input,
+.sb-group-input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -887,8 +887,8 @@
 
 /* ===== Custom adjustments requested by user ===== */
 /* Make translate and small toggle buttons match primary button sizing */
-.title-input-container .translate-btn,
-.expand-toggle-btn.small {
+.sb-title-input-container .sb-translate-btn,
+.sb-expand-toggle-btn.sb-small {
   font-size: 12px;
   min-height: 36px;
   padding: 6px 10px;
@@ -898,27 +898,27 @@
   color: #333;
 }
 
-.title-input-container .translate-btn:hover,
-.expand-toggle-btn.small:hover {
+.sb-title-input-container .sb-translate-btn:hover,
+.sb-expand-toggle-btn.sb-small:hover {
   background: #e9f3ff;
 }
 
 /* Ensure translate button icon/text doesn't overflow */
-.title-input-container {
+.sb-title-input-container {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
 /* Prevent long words from being cut off */
-.menu-item-content,
-.nav-title {
+.sb-menu-item-content,
+.sb-nav-title {
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
 /* Adjust active indicator so it doesn't push content */
-.nav-item.active::before {
+.sb-nav-item.sb-active::before {
   content: "";
   position: absolute;
   left: 8px;
@@ -930,16 +930,16 @@
 }
 
 /* Submenu indentation: slightly more to the right */
-.nav-item.level-1 .menu-item-content {
+.sb-nav-item.sb-level-1 .sb-menu-item-content {
   padding-left: 36px;
 }
-.nav-item.level-2 .menu-item-content {
+.sb-nav-item.sb-level-2 .sb-menu-item-content {
   padding-left: 52px;
 }
 
 /* Make the URL and group inputs wrap text if very long */
-.url-input,
-.group-input {
+.sb-url-input,
+.sb-group-input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -948,12 +948,12 @@
 /* End custom adjustments */
 
 /* Management mode: expand sidebar when manage button is active and compact spacing */
-.sidebar.management-mode .nav-item {
+.sb-sidebar.sb-management-mode .sb-nav-item {
   margin: 2px 6px;
   min-height: 30px;
 }
 
-.sidebar.management-mode .menu-item-content {
+.sb-sidebar.sb-management-mode .sb-menu-item-content {
   padding: 6px 10px;
   min-height: 30px;
   padding-right: 60px; /* Add extra space for action buttons */
@@ -961,18 +961,18 @@
 }
 
 /* Compact indentation for nested levels to reduce whitespace between levels */
-.nav-item.level-0 .menu-item-content {
+.sb-nav-item.sb-level-0 .sb-menu-item-content {
   padding-left: 8px;
 }
-.nav-item.level-1 .menu-item-content {
+.sb-nav-item.sb-level-1 .sb-menu-item-content {
   padding-left: 20px;
 }
-.nav-item.level-2 .menu-item-content {
+.sb-nav-item.sb-level-2 .sb-menu-item-content {
   padding-left: 32px;
 }
 
 /* Multi-language titles section */
-.multi-lang-titles {
+.sb-multi-lang-titles {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 12px;
@@ -980,15 +980,15 @@
   margin-bottom: 12px;
 }
 
-.multi-lang-titles .form-group {
+.sb-multi-lang-titles .sb-form-group {
   margin-bottom: 8px;
 }
 
-.multi-lang-titles .form-group:last-child {
+.sb-multi-lang-titles .sb-form-group:last-child {
   margin-bottom: 0;
 }
 
-.translating-indicator {
+.sb-translating-indicator {
   font-size: 10px;
   margin-left: 4px;
   animation: pulse 1.5s infinite;
@@ -1016,28 +1016,28 @@
   }
 }
 
-.spinning-loader {
+.sb-spinning-loader {
   animation: spin 1s linear infinite;
   display: inline-block;
 }
 
 /* Base query textarea styling */
-.textarea-container {
+.sb-textarea-container {
   position: relative;
   transition: all 0.3s ease;
 }
 
-.textarea-container.expanded {
+.sb-textarea-container.sb-expanded {
   z-index: 1002;
 }
 
-.code-textarea {
+.sb-code-textarea {
   font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   font-size: 11px;
   line-height: 1.4;
 }
 
-.character-count {
+.sb-character-count {
   position: absolute;
   bottom: 8px;
   right: 8px;
@@ -1048,27 +1048,27 @@
   border-radius: 3px;
 }
 
-.field-header {
+.sb-field-header {
   display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
 }
 
-.field-header .expand-toggle-btn {
+.sb-field-header .sb-expand-toggle-btn {
   margin-left: auto;
 }
 
 /* Form group styling */
-.form-group {
+.sb-form-group {
   margin-bottom: 12px;
 }
 
-.form-group:last-child {
+.sb-form-group:last-child {
   margin-bottom: 0;
 }
 
-.form-group label {
+.sb-form-group label {
   display: block;
   margin-bottom: 4px;
   font-size: 12px;
@@ -1077,8 +1077,8 @@
   line-height: 1.2;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"] {
+.sb-form-group input[type="text"],
+.sb-form-group input[type="number"] {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid #ddd;
@@ -1089,20 +1089,20 @@
   line-height: 1.2;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus {
+.sb-form-group input[type="text"]:focus,
+.sb-form-group input[type="number"]:focus {
   outline: none;
   border-color: var(--primary-blue);
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
 }
 
-.checkbox-group {
+.sb-checkbox-group {
   display: flex;
   align-items: center;
   margin-top: 8px;
 }
 
-.checkbox-group label {
+.sb-checkbox-group label {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1112,21 +1112,21 @@
   color: #333;
 }
 
-.checkbox-group input[type="checkbox"] {
+.sb-checkbox-group input[type="checkbox"] {
   margin: 0;
   width: 16px;
   height: 16px;
   cursor: pointer;
 }
 
-.form-actions {
+.sb-form-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-top: 16px;
 }
 
-.btn {
+.sb-btn {
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
@@ -1141,60 +1141,60 @@
   font-weight: 500;
 }
 
-.btn-primary {
+.sb-btn-primary {
   background-color: var(--primary-blue);
   color: white;
 }
 
-.btn-primary:hover {
+.sb-btn-primary:hover {
   background-color: var(--dark-blue);
   transform: translateY(-1px);
 }
 
-.btn-secondary {
+.sb-btn-secondary {
   background-color: #6c757d;
   color: white;
 }
 
-.btn-secondary:hover {
+.sb-btn-secondary:hover {
   background-color: #5a6268;
   transform: translateY(-1px);
 }
 
 /* Smooth transitions for all interactive elements */
-.menu-management-btn,
-.back-btn,
-.add-btn,
-.action-btn,
-.btn,
-.form-group input,
-.url-dropdown-toggle,
-.url-option {
+.sb-menu-management-btn,
+.sb-back-btn,
+.sb-add-btn,
+.sb-action-btn,
+.sb-btn,
+.sb-form-group input,
+.sb-url-dropdown-toggle,
+.sb-url-option {
   transition: all 0.15s ease;
 }
 
 /* Focus states for accessibility */
-.menu-management-btn:focus,
-.back-btn:focus,
-.add-btn:focus,
-.action-btn:focus,
-.btn:focus,
-.form-group input:focus,
-.url-dropdown-toggle:focus {
+.sb-menu-management-btn:focus,
+.sb-back-btn:focus,
+.sb-add-btn:focus,
+.sb-action-btn:focus,
+.sb-btn:focus,
+.sb-form-group input:focus,
+.sb-url-dropdown-toggle:focus {
   outline: 2px solid var(--primary-blue);
   outline-offset: 1px;
 }
 
 /* Improved styling for hierarchical display */
-.nav-item {
+.sb-nav-item {
   transition: all 0.2s ease;
 }
 
-.nav-item:hover {
+.sb-nav-item:hover {
   background-color: #f5f5f5;
 }
 
-.menu-item-content {
+.sb-menu-item-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1202,7 +1202,7 @@
 }
 
 /* Parent dropdown styling */
-.form-group select {
+.sb-form-group select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
@@ -1210,34 +1210,34 @@
 }
 
 /* Indentation for hierarchy */
-.submenu {
+.sb-submenu {
   margin-left: 0;
 }
 
 /* Ensure icon visibility */
-.menu-item-actions .action-btn svg {
+.sb-menu-item-actions .sb-action-btn svg {
   width: 16px;
   height: 16px;
   display: block;
   visibility: visible;
 }
 
-.menu-item-actions .edit-btn svg {
+.sb-menu-item-actions .sb-edit-btn svg {
   color: #ffa000 !important;
   stroke: #ffa000 !important;
 }
 
-.menu-item-actions .edit-btn:hover svg {
+.sb-menu-item-actions .sb-edit-btn:hover svg {
   color: white !important;
   stroke: white !important;
 }
 
-.menu-item-actions .delete-btn svg {
+.sb-menu-item-actions .sb-delete-btn svg {
   color: #d32f2f !important;
   stroke: #d32f2f !important;
 }
 
-.menu-item-actions .delete-btn:hover svg {
+.sb-menu-item-actions .sb-delete-btn:hover svg {
   color: white !important;
   stroke: white !important;
 }
