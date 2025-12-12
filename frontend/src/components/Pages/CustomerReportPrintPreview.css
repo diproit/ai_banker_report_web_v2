@@ -83,6 +83,61 @@
   font-weight: 600;
 }
 
+/* Drill-down hierarchy styles for print */
+.print-drilldown-table .print-group-header {
+  background-color: #e8e8e8 !important;
+  font-weight: 700;
+  font-size: 12px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-drilldown-table .print-branch-header {
+  background-color: #d0d0d0 !important;
+  font-weight: 700;
+  font-size: 13px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-drilldown-table .print-type-header {
+  background-color: #e8e8e8 !important;
+  font-weight: 600;
+  font-size: 11px;
+  padding-left: 20px !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-drilldown-table .print-type-header td {
+  padding-left: 20px !important;
+}
+
+.print-drilldown-table .print-column-header {
+  background-color: #f5f5f5 !important;
+  font-weight: 600;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-drilldown-table .print-column-header th {
+  border-bottom: 2px solid #000 !important;
+  font-size: 10px;
+  padding: 8px 6px;
+}
+
+.print-drilldown-table .print-nested-row td:first-child {
+  padding-left: 15px;
+}
+
+.print-drilldown-table
+  tbody
+  tr:not(.print-group-header):not(.print-branch-header):not(
+    .print-type-header
+  ):not(.print-column-header) {
+  background-color: white;
+}
+
 /* Footer */
 .print-footer {
   display: flex;

@@ -170,13 +170,6 @@ const CustomerReport = ({
 
     const iframeDoc = iframe.contentWindow.document;
 
-    // Prepare print data
-    const recordsPerPage = 10;
-    const pages = [];
-    for (let i = 0; i < filteredData.length; i += recordsPerPage) {
-      pages.push(filteredData.slice(i, i + recordsPerPage));
-    }
-
     const getPrintDate = () => {
       const today = new Date();
       const year = today.getFullYear();
@@ -185,7 +178,7 @@ const CustomerReport = ({
       return `${year}-${month}-${day}`;
     };
 
-    // Build HTML content
+    // Build HTML content with styles
     let htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -291,11 +284,42 @@ const CustomerReport = ({
               background-color: white;
             }
 
-            .print-table th:nth-child(6),
-            .print-table td:nth-child(6),
-            .print-table th:nth-child(7),
-            .print-table td:nth-child(7) {
-              text-align: right;
+            /* Drill-down hierarchy styles */
+            .print-group-header {
+              background-color: #e8e8e8 !important;
+              font-weight: 700;
+              font-size: 12px;
+            }
+
+            .print-branch-header {
+              background-color: #d0d0d0 !important;
+              font-weight: 700;
+              font-size: 13px;
+            }
+
+            .print-type-header {
+              background-color: #e8e8e8 !important;
+              font-weight: 600;
+              font-size: 11px;
+            }
+
+            .print-type-header td {
+              padding-left: 20px !important;
+            }
+
+            .print-column-header {
+              background-color: #f5f5f5 !important;
+              font-weight: 600;
+            }
+
+            .print-column-header th {
+              border-bottom: 2px solid #333 !important;
+              font-size: 10px;
+              padding: 8px 6px;
+            }
+
+            .print-nested-row td:first-child {
+              padding-left: 15px;
             }
 
             .print-footer {
@@ -319,7 +343,11 @@ const CustomerReport = ({
 
               .print-heading-box,
               .print-subheading-box,
-              .print-table thead {
+              .print-table thead,
+              .print-group-header,
+              .print-branch-header,
+              .print-type-header,
+              .print-column-header {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 color-adjust: exact;
@@ -337,11 +365,19 @@ const CustomerReport = ({
           <div class="print-preview-container">
     `;
 
-    pages.forEach((pageData, pageIndex) => {
-      htmlContent += '<div class="print-page">';
+    // Generate content based on drill-down mode
+    if (drillDownMode === "flat") {
+      // Flat mode - paginated table
+      const recordsPerPage = 8;
+      const pages = [];
+      for (let i = 0; i < filteredData.length; i += recordsPerPage) {
+        pages.push(filteredData.slice(i, i + recordsPerPage));
+      }
 
-      // Show heading only on first page
-      if (pageIndex === 0) {
+      pages.forEach((pageData, pageIndex) => {
+        htmlContent += '<div class="print-page">';
+
+        // Show heading on every page
         htmlContent += `
           <div class="print-heading-box">
             <h1 class="print-main-heading">${instituteName}</h1>
@@ -352,14 +388,106 @@ const CustomerReport = ({
         }</h2>
           </div>
         `;
-      }
 
-      // Table
-      htmlContent += `
-        <div class="print-table-box">
-          <table class="print-table">
-            <thead>
-              <tr>
+        htmlContent += `
+          <div class="print-table-box">
+            <table class="print-table">
+              <thead>
+                <tr>
+                  <th>Ref member number</th>
+                  <th>Customer type</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th>Mobile</th>
+                  <th>Date of Birth</th>
+                  <th>Sex</th>
+                  <th>Branch Name</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        pageData.forEach((customer) => {
+          const dob = customer["Date of Birth"]
+            ? new Date(customer["Date of Birth"]).toLocaleDateString()
+            : "";
+
+          htmlContent += `
+            <tr>
+              <td>${customer["Ref member number"] || ""}</td>
+              <td>${customer["Customer type"] || ""}</td>
+              <td>${customer["Name"] || ""}</td>
+              <td>${customer["Address"] || ""}</td>
+              <td>${customer["Phone"] || ""}</td>
+              <td>${customer["Mobile"] || ""}</td>
+              <td>${dob}</td>
+              <td>${customer["Sex"] || ""}</td>
+              <td>${customer["Branch Name"] || ""}</td>
+            </tr>
+          `;
+        });
+
+        htmlContent += `
+              </tbody>
+            </table>
+          </div>
+          <div class="print-footer">
+            <span class="print-date">${getPrintDate()}</span>
+            <span class="print-page-number">Page ${String(
+              pageIndex + 1
+            ).padStart(2, "0")}</span>
+          </div>
+        </div>
+        `;
+      });
+    } else if (drillDownMode === "type-only") {
+      // Type-only mode - grouped by customer type with pagination
+      const recordsPerPage = 8;
+      const allRecords = [];
+
+      // Flatten data with group info
+      Object.keys(groupedData)
+        .sort()
+        .forEach((type) => {
+          groupedData[type].forEach((customer) => {
+            allRecords.push({ ...customer, _groupType: type });
+          });
+        });
+
+      // Split into pages
+      const totalPages = Math.ceil(allRecords.length / recordsPerPage);
+      for (let pageNum = 0; pageNum < totalPages; pageNum++) {
+        const startIdx = pageNum * recordsPerPage;
+        const endIdx = Math.min(startIdx + recordsPerPage, allRecords.length);
+        const pageRecords = allRecords.slice(startIdx, endIdx);
+
+        htmlContent += '<div class="print-page">';
+        htmlContent += `
+          <div class="print-heading-box">
+            <h1 class="print-main-heading">${instituteName}</h1>
+          </div>
+          <div class="print-subheading-box">
+            <h2 class="print-sub-heading">Customer List for ${branchName} - Grouped by Customer Type</h2>
+          </div>
+          <div class="print-table-box">
+            <table class="print-table">
+              <tbody>
+        `;
+
+        let currentGroup = null;
+        pageRecords.forEach((customer) => {
+          const groupType = customer._groupType;
+
+          // Show group header if it's a new group on this page
+          if (groupType !== currentGroup) {
+            currentGroup = groupType;
+            const groupCount = groupedData[groupType].length;
+            htmlContent += `
+              <tr class="print-group-header">
+                <td colspan="9"><strong>${groupType}</strong> (${groupCount} customers)</td>
+              </tr>
+              <tr class="print-column-header">
                 <th>Ref member number</th>
                 <th>Customer type</th>
                 <th>Name</th>
@@ -370,41 +498,162 @@ const CustomerReport = ({
                 <th>Sex</th>
                 <th>Branch Name</th>
               </tr>
-            </thead>
-            <tbody>
-      `;
+            `;
+          }
 
-      pageData.forEach((customer) => {
-        const dob = customer["Date of Birth"]
-          ? new Date(customer["Date of Birth"]).toLocaleDateString()
-          : "";
+          const dob = customer["Date of Birth"]
+            ? new Date(customer["Date of Birth"]).toLocaleDateString()
+            : "";
+
+          htmlContent += `
+            <tr>
+              <td>${customer["Ref member number"] || ""}</td>
+              <td>${customer["Customer type"] || ""}</td>
+              <td>${customer["Name"] || ""}</td>
+              <td>${customer["Address"] || ""}</td>
+              <td>${customer["Phone"] || ""}</td>
+              <td>${customer["Mobile"] || ""}</td>
+              <td>${dob}</td>
+              <td>${customer["Sex"] || ""}</td>
+              <td>${customer["Branch Name"] || ""}</td>
+            </tr>
+          `;
+        });
 
         htmlContent += `
-          <tr>
-            <td>${customer["Ref member number"] || ""}</td>
-            <td>${customer["Customer type"] || ""}</td>
-            <td>${customer["Name"] || ""}</td>
-            <td>${customer["Address"] || ""}</td>
-            <td>${customer["Phone"] || ""}</td>
-            <td>${customer["Mobile"] || ""}</td>
-            <td>${dob}</td>
-            <td>${customer["Sex"] || ""}</td>
-            <td>${customer["Branch Name"] || ""}</td>
-          </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="print-footer">
+            <span class="print-date">${getPrintDate()}</span>
+            <span class="print-page-number">Page ${String(pageNum + 1).padStart(
+              2,
+              "0"
+            )}</span>
+          </div>
+        </div>
         `;
-      });
+      }
+    } else if (drillDownMode === "branch-type") {
+      // Branch-type mode - grouped by branch and customer type with pagination
+      const recordsPerPage = 8;
+      const allRecords = [];
 
-      htmlContent += `
-            </tbody>
-          </table>
+      // Flatten data with group info
+      Object.keys(groupedData)
+        .sort()
+        .forEach((branch) => {
+          Object.keys(groupedData[branch])
+            .sort()
+            .forEach((type) => {
+              groupedData[branch][type].forEach((customer) => {
+                allRecords.push({
+                  ...customer,
+                  _groupBranch: branch,
+                  _groupType: type,
+                });
+              });
+            });
+        });
+
+      // Split into pages
+      const totalPages = Math.ceil(allRecords.length / recordsPerPage);
+      for (let pageNum = 0; pageNum < totalPages; pageNum++) {
+        const startIdx = pageNum * recordsPerPage;
+        const endIdx = Math.min(startIdx + recordsPerPage, allRecords.length);
+        const pageRecords = allRecords.slice(startIdx, endIdx);
+
+        htmlContent += '<div class="print-page">';
+        htmlContent += `
+          <div class="print-heading-box">
+            <h1 class="print-main-heading">${instituteName}</h1>
+          </div>
+          <div class="print-subheading-box">
+            <h2 class="print-sub-heading">Customer List - Grouped by Branch and Customer Type</h2>
+          </div>
+          <div class="print-table-box">
+            <table class="print-table">
+              <tbody>
+        `;
+
+        let currentBranch = null;
+        let currentType = null;
+
+        pageRecords.forEach((customer) => {
+          const groupBranch = customer._groupBranch;
+          const groupType = customer._groupType;
+
+          // Show branch header if it's a new branch on this page
+          if (groupBranch !== currentBranch) {
+            currentBranch = groupBranch;
+            currentType = null; // Reset type when branch changes
+            const branchCount = Object.values(groupedData[groupBranch]).reduce(
+              (sum, typeData) => sum + typeData.length,
+              0
+            );
+            htmlContent += `
+              <tr class="print-branch-header">
+                <td colspan="9"><strong>${groupBranch}</strong> (${branchCount} customers)</td>
+              </tr>
+            `;
+          }
+
+          // Show type header if it's a new type on this page
+          if (groupType !== currentType) {
+            currentType = groupType;
+            const typeCount = groupedData[groupBranch][groupType].length;
+            htmlContent += `
+              <tr class="print-type-header">
+                <td colspan="9"><strong>${groupType}</strong> (${typeCount} customers)</td>
+              </tr>
+              <tr class="print-column-header">
+                <th>Ref member number</th>
+                <th>Customer type</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Date of Birth</th>
+                <th>Sex</th>
+                <th>Branch Name</th>
+              </tr>
+            `;
+          }
+
+          const dob = customer["Date of Birth"]
+            ? new Date(customer["Date of Birth"]).toLocaleDateString()
+            : "";
+
+          htmlContent += `
+            <tr class="print-nested-row">
+              <td>${customer["Ref member number"] || ""}</td>
+              <td>${customer["Customer type"] || ""}</td>
+              <td>${customer["Name"] || ""}</td>
+              <td>${customer["Address"] || ""}</td>
+              <td>${customer["Phone"] || ""}</td>
+              <td>${customer["Mobile"] || ""}</td>
+              <td>${dob}</td>
+              <td>${customer["Sex"] || ""}</td>
+              <td>${customer["Branch Name"] || ""}</td>
+            </tr>
+          `;
+        });
+
+        htmlContent += `
+              </tbody>
+            </table>
+          </div>
+          <div class="print-footer">
+            <span class="print-date">${getPrintDate()}</span>
+            <span class="print-page-number">Page ${String(pageNum + 1).padStart(
+              2,
+              "0"
+            )}</span>
+          </div>
         </div>
-        <div class="print-footer">
-          <span class="print-date">${getPrintDate()}</span>
-          <span class="print-page-number">Page ${pageIndex + 1}</span>
-        </div>
-      </div>
-      `;
-    });
+        `;
+      }
+    }
 
     htmlContent += "</div></body></html>";
 
