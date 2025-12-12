@@ -139,6 +139,132 @@
   font-size: 16px;
 }
 
+/* Drill-down table styles */
+.cr-customer-report-card .cr-group-header {
+  background-color: #e3f2fd !important;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.cr-customer-report-card .cr-group-header:hover {
+  background-color: #bbdefb !important;
+}
+
+.cr-customer-report-card .cr-branch-header {
+  background-color: #fff3e0 !important;
+  font-weight: 600;
+}
+
+.cr-customer-report-card .cr-branch-header:hover {
+  background-color: #ffe0b2 !important;
+}
+
+.cr-customer-report-card .cr-type-header {
+  background-color: #f3e5f5 !important;
+}
+
+.cr-customer-report-card .cr-type-header:hover {
+  background-color: #e1bee7 !important;
+}
+
+.cr-customer-report-card .cr-group-header td {
+  padding: 12px 10px;
+  font-weight: 600;
+  color: #1976d2;
+  border: 1px solid #90caf9;
+}
+
+.cr-customer-report-card .cr-branch-header td {
+  color: #f57c00;
+  border: 1px solid #ffb74d;
+}
+
+.cr-customer-report-card .cr-type-header td {
+  padding-left: 30px;
+  color: #7b1fa2;
+  font-weight: 500;
+  border: 1px solid #ce93d8;
+}
+
+.cr-customer-report-card .cr-group-toggle {
+  display: inline-block;
+  width: 20px;
+  font-size: 12px;
+  margin-right: 8px;
+  color: #1976d2;
+}
+
+.cr-customer-report-card .cr-branch-header .cr-group-toggle {
+  color: #f57c00;
+}
+
+.cr-customer-report-card .cr-type-header .cr-group-toggle {
+  color: #7b1fa2;
+}
+
+.cr-customer-report-card .cr-sub-toggle {
+  margin-left: 20px;
+}
+
+.cr-customer-report-card .cr-group-title {
+  font-size: 12px;
+}
+
+.cr-customer-report-card .cr-sub-title {
+  font-size: 11px;
+}
+
+.cr-customer-report-card .cr-group-row {
+  background-color: #fafafa;
+}
+
+.cr-customer-report-card .cr-nested-row {
+  background-color: #f5f5f5;
+}
+
+.cr-customer-report-card .cr-nested-row td:first-child {
+  padding-left: 50px;
+}
+
+.cr-customer-report-card .cr-drilldown-table tbody tr:nth-child(even) {
+  background-color: inherit;
+}
+
+.cr-customer-report-card .cr-drilldown-table .cr-group-row:hover {
+  background-color: #e8f5e9;
+}
+
+.cr-customer-report-card .cr-btn-expand-all {
+  background-color: #9c27b0;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cr-customer-report-card .cr-btn-expand-all:hover {
+  background-color: #7b1fa2;
+}
+
+/* Summary info for drill-down mode */
+.cr-customer-report-card .cr-summary-info {
+  text-align: center;
+  padding: 15px;
+  margin-top: 15px;
+  color: #555;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cr-customer-report-card .cr-summary-info p {
+  margin: 0;
+}
+
 /* Pagination */
 .cr-customer-report-card .cr-pagination {
   display: flex;

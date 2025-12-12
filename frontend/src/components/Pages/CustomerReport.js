@@ -10,6 +10,7 @@ const CustomerReport = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [filterBranch, setFilterBranch] = useState("all");
   const [filterCustomerType, setFilterCustomerType] = useState("all");
+  const [expandedGroups, setExpandedGroups] = useState({});
   const rowsPerPage = 10;
 
   // Reset to first page when data changes
@@ -17,12 +18,22 @@ const CustomerReport = ({
     setCurrentPage(1);
     setFilterBranch("all");
     setFilterCustomerType("all");
+    setExpandedGroups({});
   }, [data]);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [filterBranch, filterCustomerType]);
+
+  // Determine drill-down scenario
+  const shouldShowDrillDown = !customerType; // No customer type selected
+  const isAllBranches = branchName && branchName.toLowerCase() === "all";
+  const drillDownMode = shouldShowDrillDown
+    ? isAllBranches
+      ? "branch-type"
+      : "type-only"
+    : "flat";
 
   // Get unique branches and customer types from data
   const uniqueBranches = Array.from(
@@ -42,6 +53,76 @@ const CustomerReport = ({
       item["Customer type"] === filterCustomerType;
     return branchMatch && typeMatch;
   });
+
+  // Group data for drill-down views
+  const groupData = () => {
+    if (drillDownMode === "flat") {
+      return null; // No grouping needed
+    }
+
+    if (drillDownMode === "type-only") {
+      // Group by Customer Type only
+      const grouped = {};
+      filteredData.forEach((item) => {
+        const type = item["Customer type"] || "Unknown";
+        if (!grouped[type]) {
+          grouped[type] = [];
+        }
+        grouped[type].push(item);
+      });
+      return grouped;
+    }
+
+    if (drillDownMode === "branch-type") {
+      // Group by Branch, then by Customer Type
+      const grouped = {};
+      filteredData.forEach((item) => {
+        const branch = item["Branch Name"] || "Unknown";
+        const type = item["Customer type"] || "Unknown";
+
+        if (!grouped[branch]) {
+          grouped[branch] = {};
+        }
+        if (!grouped[branch][type]) {
+          grouped[branch][type] = [];
+        }
+        grouped[branch][type].push(item);
+      });
+      return grouped;
+    }
+
+    return null;
+  };
+
+  const groupedData = groupData();
+
+  // Toggle group expansion
+  const toggleGroup = (groupKey) => {
+    setExpandedGroups((prev) => ({
+      ...prev,
+      [groupKey]: !prev[groupKey],
+    }));
+  };
+
+  // Expand all groups (for printing)
+  const expandAllGroups = () => {
+    if (!groupedData) return;
+
+    const allKeys = {};
+    if (drillDownMode === "type-only") {
+      Object.keys(groupedData).forEach((key) => {
+        allKeys[key] = true;
+      });
+    } else if (drillDownMode === "branch-type") {
+      Object.keys(groupedData).forEach((branch) => {
+        allKeys[branch] = true;
+        Object.keys(groupedData[branch]).forEach((type) => {
+          allKeys[`${branch}-${type}`] = true;
+        });
+      });
+    }
+    setExpandedGroups(allKeys);
+  };
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -450,49 +531,245 @@ const CustomerReport = ({
         <button className="cr-btn-export" onClick={handleExport}>
           Export
         </button>
-      </div>
-
-      {/* Screen view - paginated data */}
-      <div className="cr-report-table-section cr-screen-only">
-        <table className="cr-report-table">
-          <thead>
-            <tr>
-              <th>Ref member number</th>
-              <th>Customer type</th>
-              <th>Name</th>
-              <th>Address</th>
-              <th>Phone</th>
-              <th>Mobile</th>
-              <th>Date of Birth</th>
-              <th>Sex</th>
-              <th>Branch Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.map((customer, index) => (
-              <tr key={index}>
-                <td>{customer["Ref member number"]}</td>
-                <td>{customer["Customer type"]}</td>
-                <td>{customer["Name"]}</td>
-                <td>{customer["Address"]}</td>
-                <td>{customer["Phone"]}</td>
-                <td>{customer["Mobile"]}</td>
-                <td>
-                  {customer["Date of Birth"]
-                    ? new Date(customer["Date of Birth"]).toLocaleDateString()
-                    : ""}
-                </td>
-                <td>{customer["Sex"]}</td>
-                <td>{customer["Branch Name"]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {filteredData.length === 0 && (
-          <p className="cr-no-data-message">No data available</p>
+        {drillDownMode !== "flat" && (
+          <button className="cr-btn-expand-all" onClick={expandAllGroups}>
+            Expand All
+          </button>
         )}
       </div>
+
+      {/* Screen view - Drill-down table for type-only mode */}
+      {drillDownMode === "type-only" && (
+        <div className="cr-report-table-section cr-screen-only">
+          <table className="cr-report-table cr-drilldown-table">
+            <thead>
+              <tr>
+                <th>Ref member number</th>
+                <th>Customer type</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Date of Birth</th>
+                <th>Sex</th>
+                <th>Branch Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(groupedData)
+                .sort()
+                .map((type) => {
+                  const typeData = groupedData[type];
+                  const isExpanded = expandedGroups[type];
+                  const displayData = isExpanded
+                    ? typeData
+                    : typeData.slice(0, 0); // Show no rows when collapsed
+
+                  return (
+                    <React.Fragment key={type}>
+                      {/* Group Header */}
+                      <tr
+                        className="cr-group-header"
+                        onClick={() => toggleGroup(type)}
+                      >
+                        <td colSpan="9">
+                          <span className="cr-group-toggle">
+                            {isExpanded ? "▼" : "▶"}
+                          </span>
+                          <span className="cr-group-title">
+                            {type} ({typeData.length} customers)
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Group Rows */}
+                      {displayData.map((customer, index) => (
+                        <tr key={`${type}-${index}`} className="cr-group-row">
+                          <td>{customer["Ref member number"]}</td>
+                          <td>{customer["Customer type"]}</td>
+                          <td>{customer["Name"]}</td>
+                          <td>{customer["Address"]}</td>
+                          <td>{customer["Phone"]}</td>
+                          <td>{customer["Mobile"]}</td>
+                          <td>
+                            {customer["Date of Birth"]
+                              ? new Date(
+                                  customer["Date of Birth"]
+                                ).toLocaleDateString()
+                              : ""}
+                          </td>
+                          <td>{customer["Sex"]}</td>
+                          <td>{customer["Branch Name"]}</td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  );
+                })}
+            </tbody>
+          </table>
+
+          {filteredData.length === 0 && (
+            <p className="cr-no-data-message">No data available</p>
+          )}
+        </div>
+      )}
+
+      {/* Screen view - Drill-down table for branch-type mode */}
+      {drillDownMode === "branch-type" && (
+        <div className="cr-report-table-section cr-screen-only">
+          <table className="cr-report-table cr-drilldown-table">
+            <thead>
+              <tr>
+                <th>Ref member number</th>
+                <th>Customer type</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Date of Birth</th>
+                <th>Sex</th>
+                <th>Branch Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(groupedData)
+                .sort()
+                .map((branch) => {
+                  const branchData = groupedData[branch];
+                  const isBranchExpanded = expandedGroups[branch];
+                  const branchCount = Object.values(branchData).reduce(
+                    (sum, typeData) => sum + typeData.length,
+                    0
+                  );
+
+                  return (
+                    <React.Fragment key={branch}>
+                      {/* Branch Header */}
+                      <tr
+                        className="cr-group-header cr-branch-header"
+                        onClick={() => toggleGroup(branch)}
+                      >
+                        <td colSpan="9">
+                          <span className="cr-group-toggle">
+                            {isBranchExpanded ? "▼" : "▶"}
+                          </span>
+                          <span className="cr-group-title">
+                            {branch} ({branchCount} customers)
+                          </span>
+                        </td>
+                      </tr>
+
+                      {/* Customer Type Sub-groups */}
+                      {isBranchExpanded &&
+                        Object.keys(branchData)
+                          .sort()
+                          .map((type) => {
+                            const typeData = branchData[type];
+                            const typeKey = `${branch}-${type}`;
+                            const isTypeExpanded = expandedGroups[typeKey];
+                            const displayData = isTypeExpanded
+                              ? typeData
+                              : typeData.slice(0, 0);
+
+                            return (
+                              <React.Fragment key={typeKey}>
+                                {/* Type Sub-header */}
+                                <tr
+                                  className="cr-group-header cr-type-header"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleGroup(typeKey);
+                                  }}
+                                >
+                                  <td colSpan="9">
+                                    <span className="cr-group-toggle cr-sub-toggle">
+                                      {isTypeExpanded ? "▼" : "▶"}
+                                    </span>
+                                    <span className="cr-group-title cr-sub-title">
+                                      {type} ({typeData.length} customers)
+                                    </span>
+                                  </td>
+                                </tr>
+                                {/* Type Rows */}
+                                {displayData.map((customer, index) => (
+                                  <tr
+                                    key={`${typeKey}-${index}`}
+                                    className="cr-group-row cr-nested-row"
+                                  >
+                                    <td>{customer["Ref member number"]}</td>
+                                    <td>{customer["Customer type"]}</td>
+                                    <td>{customer["Name"]}</td>
+                                    <td>{customer["Address"]}</td>
+                                    <td>{customer["Phone"]}</td>
+                                    <td>{customer["Mobile"]}</td>
+                                    <td>
+                                      {customer["Date of Birth"]
+                                        ? new Date(
+                                            customer["Date of Birth"]
+                                          ).toLocaleDateString()
+                                        : ""}
+                                    </td>
+                                    <td>{customer["Sex"]}</td>
+                                    <td>{customer["Branch Name"]}</td>
+                                  </tr>
+                                ))}
+                              </React.Fragment>
+                            );
+                          })}
+                    </React.Fragment>
+                  );
+                })}
+            </tbody>
+          </table>
+
+          {filteredData.length === 0 && (
+            <p className="cr-no-data-message">No data available</p>
+          )}
+        </div>
+      )}
+
+      {/* Screen view - Flat table */}
+      {drillDownMode === "flat" && (
+        <div className="cr-report-table-section cr-screen-only">
+          <table className="cr-report-table">
+            <thead>
+              <tr>
+                <th>Ref member number</th>
+                <th>Customer type</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Mobile</th>
+                <th>Date of Birth</th>
+                <th>Sex</th>
+                <th>Branch Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentData.map((customer, index) => (
+                <tr key={index}>
+                  <td>{customer["Ref member number"]}</td>
+                  <td>{customer["Customer type"]}</td>
+                  <td>{customer["Name"]}</td>
+                  <td>{customer["Address"]}</td>
+                  <td>{customer["Phone"]}</td>
+                  <td>{customer["Mobile"]}</td>
+                  <td>
+                    {customer["Date of Birth"]
+                      ? new Date(customer["Date of Birth"]).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td>{customer["Sex"]}</td>
+                  <td>{customer["Branch Name"]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {filteredData.length === 0 && (
+            <p className="cr-no-data-message">No data available</p>
+          )}
+        </div>
+      )}
 
       {/* Print view - all data */}
       <div className="cr-report-table-section cr-print-only">
@@ -532,8 +809,8 @@ const CustomerReport = ({
         </table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
+      {/* Pagination - Only show for flat mode */}
+      {drillDownMode === "flat" && totalPages > 1 && (
         <div className="cr-pagination">
           <button
             onClick={handlePrevPage}
@@ -567,6 +844,13 @@ const CustomerReport = ({
             Page {currentPage} of {totalPages} (Total: {filteredData.length}{" "}
             records)
           </span>
+        </div>
+      )}
+
+      {/* Summary info for drill-down mode */}
+      {drillDownMode !== "flat" && (
+        <div className="cr-summary-info">
+          <p>Total: {filteredData.length} records</p>
         </div>
       )}
 
