@@ -1,5 +1,6 @@
 import CustomerList from "../components/Pages/CustomerList";
 import PersonalSavingsReport from "../components/Pages/PersonalSavingsReport";
+import PersonalFDReport from "../components/Pages/PersonalFDReport";
 import Home from "../components/Pages/Home";
 import ChatUI from "../components/Pages/ChatUI";
 import UserRights from "../components/Pages/UserRights";
@@ -24,6 +25,7 @@ export const routeComponentMap = {
   "/design-report": DesignReport,
   "/about/team": Team,
   "/transactions/personal-savings/savings": PersonalSavingsReport,
+  "/transactions/personal-savings/personal-fd-list": PersonalFDReport,
   "/transactions/past-due/loan-past-due": LoanPastDueReports,
   "/transactions/past-due/loan-past-due-previous-month": LoanPastDueReportsPrevousMonth,
   // Add more mappings as you create components
