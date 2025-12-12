@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { sqlExecutorApi } from "../../../clients/sqlExecutorClient";
 import { toast } from "react-toastify";
 import "./PersonalSavingsSummary.css";
-import PersonalSavingsPrintPreview from "./PersonalSavingsPrintPreview";
+import PersonalSavingsSummaryReport from "./PersonalSavingsSummaryReport";
 
 const PersonalSavingsSummary = () => {
   const [branchId, setBranchId] = useState(null);
@@ -140,10 +140,6 @@ const PersonalSavingsSummary = () => {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="pss-personal-savings-summary-container">
       <div className="pss-personal-savings-summary-card">
@@ -207,22 +203,13 @@ const PersonalSavingsSummary = () => {
               "Generate Report"
             )}
           </button>
-          {reportData.length > 0 && (
-            <button
-              className="pss-btn-print"
-              onClick={handlePrint}
-              disabled={isLoading}
-            >
-              Print Report
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Print Preview */}
+      {/* Report Display */}
       {reportData.length > 0 && (
         <div ref={printPreviewRef}>
-          <PersonalSavingsPrintPreview
+          <PersonalSavingsSummaryReport
             instituteName={instituteName}
             branchName={branchName}
             selectedDate={selectedDate}

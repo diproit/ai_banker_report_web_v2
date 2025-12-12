@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { sqlExecutorApi } from "../../../clients/sqlExecutorClient";
 import { toast } from "react-toastify";
 import "./LoanPastDueSummary.css";
-import LoanPastDuePrintPreview from "./LoanPastDuePrintPreview";
+import LoanPastDueSummaryReport from "./LoanPastDueSummaryReport";
 
 const LoanPastDueSummary = () => {
   const [branchId, setBranchId] = useState(null);
@@ -140,10 +140,6 @@ const LoanPastDueSummary = () => {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="pds-loan-pastdue-summary-container">
       <div className="pds-loan-pastdue-summary-card">
@@ -207,22 +203,13 @@ const LoanPastDueSummary = () => {
               "Generate Report"
             )}
           </button>
-          {reportData.length > 0 && (
-            <button
-              className="pds-btn-print"
-              onClick={handlePrint}
-              disabled={isLoading}
-            >
-              Print Report
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Print Preview */}
+      {/* Report Display */}
       {reportData.length > 0 && (
         <div ref={printPreviewRef}>
-          <LoanPastDuePrintPreview
+          <LoanPastDueSummaryReport
             instituteName={instituteName}
             branchName={branchName}
             selectedDate={selectedDate}
