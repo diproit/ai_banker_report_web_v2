@@ -8,23 +8,14 @@ const CustomerReport = ({
   instituteName = "Institute Name",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterBranch, setFilterBranch] = useState("all");
-  const [filterCustomerType, setFilterCustomerType] = useState("all");
   const [expandedGroups, setExpandedGroups] = useState({});
   const rowsPerPage = 10;
 
   // Reset to first page when data changes
   useEffect(() => {
     setCurrentPage(1);
-    setFilterBranch("all");
-    setFilterCustomerType("all");
     setExpandedGroups({});
   }, [data]);
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filterBranch, filterCustomerType]);
 
   // Determine drill-down scenario
   const shouldShowDrillDown = !customerType; // No customer type selected
@@ -35,24 +26,8 @@ const CustomerReport = ({
       : "type-only"
     : "flat";
 
-  // Get unique branches and customer types from data
-  const uniqueBranches = Array.from(
-    new Set(data.map((item) => item["Branch Name"]).filter(Boolean))
-  ).sort();
-
-  const uniqueCustomerTypes = Array.from(
-    new Set(data.map((item) => item["Customer type"]).filter(Boolean))
-  ).sort();
-
-  // Filter data based on selected filters
-  const filteredData = data.filter((item) => {
-    const branchMatch =
-      filterBranch === "all" || item["Branch Name"] === filterBranch;
-    const typeMatch =
-      filterCustomerType === "all" ||
-      item["Customer type"] === filterCustomerType;
-    return branchMatch && typeMatch;
-  });
+  // Use data directly without additional filtering
+  const filteredData = data;
 
   // Group data for drill-down views
   const groupData = () => {
@@ -486,43 +461,6 @@ const CustomerReport = ({
         {customerType && ` - ${customerType}`}
       </h2>
 
-      {/* Filter Section */}
-      <div className="cr-filter-section">
-        <div className="cr-filter-group">
-          <label htmlFor="filter-branch">Filter by Branch:</label>
-          <select
-            id="filter-branch"
-            value={filterBranch}
-            onChange={(e) => setFilterBranch(e.target.value)}
-            className="cr-filter-select"
-          >
-            <option value="all">All Branches</option>
-            {uniqueBranches.map((branch) => (
-              <option key={branch} value={branch}>
-                {branch}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="cr-filter-group">
-          <label htmlFor="filter-customer-type">Filter by Customer Type:</label>
-          <select
-            id="filter-customer-type"
-            value={filterCustomerType}
-            onChange={(e) => setFilterCustomerType(e.target.value)}
-            className="cr-filter-select"
-          >
-            <option value="all">All Types</option>
-            {uniqueCustomerTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       {/* Action Buttons */}
       <div className="cr-report-actions">
         <button className="cr-btn-print" onClick={handlePrint}>
@@ -542,19 +480,6 @@ const CustomerReport = ({
       {drillDownMode === "type-only" && (
         <div className="cr-report-table-section cr-screen-only">
           <table className="cr-report-table cr-drilldown-table">
-            <thead>
-              <tr>
-                <th>Ref member number</th>
-                <th>Customer type</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone</th>
-                <th>Mobile</th>
-                <th>Date of Birth</th>
-                <th>Sex</th>
-                <th>Branch Name</th>
-              </tr>
-            </thead>
             <tbody>
               {Object.keys(groupedData)
                 .sort()
@@ -581,6 +506,20 @@ const CustomerReport = ({
                           </span>
                         </td>
                       </tr>
+                      {/* Column Headers - shown when expanded */}
+                      {isExpanded && (
+                        <tr className="cr-drilldown-column-header">
+                          <th>Ref member number</th>
+                          <th>Customer type</th>
+                          <th>Name</th>
+                          <th>Address</th>
+                          <th>Phone</th>
+                          <th>Mobile</th>
+                          <th>Date of Birth</th>
+                          <th>Sex</th>
+                          <th>Branch Name</th>
+                        </tr>
+                      )}
                       {/* Group Rows */}
                       {displayData.map((customer, index) => (
                         <tr key={`${type}-${index}`} className="cr-group-row">
@@ -617,19 +556,6 @@ const CustomerReport = ({
       {drillDownMode === "branch-type" && (
         <div className="cr-report-table-section cr-screen-only">
           <table className="cr-report-table cr-drilldown-table">
-            <thead>
-              <tr>
-                <th>Ref member number</th>
-                <th>Customer type</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone</th>
-                <th>Mobile</th>
-                <th>Date of Birth</th>
-                <th>Sex</th>
-                <th>Branch Name</th>
-              </tr>
-            </thead>
             <tbody>
               {Object.keys(groupedData)
                 .sort()
@@ -689,6 +615,20 @@ const CustomerReport = ({
                                     </span>
                                   </td>
                                 </tr>
+                                {/* Column Headers - shown when type is expanded */}
+                                {isTypeExpanded && (
+                                  <tr className="cr-drilldown-column-header">
+                                    <th>Ref member number</th>
+                                    <th>Customer type</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Phone</th>
+                                    <th>Mobile</th>
+                                    <th>Date of Birth</th>
+                                    <th>Sex</th>
+                                    <th>Branch Name</th>
+                                  </tr>
+                                )}
                                 {/* Type Rows */}
                                 {displayData.map((customer, index) => (
                                   <tr

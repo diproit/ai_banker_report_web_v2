@@ -195,6 +195,19 @@
   color: #666;
 }
 
+/* Column headers inside drill-down groups */
+.cr-customer-report-card .cr-drilldown-column-header {
+  background-color: #e8e8e8 !important;
+  font-weight: 600;
+}
+
+.cr-customer-report-card .cr-drilldown-column-header th {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 2px solid #d0d0d0;
+  color: #333;
+}
+
 .cr-customer-report-card .cr-branch-header .cr-group-toggle {
   color: #666;
 }
