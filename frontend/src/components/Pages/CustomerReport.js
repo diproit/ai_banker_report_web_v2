@@ -468,7 +468,7 @@ const CustomerReport = ({
             <h1 class="print-main-heading">${instituteName}</h1>
           </div>
           <div class="print-subheading-box">
-            <h2 class="print-sub-heading">Customer List for ${branchName} - Grouped by Customer Type</h2>
+            <h2 class="print-sub-heading">Customer List for ${branchName}</h2>
           </div>
           <div class="print-table-box">
             <table class="print-table">
@@ -569,7 +569,7 @@ const CustomerReport = ({
             <h1 class="print-main-heading">${instituteName}</h1>
           </div>
           <div class="print-subheading-box">
-            <h2 class="print-sub-heading">Customer List - Grouped by Branch and Customer Type</h2>
+            <h2 class="print-sub-heading">Customer List</h2>
           </div>
           <div class="print-table-box">
             <table class="print-table">
